@@ -1,0 +1,132 @@
+<?xml version="1.0"?>
+<root>    
+	<externalsource baseid="q1" filename="MoodSubset.xml"></externalsource>
+	
+	<externalsource baseid="q5" filename="BehacioralDysregulationItems.xml"></externalsource>
+	
+	<category>
+	    <description>Life Events/Experiences</description>
+		<question id = "q401" type = "check">
+			<text>Since the last prompt have you had a disagreement (if yes,with whom)?</text>
+			<type>multiple selection</type>
+			<answer id = "01">romantic partner</answer>			
+			<answer id = "02">boss/teacher</answer>
+			<answer id = "03">coworker</answer>
+			<answer id = "04">sibling</answer>
+			<answer id = "05">friend</answer>
+			<answer id = "06">parent</answer>
+			<answer id = "07">roommate</answer>
+			<answer id = "08">other family member</answer>			
+			<answer id = "09" action="uncheck">THERE WAS NO SUCH INCIDENT/FEELING</answer>
+		</question>	
+		<question id = "q402" type = "check">
+			<text>Since the last prompt have you felt rejected (if yes,by whom)?</text>
+			<type>multiple selection</type>
+			<answer id = "01">romantic partner</answer>			
+			<answer id = "02">boss/teacher</answer>
+			<answer id = "03">coworker</answer>
+			<answer id = "04">sibling</answer>
+			<answer id = "05">friend</answer>
+			<answer id = "06">parent</answer>
+			<answer id = "07">roommate</answer>
+			<answer id = "08">other family member</answer>			
+			<answer id = "09" action="uncheck">THERE WAS NO SUCH INCIDENT/FEELING</answer>
+		</question>	
+		<question id = "q403" type = "check">
+			<text>Since the last prompt have you felt complimented or praised (if yes,by whom)?</text>
+			<type>multiple selection</type>
+			<answer id = "01">romantic partner</answer>			
+			<answer id = "02">boss/teacher</answer>
+			<answer id = "03">coworker</answer>
+			<answer id = "04">sibling</answer>
+			<answer id = "05">friend</answer>
+			<answer id = "06">parent</answer>
+			<answer id = "07">roommate</answer>
+			<answer id = "08">other family member</answer>			
+			<answer id = "09" action="uncheck">THERE WAS NO SUCH INCIDENT/FEELING</answer>
+		</question>	
+		<question id = "q404" type = "check">
+			<text>Since the last prompt have you felt "let down" by someone you depend on (if yes,by whom)?</text>
+			<type>multiple selection</type>
+			<answer id = "01">romantic partner</answer>			
+			<answer id = "02">boss/teacher</answer>
+			<answer id = "03">coworker</answer>
+			<answer id = "04">sibling</answer>
+			<answer id = "05">friend</answer>
+			<answer id = "06">parent</answer>
+			<answer id = "07">roommate</answer>
+			<answer id = "08">other family member</answer>			
+			<answer id = "09" action="uncheck">THERE WAS NO SUCH INCIDENT/FEELING</answer>
+		</question>	
+	</category>
+	
+	
+	
+	<category>
+	<description>Life Events/Experiences</description>
+	    <questionblock type="radio">
+		    <description>Cigarette expectancy/motivation items</description>
+		    <answer id="1">YES</answer>
+		    <answer id="2">NO</answer>		    
+			<text id="q405">Since the last prompt have you experienced a loss?</text>
+			<text id="q406">Since the last prompt have you Received bad/good news?</text>
+			</questionblock>			
+	</category>	
+	 
+<category>
+	     <description>Life Events/Experiences</description>
+	  <question id = "q407" type = "radio">
+			<text> Since the last prompt have you slept ?</text>
+			<answer id = "1">YES</answer>
+			<answer id = "2" skip="q409">NO</answer>
+		</question>		
+	 </category>
+	 
+   <category>
+	     <description>Life Events/Experiences</description>
+	     <question id = "q408" type = "number">
+			<text> How many Hour(s)?</text>
+			<answer id = "item">hour(s)</answer>
+			<answer id = "min">1</answer>
+			<answer id = "max">24</answer>	
+		</question>		
+	 </category>
+	 <category>
+	     <description>Life Events/Experiences</description>
+	  <question id = "q409" type = "radio">
+			<text> Since the last prompt have you used caffeine?</text>
+			<answer id = "1">YES</answer>
+			<answer id = "2" skip="q411">NO</answer>
+		</question>		
+	 </category>
+	 
+   <category>
+	     <description>Life Events/Experiences</description>
+	     <question id = "q410" type = "number">
+			<text> How many Cup(s)?</text>
+			<answer id = "item">cup(s)</answer>
+			<answer id = "min">1</answer>
+			<answer id = "max">24</answer>	
+		</question>		
+	 </category>
+	 
+      <category>
+	     <description>Life Events/Experiences</description>
+	  <question id = "q411" type = "radio">
+			<text> Since the last prompt have you used over the counter-medications(IF YES, LOG MEDICATIONS in your paper diary)?</text>
+			<answer id = "1">YES</answer>
+			<answer id = "2">NO</answer>
+		</question>		
+	 </category>
+	 	 
+	  <category> 
+	      <description>Life Events/Experiences</description>
+		<question id="q412" type="radio">
+			<text>Since the last prompt have you taken your medications as prescribed(if no, log changes in your paper diary)?</text>	
+		    <answer id="1">YES</answer>
+		    <answer id="2">NO</answer>
+		</question>	
+	 </category>
+  
+	<externalsource baseid="q2" filename="SituationAndSetting.xml"></externalsource>   
+</root>

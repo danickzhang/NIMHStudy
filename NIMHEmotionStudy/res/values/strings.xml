@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">NIMH Emotion Study</string>
+	<string name="yes">Yes</string>
+	<string name="no">No</string>
+	<string name="return_to_main">Return to Main Menu</string>
+	<string name="pin_hint">4-digit PIN</string>
+    
+    
+	<!-- Menus -->
+    <string name="menu_en_bt">Enable Bluetooth</string>
+    <string name="menu_dis_bt">Disable Bluetooth</string>
+    <string name="menu_management">Management</string>
+    <string name="menu_about">About</string>
+    
+
+    <!-- Contents -->
+    <string name="section_1">Start Service</string>
+    <string name="section_2">Stop Service</string>
+    <string name="section_3">Survey Menu</string>
+    <string name="section_4">Sensor Connections</string>
+    <string name="section_5">Set Wake up Time</string>
+    <string name="section_6">Suspension</string>
+    <string name="section_62">Break Suspension</string>
+    
+    <!-- Bed-time -->
+    <string name="bedtime_title">Set Wake up Time Report</string>
+    <string name="bedtime_message">This should be done when your are going to bed for the night.</string>
+    <string name="bedtime_message_confirm">Please confirm that you are going to bed for the night.</string>
+    <string name="bedtime_checkbox">set as default</string>
+    
+    <string name="bedtime_set">Set wake up time at </string>
+    <string name="bedtime_alert">Wake up time must between 3:00 A.M. and 12:00 P.M.</string>
+    
+    <!-- Suspension -->
+    <string name="suspension_title">Please Confirm Suspension</string>
+    <string name="suspension_msg">During the suspension you won\'t receive any random prompts, but you WILL receive drinking follow-ups.</string>
+    <string name="suspension_break_title">Break Suspension</string>
+    <string name="suspension_break_msg">Please confirm that you want to break suspension.</string>
+    <string name="suspension_set_text">Select suspension duration:</string>
+    <string name="suspension_set">Set Suspension Length</string>
+    <string name="suspension_end">Suspension has ended</string>
+    <string name="suspension_under">Under Suspension</string>
+    
+    <!-- Admin  -->
+    <string name="admin_set_title">Verify Admin PIN</string>
+    <string name="admin_set_msg">Please input PIN for \nadministrator</string>
+    <string name="user_setpwd_title">Set User PIN</string>
+    <string name="user_setpwd_msg">Please input 4-digit PIN for \nUser: </string>
+    <string name="assign_confirm_title">Confirm</string>
+    <string name="assign_remove_title">Confirm Removal</string>
+    <string name="assign_btn">Assign ID</string>
+    <string name="remove_btn">Remove ID</string>
+    <string name="assign_title">Please assign an ID:</string>
+    <string name="remove_title">Current ID on device:</string>
+    <string name="remove_msg">Do you really want to remove this ID and all related data from the device?</string>
+    <string name="assign_hint">Four-digit ID goes here</string>
+    <string name="remove_hint">Not set yet</string>
+    
+    <string name="pin_title">Login</string>
+    <string name="pin_message">Please input your PIN number.</string>
+    <string name="pin_title_wrong">Pin Incorrect</string>
+    <string name="pin_message_wrong">Please press OK to try again.</string>
+    
+    <string name="assign_id_null">This ID is not in the database, please double-check the ID you entered or have an administrator add it to the database via the web page.</string>
+	<string name="assing_id_exist">This ID has been used before. \nDo you really want to assign this ID: </string>
+	<string name="assign_id_new">Do you want to assign this ID: </string>
+	<string name="assign_id_wrong">The ID format is incorrect, please try again.</string>
+	<string name="assign_id_net_error">The ID was not accepted, please check network connection and try again.</string>
+	
+	
+    
+<!-- Surveys -->
+    <string name="btn_submit">Submit</string>
+    <string name="btn_previous">Previous Question</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="survey_menu_title">Self-Assessment Survey Menu</string>
+    <string name="survey_menu_select">Select a survey</string>
+    <string name="survey_timeout">Timeout has been reached for completing the current survey.</string>
+    <string name="survey_completed">Survey Complete.</string>
+    <string name="survey_cancel_title">Are you sure you want to exit?</string>
+    <string name="survey_cancel_msg">This action will erase the current survey.\r\nIf you just want to go back to the previous question, use \'Previous Question\' button.\r\n\nAre you sure you wish to exit without completing the survey?</string>
+    
+    <!-- Morning Report -->
+    <string name="morning_report_name">Morning Report</string>
+    <string name="morning_report_title">Finished</string>
+    <string name="morning_report_msg">You have already finished the Morning Report for today.</string>
+    <string name="morning_report_title2">Too Late</string>
+    <string name="morning_report_msg2">The Morning Report should be done before noon.</string>
+    <string name="morning_report_title3">Too Early</string>
+    <string name="morning_report_msg3">The Morning Report should be done after 3:00 a.m.</string>
+    <string name="morning_report_set_text">Wake up time (for tomorrow):</string>
+    <string name="morning_report_set">Set wake up time</string>
+    <string name="morning_report_unfinished">You may need to complete morning survey for today first</string>
+    
+    <!-- Initial Drinking -->
+    <string name="initial_drink_name">Initial Drinking</string>
+    <string name="first_drink_title">Drink Confirmation</string>
+    <string name="first_drink_msg">Are you going to report your drink(s)?</string>
+	    
+<!-- Warning  -->
+	<string name="public_key_lost">Public Key missing, exiting!</string>
+	
+	<string name="set_upin_failed">Set PIN failed. Please try again.</string>
+	<string name="set_upin_error">Set PIN error. Please check your network connection and try again.</string>
+	
+	<string name="input_apin_failed">Admin PIN is incorrect. Please try again.</string>
+	<string name="input_apin_error">Verify failed. Please try again.</string>
+	<string name="input_apin_return">Return code incorrect. Please try again.</string>
+	<string name="input_apin_net_error">Failed. Please try again, with network connection.</string>
+
+	
+	
+</resources>
