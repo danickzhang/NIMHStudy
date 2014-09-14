@@ -98,7 +98,7 @@ public class Utilities {
 /*	survey config*/
 	public final static int MAX_REMINDER = 3;
 	public final static int MAX_TRIGGER_MORNING = 1;//1
-	public final static int MAX_TRIGGER_RANDOM = 3;//3
+	public final static int MAX_TRIGGER_RANDOM = 6;//6
 	public final static int MAX_TRIGGER_FOLLOWUP = 3;//3
 	public final static int VOLUME = 8;//10
 	public final static String PHONE_BASE_PATH = "sdcard/TestResult_nimh/";
@@ -258,10 +258,28 @@ public class Utilities {
 	
 
 /*	validate*/
-	public final static String VALIDATE_ADDRESS = 			"http://dslsrv8.cs.missouri.edu/~rs79c/Server/Crt/validateUser.php";
-//	public final static String WRITE_ARRAY_TO_FILE = 		"http://dslsrv8.cs.missouri.edu/~czcz4/Server/Crt/writeArrayToFile.php";
-//	public final static String WRITE_ARRAY_TO_FILE_DEC = 	"http://dslsrv8.cs.missouri.edu/~czcz4/Server/Crt/writeArrayToFileDec.php";
+	
+/*	Craving Study*/
+//	public final static String VALIDATE_ADDRESS = 			"http://dslsrv8.cs.missouri.edu/~hw85f/Server/Crt2/validateUser.php";
+//	public final static String WRITE_ARRAY_TO_FILE = 		"http://dslsrv8.cs.missouri.edu/~hw85f/Server/Crt2/writeArrayToFile.php";
+//	public final static String WRITE_ARRAY_TO_FILE_DEC = 	"http://dslsrv8.cs.missouri.edu/~hw85f/Server/Crt2/writeArrayToFileDec.php";
+//	public final static String COMPLIANCE_ADDRESS = 		"http://dslsrv8.cs.missouri.edu/~hw85f/Server/Crt2/compliance.php";
+//	public final static String STUDY_DAY_MODIFY_ADDRESS = 	"http://dslsrv8.cs.missouri.edu/~hw85f/Server/Crt2/changeStudyWeek.php";
+	
+/*	EMA-STL Study*/
+//	public final static String VALIDATE_ADDRESS = 			"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtEMA/validateUser.php";
+//	public final static String WRITE_ARRAY_TO_FILE = 		"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtEMA/writeArrayToFile.php";
+//	public final static String WRITE_ARRAY_TO_FILE_DEC = 	"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtEMA/writeArrayToFileDec.php";
+//	public final static String COMPLIANCE_ADDRESS = 		"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtEMA/compliance.php";
+//	public final static String STUDY_DAY_MODIFY_ADDRESS = 	"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtEMA/changeStudyWeek.php";
+	
+/*	NIMH Emotion Study*/
+	public final static String VALIDATE_ADDRESS = 			"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtNIMH/validateUser.php";
+	public final static String WRITE_ARRAY_TO_FILE = 		"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtNIMH/writeArrayToFile.php";
 	public final static String WRITE_ARRAY_TO_FILE_DEC = 	"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtNIMH/writeArrayToFileDec.php";
+	public final static String COMPLIANCE_ADDRESS = 		"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtNIMH/compliance.php";
+	public final static String STUDY_DAY_MODIFY_ADDRESS = 	"http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtNIMH/changeStudyWeek.php";
+	
 //	public final static String UPLOAD_ADDRESS = WRITE_ARRAY_TO_FILE;
 	public final static String UPLOAD_ADDRESS = WRITE_ARRAY_TO_FILE_DEC;
 	public final static SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
@@ -319,12 +337,12 @@ public class Utilities {
 		}
 		long peak = c.getTimeInMillis();
 		
-		long unit = (peak-base)/(MAX_TRIGGER_RANDOM+1);
-		long r_unit = (peak-base)/((MAX_TRIGGER_RANDOM+1)*3);
+		long unit = (peak-base)/(MAX_TRIGGER_RANDOM+1);//7
+		long r_unit = (peak-base)/((MAX_TRIGGER_RANDOM+1)*3);//21
 		
 		String random_schedule = new String();
 		
-		for(int i=1;i<MAX_TRIGGER_RANDOM+1;i++){
+		for(int i=1;i<MAX_TRIGGER_RANDOM+1;i++){//7
 			random_schedule = random_schedule + (base+unit*i+(new Random().nextInt((int) (2*r_unit))-r_unit)+",");
 		}
 		
@@ -346,7 +364,7 @@ public class Utilities {
 			
 			try {
 				//nimh gonna be different
-				writeEventToFile(context, 10, strArr[0], strArr[1], strArr[2], "", "", "");
+				writeEventToFile(context, 10, strArr[0], strArr[1], strArr[2], strArr[3], strArr[4], strArr[5]);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -539,7 +557,7 @@ public class Utilities {
 		cancelMorning(context);
 		
 //		//write to file random schedule
-//		//3
+//		//6
 //		String strRandom[] = getSP(context, SP_RANDOM_TIME).getString(SP_KEY_RANDOM_TIME_SET, "").split(",");
 //		
 //		if(strRandom.length != 1){
@@ -553,7 +571,7 @@ public class Utilities {
 //			
 //			try {
 //				//nimh gonna be different
-//				writeEventToFile(context, 10, strRandom[0], strRandom[1], strRandom[2], "", "", "");
+//				writeEventToFile(context, 10, strRandom[0], strRandom[1], strRandom[2], strRandom[3], strRandom[4], strRandom[5]);
 //			} catch (IOException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();

@@ -57,6 +57,8 @@
     <string name="remove_msg">Do you really want to remove this ID and all related data from the device?</string>
     <string name="assign_hint">Four-digit ID goes here</string>
     <string name="remove_hint">Not set yet</string>
+    <string name="assign_new_week">Start a new study-week</string>
+    <string name="remove_local">Remove phone backup files</string>
     
     <string name="pin_title">Login</string>
     <string name="pin_message">Please input your PIN number.</string>
@@ -93,11 +95,35 @@
     <string name="morning_report_set_text">Wake up time (for tomorrow):</string>
     <string name="morning_report_set">Set wake up time</string>
     <string name="morning_report_unfinished">You may need to complete morning survey for today first</string>
+    <string name="morning_report_title4">Alert</string>
+    <string name="morning_report_msg4">Please remember to connect your sensor.</string>
     
     <!-- Initial Drinking -->
     <string name="initial_drink_name">Initial Drinking</string>
     <string name="first_drink_title">Drink Confirmation</string>
     <string name="first_drink_msg">Are you going to report your drink(s)?</string>
+    
+<!-- Service  -->
+	<string name="service_start">Service started!</string>
+	<string name="service_stop">Service stopped!</string>
+	<string name="service_stop_title">Confirm Stop Service</string>
+	<string name="service_stop_msg">This will shut down the background service and stop collecting any sensor data from your application. \nDo you really want to do this?</string>
+	
+<!-- Bluetooth  -->
+	<string name="bluetooth_enabled">Bluetooth is already enabled!</string>
+	<string name="bluetooth_disabled">Bluetooth is disabled!</string>
+	
+	<string name="bluetooth_needed">Enable Bluetooth before connecting</string>
+	<string name="bluetooth_loop">Try to connect.</string>
+	<string name="bluetooth_wrong_select">Please select the devices with \'EQ\' prefix</string>
+	<string name="bluetooth_no_select">No device is selected</string>
+	
+	<string name="device_no_pair">No Paired Device</string>
+	<string name="device_select">Select Device</string>
+	<string name="device_not_found">No Devices Found</string>
+	
+<!-- Sensor  -->
+	<string name="sensor_connect">Intent Received</string>
 	    
 <!-- Warning  -->
 	<string name="public_key_lost">Public Key missing, exiting!</string>

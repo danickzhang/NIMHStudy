@@ -170,8 +170,8 @@ public class XMLSurveyActivity extends Activity {
 					Calendar rsT = Calendar.getInstance();
 					String rsDate = (rsT.get(Calendar.MONTH)+1)+"/"+rsT.get(Calendar.DAY_OF_MONTH)+"/"+rsT.get(Calendar.YEAR);
 					String uID = Utilities.getSP(this, Utilities.SP_LOGIN).getString(Utilities.SP_KEY_LOGIN_USERID, "0000");
-					TriggerSignal triggerSignal = new TriggerSignal();
-					triggerSignal.execute(uID,rsDate,rsID);
+					ComplianceSignal triggerSignal = new ComplianceSignal();
+					triggerSignal.execute(uID,rsDate,rsID,"trigger");
 					
 				}
 			}
@@ -480,7 +480,7 @@ public class XMLSurveyActivity extends Activity {
     	@Override    	
     	public void run(){ 
     		
-    		streamID = soundp.play(soundsMap.get(1), 1, 1, 1, 2, 1); // should be different 
+    		streamID = soundp.play(soundsMap.get(1), 1, 1, 1, 0, 1); // nimh should be different //0->2
     	}
     }
 	
@@ -870,8 +870,8 @@ public class XMLSurveyActivity extends Activity {
 			Calendar rsT = Calendar.getInstance();
 			String rsDate = (rsT.get(Calendar.MONTH)+1)+"/"+rsT.get(Calendar.DAY_OF_MONTH)+"/"+rsT.get(Calendar.YEAR);
 			String uID = Utilities.getSP(this, Utilities.SP_LOGIN).getString(Utilities.SP_KEY_LOGIN_USERID, "0000");
-			CompletedSignal completedSignal = new CompletedSignal();
-			completedSignal.execute(uID,rsDate,rsID);
+			ComplianceSignal completedSignal = new ComplianceSignal();
+			completedSignal.execute(uID,rsDate,rsID,"complete");
 			
     	}
     	//--
@@ -1250,32 +1250,30 @@ public class XMLSurveyActivity extends Activity {
 	}
 	
 	//haidong from ricky
-	private class CompletedSignal extends AsyncTask<String,Void, Boolean>
+	private class ComplianceSignal extends AsyncTask<String,Void, Boolean>
 	{
 
 		@Override
 		protected Boolean doInBackground(String... strings) {
 			// TODO Auto-generated method stub
-	         String UID=strings[0];
-	         String Date=strings[1];
-	         String RSID=strings[2];
+	         String UID = strings[0];
+	         String Date = strings[1];
+	         String RSID = strings[2];
+	         String CMD = strings[3];
 	         if(checkDataConnectivity())
 	 		{
-	         HttpPost request = new HttpPost("http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtEMA/compliance.php");
+	         HttpPost request = new HttpPost(Utilities.COMPLIANCE_ADDRESS);
 	         List<NameValuePair> params = new ArrayList<NameValuePair>();
-	         params.add(new BasicNameValuePair("category","complete"));                            
+	         params.add(new BasicNameValuePair("category",CMD));                            
 	         params.add(new BasicNameValuePair("UID",UID));
 	         params.add(new BasicNameValuePair("Date",Date));
 	         params.add(new BasicNameValuePair("RSID",RSID));
-	         //params.add(new BasicNameValuePair("userID", UID));
 	         try {
 	         	        	
 	             request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
 	             HttpResponse response = new DefaultHttpClient().execute(request);
 	             if(response.getStatusLine().getStatusCode() == 200){
 	                 String result = EntityUtils.toString(response.getEntity());
-	                 Log.d("Sensor Data Point Info",result);                
-	                // Log.d("Wrist Sensor Data Point Info","Data Point Successfully Uploaded!");
 	             }
 	             return true;
 	         } 
@@ -1288,58 +1286,10 @@ public class XMLSurveyActivity extends Activity {
 	     	
 	     else 
 	     {
-	     	Log.d("Sensor Data Point Info","No Network Connection:Data Point was not uploaded");
-	     	//Toast.makeText(serviceContext, errMSG, Toast.LENGTH_LONG).show();
 	     	return false;
 	      } 
 		    
 		}
 		
 	}
-	private class TriggerSignal extends AsyncTask<String,Void, Boolean>
-	{
-
-		@Override
-		protected Boolean doInBackground(String... strings) {
-			// TODO Auto-generated method stub
-	         String UID=strings[0];
-	         String Date=strings[1];
-	         String RSID=strings[2];
-	         if(checkDataConnectivity())
-	 		{
-	         HttpPost request = new HttpPost("http://dslsrv8.cs.missouri.edu/~hw85f/Server/CrtEMA/compliance.php");
-	         List<NameValuePair> params = new ArrayList<NameValuePair>();
-	         params.add(new BasicNameValuePair("category","trigger"));                            
-	         params.add(new BasicNameValuePair("UID",UID));
-	         params.add(new BasicNameValuePair("Date",Date));
-	         params.add(new BasicNameValuePair("RSID",RSID));
-	         try {
-	         	        	
-	             request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
-	             HttpResponse response = new DefaultHttpClient().execute(request);
-	             if(response.getStatusLine().getStatusCode() == 200){
-	                 String result = EntityUtils.toString(response.getEntity());
-	                 Log.d("Sensor Data Point Info",result);                
-	                // Log.d("Wrist Sensor Data Point Info","Data Point Successfully Uploaded!");
-	             }
-	             return true;
-	         } 
-	         catch (Exception e) 
-	         {	             
-	             e.printStackTrace();
-	             return false;
-	         }
-	 	  }
-	     	
-	     else 
-	     {
-	     	Log.d("Sensor Data Point Info","No Network Connection:Data Point was not uploaded");
-	     	//Toast.makeText(SurveyPinContext, errMSG, Toast.LENGTH_LONG).show();
-	     	return false;
-	      } 
-		    
-		}
-		
-	}
-	
 }
