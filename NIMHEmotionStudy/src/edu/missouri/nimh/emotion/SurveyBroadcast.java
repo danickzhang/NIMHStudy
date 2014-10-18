@@ -1,5 +1,6 @@
 package edu.missouri.nimh.emotion;
 
+import java.io.IOException;
 import java.util.Calendar;
 
 import edu.missouri.nimh.emotion.location.LocationUtilities;
@@ -109,6 +110,9 @@ public class SurveyBroadcast extends BroadcastReceiver {
         		Utilities.getSP(context, Utilities.SP_RANDOM_TIME).edit().putLong(Utilities.SP_KEY_DRINKING_TIME_SET, Calendar.getInstance().getTimeInMillis()).commit();
         		
         		time = Calendar.getInstance().getTimeInMillis()+Utilities.FOLLOWUP_IN_SECONDS*1000;
+
+				Log.d("sa======================", "set true");
+				shp.edit().putBoolean(Utilities.SP_KEY_SURVEY_UNDERDRINKING, true).commit();
         	}
     		
         	//cancel exist reminder alarms if any
@@ -169,6 +173,12 @@ public class SurveyBroadcast extends BroadcastReceiver {
         		Utilities.LogB("*****************************", "else");
         		am.cancel(piSchedule);
         		shp.edit().putInt(triggerSeq, 0).commit();
+
+				if (surveyName.equals(Utilities.SV_NAME_FOLLOWUP)) {
+					Log.d("sa======================", "set false");
+					shp.edit().putBoolean(Utilities.SP_KEY_SURVEY_UNDERDRINKING, false).commit();
+				}
+
         	}
         	
         	
@@ -182,11 +192,33 @@ public class SurveyBroadcast extends BroadcastReceiver {
 				shp.edit().putString(Utilities.SP_KEY_SURVEY_UNDERREMINDERING, surveyName).commit();
 			}
 
-			if(shp.getString(Utilities.SP_KEY_SURVEY_UNDERREMINDERING, "").equals(surveyName)){
+			Utilities.LogB("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!2", surveyName + " " + shp.getString(Utilities.SP_KEY_SURVEY_UNDERREMINDERING, "") + " " + shp.getBoolean(Utilities.SP_KEY_SURVEY_UNDERDRINKING, false));
+			if (shp.getString(Utilities.SP_KEY_SURVEY_UNDERREMINDERING, "").equals(surveyName) &&
+					!(surveyName.equals(Utilities.SV_NAME_RANDOM) && shp.getBoolean(Utilities.SP_KEY_SURVEY_UNDERDRINKING, false))) {
 				am.setExact(AlarmManager.RTC_WAKEUP, Calendar.getInstance().getTimeInMillis() ,piReminder);
 			}else{
-				Utilities.LogB("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", surveyName);
+				Utilities.LogB("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", surveyName + " " + shp.getString(Utilities.SP_KEY_SURVEY_UNDERREMINDERING, ""));
 				Toast.makeText(context, surveyName+" has been skipped under current survey you are doing!", Toast.LENGTH_LONG).show();
+				shp.edit().putString(Utilities.SP_KEY_SURVEY_UNDERREMINDERING, "").commit();
+
+				try {
+					// for under doing some TRIGGERED survey, the new one will be skipped
+					// Random
+					// Drinking follow-ups
+
+					String seq = "";
+					int s = shp.getInt(triggerSeq, 0) != 0 ? shp.getInt(triggerSeq, 0) : Utilities.MAX_TRIGGER_MAP.get(surveyName);
+					if(surveyName.equals(Utilities.SV_NAME_RANDOM)){
+						seq = "," + s;
+					}
+
+					Utilities.writeEventToFile(context, (surveyName.equals(Utilities.SV_NAME_RANDOM) ? Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM : Utilities.CODE_SKIP_BLOCK_SURVEY_DRINKING),
+							"", "", "", "",
+							"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 		
@@ -230,7 +262,23 @@ public class SurveyBroadcast extends BroadcastReceiver {
 				}
 				else if(shp.getBoolean(Utilities.SP_KEY_SURVEY_SUSPENSION, false)){
 					Toast.makeText(context, surveyName+" has been skipped under suspension!", Toast.LENGTH_LONG).show();
-					Log.d("XXXXXXXXXXXXXXXX", "under suspension");
+					Log.d("XXXXXXXXXXXXXXXX", "under suspension " + surveyName + " " + shp.getInt(triggerSeq, 0));
+
+					try {
+						// since suspension doesn't skip drinking follow-ups and morning, this is only for random
+
+						String seq = "";
+						int s = shp.getInt(triggerSeq, 0) != 0 ? shp.getInt(triggerSeq, 0) : Utilities.MAX_TRIGGER_MAP.get(surveyName);
+						if (surveyName.equals(Utilities.SV_NAME_RANDOM)) {
+							seq = "," + s;
+						}
+						Utilities.writeEventToFile(context, Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM,
+								"", "", "",	"",
+								"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
 			}
 			

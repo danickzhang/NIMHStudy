@@ -140,26 +140,37 @@ public class AdminManageActivity extends TabActivity {
 		builder.setTitle(R.string.admin_set_title);
 		builder.setView(textEntryView);  
 		builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {
 				
 				EditText pinEdite = (EditText) textEntryView.findViewById(R.id.pin_edit);
 				String pinStr = pinEdite.getText().toString();
 				Utilities.Log("Pin Dialog", "pin String is "+pinStr);
-				
+
+				String data = null;
+				try {
+					data = Utilities.encryption("0000" + "," + "1" + "," + pinStr);
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
 /*				check network*/
 				
 /*				prepare params for server*/
 				HttpPost request = new HttpPost(Utilities.VALIDATE_ADDRESS);
  		        
  		        List<NameValuePair> params = new ArrayList<NameValuePair>();
- 		        
- 		        //file_name 
- 		        params.add(new BasicNameValuePair("userID","0000"));        
- 		        //function
- 		        params.add(new BasicNameValuePair("pre","1"));
- 		        //data                       
- 		        params.add(new BasicNameValuePair("password",pinStr));
-				
+
+				params.add(new BasicNameValuePair("data", data));
+
+// 		        //file_name
+// 		        params.add(new BasicNameValuePair("userID","0000"));
+// 		        //function
+// 		        params.add(new BasicNameValuePair("pre","1"));
+// 		        //data
+// 		        params.add(new BasicNameValuePair("password",pinStr));
+
 /*				check identity*/
  		        
  		        try {
@@ -209,8 +220,9 @@ public class AdminManageActivity extends TabActivity {
 		});
 		
 		builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-		    public void onClick(DialogInterface dialog, int whichButton) {  
-		    	
+		    @Override
+			public void onClick(DialogInterface dialog, int whichButton) {
+
 		    	imm.toggleSoftInput(0, InputMethodManager.RESULT_SHOWN);
 		    	imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
 					
@@ -296,17 +308,27 @@ public class AdminManageActivity extends TabActivity {
 /*				prepare params for server*/
             	String asedID = asID.getText().toString();
             	Log.d(TAG, "get from edittext is "+asedID);
-            	
+
+            	String data = null;
+				try {
+					data = Utilities.encryption(asedID + "," + "2");
+				} catch (Exception e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
             	HttpPost request = new HttpPost(Utilities.VALIDATE_ADDRESS);
  		        
  		        List<NameValuePair> params = new ArrayList<NameValuePair>();
- 		        
- 		        //file_name 
- 		        params.add(new BasicNameValuePair("userID",asedID));        
- 		        //function
- 		        params.add(new BasicNameValuePair("pre","2"));
- 		        //data                       
- 		        //params.add(new BasicNameValuePair("password",""));
+
+				params.add(new BasicNameValuePair("data", data));
+
+				// 		        //file_name
+				// 		        params.add(new BasicNameValuePair("userID",asedID));
+				// 		        //function
+				// 		        params.add(new BasicNameValuePair("pre","2"));
+				// 		        //data
+				// 		        //params.add(new BasicNameValuePair("password",""));
 
 /*				check identity*/
  		        
@@ -451,6 +473,7 @@ public class AdminManageActivity extends TabActivity {
         builder.setTitle(R.string.assign_confirm_title);  
         builder.setMessage(str);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {  
+        	@Override
         	public void onClick(DialogInterface dialog, int whichButton) {  
         		setHints();
         	}  
@@ -472,6 +495,7 @@ public class AdminManageActivity extends TabActivity {
         builder.setTitle(R.string.assign_confirm_title);  
         builder.setMessage(str);
         builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {  
+			@Override
 			public void onClick(DialogInterface dialog, int whichButton) {  
 				editor.putString(Utilities.SP_KEY_LOGIN_USERID, asID.getText().toString());
 				Log.d("here!!!", "id is "+asID.getText().toString());
@@ -483,8 +507,17 @@ public class AdminManageActivity extends TabActivity {
 				
 				//start new study week, if checked
 				if(rm_check.isChecked()){
+
+					String UID = null;
+					try {
+						UID = Utilities.encryption(asID.getText().toString());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
 					ChangeStudyWeek changeStudyWeek = new ChangeStudyWeek();
-		        	changeStudyWeek.execute(asID.getText().toString());
+					changeStudyWeek.execute(UID);
 				}
 				
 				setHints();

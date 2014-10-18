@@ -17,6 +17,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -73,7 +74,8 @@ public class SurveyMenu extends Activity {
 				linearLayout.addView(b);
 				
 				b.setOnClickListener(new OnClickListener(){
-					
+
+					@Override
 					public void onClick(View v) {
 						final SurveyInfo temp = buttonMap.get(v);
 						Utilities.Log(TAG, temp.getDisplayName());
@@ -111,30 +113,35 @@ public class SurveyMenu extends Activity {
 						
 						//Confirm Initial Drinking
 						else if (temp.getDisplayName().equals(getResources().getString(R.string.initial_drink_name))){
-							Dialog alertDialog = new AlertDialog.Builder(SurveyMenu.this)
-							.setCancelable(true)
-							.setTitle(R.string.first_drink_title)
-							.setMessage(R.string.first_drink_msg)
-							.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() { 
+							SharedPreferences shp = Utilities.getSP(SurveyMenu.this, Utilities.SP_SURVEY);
+							if (shp.getBoolean(Utilities.SP_KEY_SURVEY_UNDERDRINKING, false)) {
+								Alert(R.string.morning_report_title5, R.string.morning_report_msg5);
+							} else {
+								Dialog alertDialog = new AlertDialog.Builder(SurveyMenu.this)
+								.setCancelable(true)
+								.setTitle(R.string.first_drink_title)
+								.setMessage(R.string.first_drink_msg)
+								.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
 
-								@Override 
-								public void onClick(DialogInterface dialog, int which) { 
-									// TODO Auto-generated method stub  
-									launchSurvey(temp.getName());
-								} 
-							})
-							.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-								
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									// TODO Auto-generated method stub
-									
-								}
-							})
-							.create();
-							alertDialog.show();
-						} 
-						
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										// TODO Auto-generated method stub
+										launchSurvey(temp.getName());
+									}
+								})
+								.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog, int which) {
+										// TODO Auto-generated method stub
+
+											}
+								})
+								.create();
+								alertDialog.show();
+							}
+						}
+
 						else {
 							launchSurvey(temp.getName());
 						}
@@ -191,17 +198,17 @@ public class SurveyMenu extends Activity {
 			}
 			else if(resultCode == 3){
 //				Toast.makeText(this, "morning complete", Toast.LENGTH_LONG).show();
-				new AlertDialog.Builder(this)
-			    .setTitle(R.string.morning_report_title4)
-			    .setMessage(R.string.morning_report_msg4)
-			    .setCancelable(false)
-			    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {		          
-			        @Override  
-			        public void onClick(DialogInterface dialog, int which) { 
-			        	dialog.cancel();
-			        }
-			    })
-			    .create().show();
+//				new AlertDialog.Builder(this)
+//			    .setTitle(R.string.morning_report_title4)
+//			    .setMessage(R.string.morning_report_msg4)
+//			    .setCancelable(false)
+//			    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+//			        @Override
+//			        public void onClick(DialogInterface dialog, int which) {
+//			        	dialog.cancel();
+//			        }
+//			    })
+//			    .create().show();
 			}else{
 				
 			}

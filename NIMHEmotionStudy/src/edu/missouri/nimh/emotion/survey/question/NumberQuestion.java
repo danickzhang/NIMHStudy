@@ -8,8 +8,8 @@ import android.content.Context;
 import android.util.Log;
 import android.util.TypedValue;
 import android.widget.LinearLayout;
-import android.widget.NumberPicker;
 import android.widget.LinearLayout.LayoutParams;
+import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
 import android.widget.TextView;
 
@@ -26,15 +26,17 @@ public class NumberQuestion extends SurveyQuestion {
 		this.questionId = id;
 		this.questionType = QuestionType.NUMBER;
 	}
-	
-	
+
+
+	@Override
 	public LinearLayout prepareLayout(Context c) {
 		this.item = this.answers.get(0).getAnswerText();
 		this.min = Integer.parseInt(this.answers.get(1).getAnswerText());
 		this.max = Integer.parseInt(this.answers.get(2).getAnswerText());
-		if(result == -1)
+		if(result == -1) {
 			result = this.min;
-		
+		}
+
 		LinearLayout layout = new LinearLayout(c);
 		layout.setLayoutParams(new LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.MATCH_PARENT));
 		layout.setOrientation(LinearLayout.VERTICAL);
@@ -113,18 +115,22 @@ public class NumberQuestion extends SurveyQuestion {
 		return layout;
 	}
 
-	
+
+	@Override
 	public boolean validateSubmit() {
-		if(answered && result >= 0)
+		if(answered && result >= 0) {
 			return true;
+		}
 		return false;
 	}
-	
+
+	@Override
 	public String getSkip(){
 		return null;
 	}
-	
-	
+
+
+	@Override
 	public ArrayList<String> getSelectedAnswers(){
 		if(!validateSubmit()){
 			ArrayList<String> temp = new ArrayList<String>();
@@ -135,9 +141,10 @@ public class NumberQuestion extends SurveyQuestion {
 		temp.add(Integer.valueOf(result).toString());
 		return temp;
 	}
-	
+
+	@Override
 	public boolean clearSelectedAnswers(){
-		Log.d("final 3", "clear");
+//		Log.d("final 3", "clear");
 //		answers = null;
 		result = -1;
 		answered = false;
