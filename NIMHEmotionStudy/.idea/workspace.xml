@@ -2,95 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cd64b4ff-f6cd-4b90-ab79-e504291c544a" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/raw/alarm_sound.mp3" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/libs/android-support-v4.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/libs/google-play-services.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/libs/google-play-services.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.jar" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/drawable-hdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/drawable-mdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/drawable-xhdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/drawable-xxhdpi/ic_launcher.png" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/raw/publickey.key" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.gitignore" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/.name" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/location/ActivityRecognitionScan.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/location/ActivityRecognitionService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/activity/AdminManageActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/AndroidManifest.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/category/Answer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/assets/BehacioralDysregulationItems.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/category/Category.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/question/CheckQuestion.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/DaemonReceiver.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/location/LocationBroadcast.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/location/LocationUtilities.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/MainActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/assets/MoodDysregulationParcel.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/assets/MoodSubset.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/assets/MorningReportParcel.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/activity/MorningScheduler.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/NIMHEmotionStudy-NIMHEmotionStudy.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy.iml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/question/NumberPickerMe.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/question/NumberQuestion.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/category/Question.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/category/QuestionType.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/question/RadioInputQuestion.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/question/RadioQuestion.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/assets/RandomAssessmentParcel.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/category/RandomCategory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/services/SensorService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/assets/SituationAndSetting.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/StartupIntentReceiver.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/category/SurveyAnswer.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/SurveyBroadcast.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/category/SurveyCategory.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/SurveyInfo.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/activity/SurveyMenu.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/category/SurveyQuestion.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/activity/SuspensionTimePicker.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/question/TextQuestion.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/Utilities.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/XMLConfigHandler.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/XMLConfigParser.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/XMLHandler.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/XMLParser.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/java/edu/missouri/nimh/emotion/survey/XMLSurveyActivity.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/layout/activity_admin_manage.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/layout/activity_main.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/layout/activity_morning_scheduler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/layout/activity_suspension_picker.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/android_support_v4.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/build.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/build.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/assets/config.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/values/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/values-sw600dp/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/values-sw720dp-land/dimens.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/libraries/google_play_services.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradle/wrapper/gradle-wrapper.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/gradle.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew.bat" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/gradlew" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/local.properties" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/menu/main.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/layout/pin_input.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/copyright/profiles_settings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/layout/remove_id.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/settings.gradle" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/values/strings.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/values/styles.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/values-v11/styles.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/values-v14/styles.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/layout/survey_layout.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/NIMHEmotionStudy/src/main/res/layout/test.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/vcs.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/AndroidManifest.xml" afterPath="$PROJECT_DIR$/AndroidManifest.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="NIMHEmotionStudy.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -2147,7 +2059,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4301708036881" />
+        <entry key="$PROJECT_DIR$" value="4301841699999" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -2561,10 +2473,10 @@
     <order />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="1952" />
-    <option name="y" value="-10" />
-    <option name="width" value="1888" />
-    <option name="height" value="1090" />
+    <option name="x" value="2058" />
+    <option name="y" value="57" />
+    <option name="width" value="1350" />
+    <option name="height" value="860" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -2577,7 +2489,7 @@
     <ConfirmationsSetting value="0" id="Remove" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="AndroidView" proportions="" version="1">
+    <navigator currentView="ProjectPane" proportions="" version="1">
       <flattenPackages />
       <showMembers />
       <showModules />
@@ -2590,7 +2502,40 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="ProjectPane" />
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
       <pane id="Scratches" />
       <pane id="PackagesPane" />
       <pane id="AndroidView">
@@ -2599,6 +2544,30 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="NIMHEmotionStudy" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy-NIMHEmotionStudy" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="NIMHEmotionStudy-NIMHEmotionStudy" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="manifests" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidManifestsGroupNode" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
@@ -2760,24 +2729,24 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1952" y="-10" width="1888" height="1090" extended-state="6" />
+    <frame x="2058" y="57" width="1350" height="860" extended-state="1" />
     <editor active="false" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Build Variants" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32911393" sideWeight="0.50216687" order="-1" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4345404" sideWeight="0.50535166" order="-1" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32911393" sideWeight="0.49783316" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.4345404" sideWeight="0.4946483" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.3299025" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32911393" sideWeight="0.49783316" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.24972914" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.3524465" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="true" content_ui="tabs" />
