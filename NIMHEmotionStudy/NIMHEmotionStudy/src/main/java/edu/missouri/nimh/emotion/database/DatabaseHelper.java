@@ -3,94 +3,133 @@ package edu.missouri.nimh.emotion.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
+import android.util.Log;
 
 /**
  *
  * @author Andrew Smith
+ *
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static final String DB_NAME     = "";
+    private static final String DB_NAME     = "db.db";
     private static final String DB_LOCATION = "";
+    private static final int    DB_VERSION  = 1;
 
-    private static final String CREATE_SCRIPT_Location = "";
-    private static final String CREATE_SCRIPT          = "";
+    private static final String LOCATION_DATA_SQL =
+            "CREATE TABLE `locationData` (" +
+            "    `locationDataId` INTEGER PRIMARY KEY NOT NULL," +
+            "    `latitude`  VARCHAR(45) NULL,"                  +
+            "    `longitude` VARCHAR(45) NULL,"                  +
+            "    `unknown1`  VARCHAR(45) NULL,"                  +
+            "    `unknown2`  VARCHAR(45) NULL,"                  +
+            "    `type`      VARCHAR(45) NULL"                   +
+            ");";
+
+    private static final String HARDWARE_INFO_SQL =
+            "CREATE TABLE `hardwareInfo` ("                      +
+            "    `hardwareInfoID` INTEGER PRIMARY KEY NOT NULL," +
+            "    `message` TEXT NOT NULL"                        +
+            ");";
+
+    private static final String SURVEY_SQL =
+            "CREATE TABLE `survey` ("              +
+            "    `surveyID` VARCHAR(45) NOT NULL," +
+            "    `name`     VARCHAR(45) NOT NULL," +
+            "    PRIMARY KEY (`surveyID`)"         +
+            ");";
+
+    private static final String QUESTION_SQL =
+            "CREATE TABLE `question` ("          +
+            "    `questionID` VARCHAR(45) NULL," +
+            "    `text`       TEXT NOT NULL"     +
+            ");";
+
+    private static final String QUESTION_SURVEY =
+            "CREATE TABLE `questionOnSurvey` ("          +
+            "    `surveyID`   INT NOT NULL,"             +
+            "    `questionID` VARCHAR(45) NOT NULL,"     +
+            "    PRIMARY KEY (`surveyID`, `questionID`)" +
+            ");";
+
+    private static final String SurveySubmission =
+            "CREATE TABLE `surveySubmission` ("                      +
+            "    `surveySubmissionID` INTEGER PRIMARY KEY NOT NULL," +
+            "    `surveyID` VARCHAR(45) NOT NULL"                    +
+             ");";
+
+    private static final String SUBMISSION_ANSWER =
+            "CREATE TABLE `submissionAnswer` (" +
+            "        `submissionAnswerID` INTEGER PRIMARY KEY NOT NULL," +
+            "        `surveySubmissionID` INT NOT NULL,"                 +
+            "        `questionID`         VARCHAR(45) NOT NULL,"         +
+            "        `answer`             INT NOT NULL"                  +
+            ");";
+
+   private static final String EVENT_SQL =
+            " CREATE TABLE `event` ("                        +
+            "    `eventID` VARCHAR(45) NOT NULL,"            +
+            "    `userID`             VARCHAR(8)  NOT NULL," +
+            "    `timestamp`          TIMESTAMP   NOT NULL,"  +
+            "    `type`               VARCHAR(45) NULL,"     +
+            "    `studyDay`           DATE        NULL,"     +
+            "    `scheduledTS`        TIMESTAMP   NULL,"     +
+            "    `startTS`            TIMESTAMP   NULL,"     +
+            "    `endTS`              TIMESTAMP   NULL,"     +
+            "    `surveySubmissionID` VARCHAR(45) NULL,"     +
+            "    `locationDataID`     INT         NULL,"     +
+            "    `hardwareInfoID`     INT         NULL,"     +
+            "    PRIMARY KEY (`eventID`)" +
+            ");";
+
+    private static String[] TABLES_SQL = {
+            LOCATION_DATA_SQL,
+            HARDWARE_INFO_SQL,
+            SURVEY_SQL,
+            QUESTION_SQL,
+            QUESTION_SURVEY,
+            SurveySubmission,
+            SUBMISSION_ANSWER,
+            EVENT_SQL
+    };
+
+    private static String[] TABLE_NAMES = {
+            "locationData",
+            "hardwareInfo",
+            "survey",
+            "question",
+            "questionOnSurvey",
+            "surveySubmission",
+            "submissionAnswer",
+            "event"
+    };
+
 
     public DatabaseHelper(Context context) {
-        super(context, DB_NAME, null, 1);
+        super(context, DB_NAME, null, DB_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        // load SQL script from assets/res
+            Log.d("DB", "Creating database");
+            for (String createStatement : TABLES_SQL) {
+                db.execSQL(createStatement);
+            }
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        // delete
-        // call onCreate
+
+        Log.d("DB", "Database is being upgraded");
+        Log.d("DB", "Deleting tables");
+
+
+        for(String table : TABLE_NAMES) {
+            db.execSQL(String.format("DROP TABLE %s;", table));
+        }
+
+        Log.d("DB", "Creating tables");
+
+        onCreate(db);
     }
-
-    /**
-     * This method should write a single event into the database
-     */
-    private void writeEventToDb() {
-
-    }
-
-    /**
-     * This method should write the phones current GPS information into the database
-     */
-    private void writeLocationEvent() {
-
-    }
-
-    /**
-     * This method should write information about a change in hardware status to the database
-     */
-    private void writeHardwareInfo() {
-
-    }
-
-    /**
-     * @return Returns a JSON array of all of the data which has not been sent to the server.
-     */
-    public JSONArray getDataToSync() { return null; }
-
-    /**
-     *
-     * @param moodId
-     * @return
-     */
-    public JSONObject getMood(int moodId)                                   { return null; }
-
-    /**
-     *
-     * @param impulsivityId
-     * @return
-     */
-    public JSONObject getMoodAndImpulsivity(int impulsivityId)              { return null; }
-
-    /**
-     *
-     * @param impulsivityId
-     * @return
-     */
-    public JSONObject getImpulsivity(int impulsivityId)                     { return null; }
-    public JSONObject getStudyDay(int studyDay, int userId)                 { return null; }
-    public JSONObject getDrugs(int drugsId)                                 { return null; }
-    public JSONObject getSinceLastSurvey(int sinceLastSurveyId)             { return null; }
-    public JSONObject getSettings(int settingsId)                           { return null; }
-    public JSONObject getSituationAndSetting(int situationAndSettingId)     { return null; }
-    public JSONObject getSituation(int situationId)                         { return null; }
-    public JSONObject getMoodDisregulation(int moodDisregulationId)         { return null; }
-    public JSONObject getWorseMood(int worseMoodId)                         { return null; }
-    public JSONObject getBetterMood(int betterMood)                         { return null; }
-    public JSONObject getLocationData(int locationId)                       { return null; }
-    public JSONObject getLifeEventsExperiences(int lifeEventsExperiencesId) { return null; }
-    public JSONObject getRomanticPartner(int romanticPartnerId)             { return null; }
-    public JSONObject getEvent(int eventId)                                 { return null; }
 }
