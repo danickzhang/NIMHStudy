@@ -1,6 +1,5 @@
 package edu.missouri.nimh.emotion.database;
 
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -20,7 +19,7 @@ import edu.missouri.nimh.emotion.location.LocationBroadcast;
  */
 public class DAO {
     private final DatabaseHelper helper;
-    private SQLiteDatabase db;
+    private final SQLiteDatabase db;
 
     public DAO(Context context) {
         helper = new DatabaseHelper(context);
@@ -41,9 +40,7 @@ public class DAO {
         float  accuracy  = location.getAccuracy();
         String provider  = location.getProvider();
 
-        db.beginTransaction();
-
-        long result = insertLocation(latitude,longitude,accuracy,provider, type);
+        long result = insertLocation(latitude, longitude, accuracy, provider, type);
 
         if(result == -1) {
             return false;
@@ -51,20 +48,63 @@ public class DAO {
 
         result = insertEvent(LocationBroadcast.ID, time, "?", 0, null, null, null, null, result, null);
 
-        if(result != -1) {
-            db.setTransactionSuccessful();
-        }
-
-        db.endTransaction();
         return result != -1;
     }
 
 
     // ******************** Functions which insert only their parameters into the database **********************
 
+    public boolean insertSurvey(String surveyId, String name) {
+        ContentValues values = new ContentValues();
+
+        values.put("surveyID", surveyId);
+        values.put("name",     name);
+
+        boolean success = false;
+
+        try {
+            db.beginTransaction();
+
+            success = db.insert("survey", null, values) != -1;
+
+            if (success) {
+                db.setTransactionSuccessful();
+            }
+
+        } finally {
+            db.endTransaction();
+        }
+
+        return success;
+
+    }
+
+    public boolean insertQuestionOnSurvey(String surveyId, String questionId) {
+        ContentValues values = new ContentValues();
+
+        values.put("surveyID",   surveyId);
+        values.put("questionID", questionId);
+
+        boolean success = false;
+
+        try {
+
+            db.beginTransaction();
+
+            success = db.insert("questionOnSurvey", null, values) != -1;
+
+            if(success) {
+                db.setTransactionSuccessful();
+            }
+        } finally {
+            db.endTransaction();
+        }
+
+        return success;
+    }
 
     /**
-     * Inserts locoation data into the location table.
+     * Inserts location data into the location table.
      *
      * @param latitude   The latitude of the location
      * @param longitude  The longitude of the location
@@ -75,21 +115,25 @@ public class DAO {
      */
     public long insertLocation(double latitude, double longitude, float accuracy, String provider, String type) {
         ContentValues values = new ContentValues();
-        values.put("lattitude", latitude);
+        values.put("latitude", latitude);
         values.put("longitude", longitude);
         values.put("unknown1",  accuracy);
-        values.put("unknown2", provider);
+        values.put("unknown2",  provider);
         values.put("type",      type);
 
-        db.beginTransaction();
+        long result = -1;
 
-        long result = db.insert("locationData", null, values);
+        try {
+            db.beginTransaction();
 
-        if(result!= -1) {
-            db.setTransactionSuccessful();
+            result = db.insert("locationData", null, values);
+
+            if (result != -1) {
+                db.setTransactionSuccessful();
+            }
+        } finally {
+            db.endTransaction();
         }
-
-        db.endTransaction();
 
         return result;
     }
@@ -99,26 +143,30 @@ public class DAO {
 
         ContentValues values = new ContentValues();
 
-        db.beginTransaction();
+        long result = -1;
 
-        values.put("userId", userId);
-        values.put("timestamp", timestamp.toString());
-        values.put("type", type);
-        values.put("studyDay", studyDay);
-        values.put("scheduledTS", scheduledTS.toString());
-        values.put("startTS", startTS.toString());
-        values.put("endTS", endTS.toString());
-        values.put("surveySubmissionId", surveySubmissionId);
-        values.put("locationDataId", locationDataId);
-        values.put("hardwareInfo", hardwareInfoId);
+        try {
+            db.beginTransaction();
 
-        long result = db.insert("event", null, values);
+            values.put("userId",             userId);
+            values.put("timestamp",          timestamp.toString());
+            values.put("type",               type);
+            values.put("studyDay",           studyDay);
+            values.put("scheduledTS",        scheduledTS.toString());
+            values.put("startTS",            startTS.toString());
+            values.put("endTS",              endTS.toString());
+            values.put("surveySubmissionId", surveySubmissionId);
+            values.put("locationDataId",     locationDataId);
+            values.put("hardwareInfo",       hardwareInfoId);
 
-        if(result != -1) {
-            db.setTransactionSuccessful();
+            result = db.insert("event", null, values);
+
+            if (result != -1) {
+                db.setTransactionSuccessful();
+            }
+        } finally {
+            db.endTransaction();
         }
-
-        db.endTransaction();
 
         return result;
     }
