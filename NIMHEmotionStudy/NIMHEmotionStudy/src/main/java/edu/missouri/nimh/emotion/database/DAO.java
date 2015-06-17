@@ -123,6 +123,115 @@ public class DAO {
         return result;
     }
 
+    /**
+     * Inserts a row into the hardwareInfo table
+     * @param hardwareInfoID auto-incrementing primary key for this table
+     * @param message the text of the hardware information
+     * @return -1 if the insertion failed, or a row ID otherwise
+     */
+    public long insertHardwareInfo(Integer hardwareInfoID, String message){
+
+        // The values that will be inserted in the new row
+        ContentValues values = new ContentValues();
+
+
+        values.put("hardwareInfoID", hardwareInfoID);
+        values.put("message", message);
+
+
+        // The result of the row insertion
+        long result;
+
+        try {
+
+            // Attempt to insert the row into "event," and store the result.
+           result = db.insert("hardwareInfo", null, values);
+
+           // If the result returns -1, it failed. If it returns anything else, it was successful.
+           if(result != -1) {
+               db.setTransactionSuccessful();
+           }
+
+        } finally {
+           db.endTransaction();
+        }
+
+        return result;
+    }
+
+    /**
+     * Inserts a row into the submissionAnswer table
+     * @param submissionAnswerID the auto-incrementing primary key of this table
+     * @param surveySubmissionID the unofficial foreign key from the surveySubmission table
+     * @param questionID the question ID
+     * @param answer the answer
+     * @return -1 if the insertion failed, or a row ID otherwise
+     */
+    public long insertSubmissionAnswer(Integer submissionAnswerID, Integer surveySubmissionID, String questionID, Integer answer){
+
+        // The values that will be inserted in the new row
+        ContentValues values = new ContentValues();
+
+        values.put("submissionAnswerID", submissionAnswerID);
+        values.put("surveySubmissionID", surveySubmissionID);
+        values.put("questionID", questionID);
+        values.put("answer", answer);
+
+        // The result of the row insertion
+        long result;
+
+        try {
+
+            // Attempt to insert the row into "event," and store the result.
+            result = db.insert("submissionAnswer", null, values);
+
+            // If the result returns -1, it failed. If it returns anything else, it was successful.
+            if(result != -1) {
+                db.setTransactionSuccessful();
+            }
+
+        } finally {
+            db.endTransaction();
+        }
+
+        return result;
+
+    }
+
+    /**
+     * Inserts a row into the surveySubmission table
+     * @param surveySubmissionID the survey submission ID
+     * @param surveyID the ID of the survey
+     * @return -1 if the insertion failed, or a row ID otherwise
+     */
+    public long insertSurveySubmission(Integer surveySubmissionID, String surveyID){
+
+        // The values that will be inserted in the new row
+        ContentValues values = new ContentValues();
+
+        values.put("surveySubmissionID", surveySubmissionID);
+        values.put("surveyID", surveyID);
+
+        // The result of the row insertion
+        long result;
+
+        try {
+
+            // Attempt to insert the row into "event," and store the result.
+            result = db.insert("surveySubmission", null, values);
+
+            // If the result returns -1, it failed. If it returns anything else, it was successful.
+            if(result != -1) {
+                db.setTransactionSuccessful();
+            }
+
+        } finally {
+            db.endTransaction();
+        }
+        
+        return result;
+    }
+
     // *************************************** Data to JSON ********************************
 
 
