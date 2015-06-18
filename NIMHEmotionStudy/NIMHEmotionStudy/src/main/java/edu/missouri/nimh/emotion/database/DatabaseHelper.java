@@ -21,10 +21,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String LOCATION_DATA_SQL =
             "CREATE TABLE `locationData` (" +
             "    `locationDataId` INTEGER PRIMARY KEY NOT NULL," +
-            "    `latitude`  VARCHAR(45) NULL,"                  +
-            "    `longitude` VARCHAR(45) NULL,"                  +
-            "    `unknown1`  VARCHAR(45) NULL,"                  +
-            "    `unknown2`  VARCHAR(45) NULL,"                  +
+            "    `latitude`  DOUBLE NULL,"                  +
+            "    `longitude` DOUBLE NULL,"                  +
+            "    `accuracy`  Float NULL,"                  +
+            "    `provider`  VARCHAR(45) NULL,"                  +
             "    `type`      VARCHAR(45) NULL"                   +
             ");";
 
@@ -69,18 +69,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ");";
 
    private static final String EVENT_SQL =
-            " CREATE TABLE `event` ("                        +
-            "    `eventID` VARCHAR(45) NOT NULL,"            +
-            "    `userID`             VARCHAR(8)  NOT NULL," +
+            " CREATE TABLE `event` ("                         +
+            "    `eventID` VARCHAR(45) NOT NULL,"             +
+            "    `userID`             VARCHAR(8)  NOT NULL,"  +
             "    `timestamp`          TIMESTAMP   NOT NULL,"  +
-            "    `type`               VARCHAR(45) NULL,"     +
-            "    `studyDay`           DATE        NULL,"     +
-            "    `scheduledTS`        TIMESTAMP   NULL,"     +
-            "    `startTS`            TIMESTAMP   NULL,"     +
-            "    `endTS`              TIMESTAMP   NULL,"     +
-            "    `surveySubmissionID` VARCHAR(45) NULL,"     +
-            "    `locationDataID`     INT         NULL,"     +
-            "    `hardwareInfoID`     INT         NULL,"     +
+            "    `type`               VARCHAR(45) NULL,"      +
+            "    `studyDay`           DATE        NULL,"      +
+            "    `scheduledTS`        TIMESTAMP   NULL,"      +
+            "    `startTS`            TIMESTAMP   NULL,"      +
+            "    `endTS`              TIMESTAMP   NULL,"      +
+            "    `surveySubmissionID` VARCHAR(45) NULL,"      +
+            "    `locationDataID`     INT         NULL,"      +
+            "    `hardwareInfoID`     INT         NULL,"      +
             "    PRIMARY KEY (`eventID`)" +
             ");";
 

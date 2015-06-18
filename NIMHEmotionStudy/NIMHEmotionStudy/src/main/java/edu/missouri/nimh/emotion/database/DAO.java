@@ -2,8 +2,12 @@ package edu.missouri.nimh.emotion.database;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -118,8 +122,8 @@ public class DAO {
         ContentValues values = new ContentValues();
         values.put("latitude", latitude);
         values.put("longitude", longitude);
-        values.put("unknown1",  accuracy);
-        values.put("unknown2",  provider);
+        values.put("accuracy",  accuracy);
+        values.put("provider",  provider);
         values.put("type",      type);
 
         long result = -1;
@@ -285,6 +289,47 @@ public class DAO {
 
 
     //               Functions which load data and return them as JSON will be here.
+
+
+    /**
+     * Loads a locationData row by id returning it in JSON.
+     * @param locationDataID The id of the LocationData object to retrieve
+     * @return A JSON object representing a row of the LocationData table
+     * @throws JSONException
+     */
+    public JSONObject getLocationData(int locationDataID) throws JSONException {
+
+        Cursor cursor;
+
+        String[] columns   = { "locationDataId", "longitude", "unknown1", "unknown2", "type" };
+        String[] arguments = { Integer.toString(locationDataID) };
+
+        cursor = db.query("locationData", columns, "locationID = ?", arguments, null,null,null);
+
+        assert cursor.getCount() == 1;
+
+        cursor.moveToFirst();
+
+        int    locationDataId = cursor.getInt(0);
+        double latitude       = cursor.getDouble(1);
+        double longitude      = cursor.getDouble(2);
+        float  accuracy       = cursor.getFloat(3);
+        String provider       = cursor.getString(4);
+        String type           = cursor.getString(5);
+
+        cursor.close();
+
+        JSONObject locationData = new JSONObject();
+        locationData.put("locationDataId", locationDataId);
+        locationData.put("latitude", latitude);
+        locationData.put("longitude", longitude);
+        locationData.put("accuracy", accuracy);
+        locationData.put("provider", provider);
+        locationData.put("type", type);
+
+        return  locationData;
+
+    }
 
 
    // **************************************** Data to JSON ********************************
