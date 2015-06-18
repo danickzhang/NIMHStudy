@@ -14,6 +14,7 @@ import edu.missouri.nimh.emotion.location.LocationBroadcast;
 
 /**
  * @author Andrew Smith
+ * @author Jay Kelner
  *
  * Contains functions to insert into the database and to retrieve database information in JSON.
  */
@@ -22,7 +23,7 @@ public class DAO {
     private final SQLiteDatabase db;
 
     public DAO(Context context) {
-        helper = new DatabaseHelper(context);
+        helper = DatabaseHelper.getInstance(context);
         db = helper.getWritableDatabase();
     }
 

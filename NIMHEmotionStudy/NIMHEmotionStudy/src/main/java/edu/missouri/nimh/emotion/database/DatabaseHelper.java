@@ -12,6 +12,8 @@ import android.util.Log;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
+    private static DatabaseHelper databaseHelper;
+
     private static final String DB_NAME     = "db.db";
     private static final String DB_LOCATION = "";
     private static final int    DB_VERSION  = 1;
@@ -104,9 +106,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "event"
     };
 
-
-    public DatabaseHelper(Context context) {
+    private DatabaseHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
+    }
+
+    public static synchronized DatabaseHelper getInstance(Context context) {
+        if(databaseHelper == null) {
+            databaseHelper = new DatabaseHelper(context);
+        }
+
+        return databaseHelper;
     }
 
     @Override
