@@ -62,7 +62,7 @@ public class DAO {
     }
 
 
-    // ******************** Functions which insert only their parameters into the database **********************
+    // ******************** Functions which insert only their parameters into the database *********
 
     /**
      * Inserts a row into the survey table
@@ -196,17 +196,14 @@ public class DAO {
 
     /**
      * Inserts a row into the hardwareInfo table
-     * @param hardwareInfoID auto-incrementing primary key for this table
      * @param message the text of the hardware information
      * @return -1 if the insertion failed, or a row ID otherwise
      */
-    public long insertHardwareInfo(Integer hardwareInfoID, String message){
+    public long insertHardwareInfo(String message){
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
 
-
-        values.put("hardwareInfoID", hardwareInfoID);
         values.put("message", message);
 
 
@@ -232,18 +229,17 @@ public class DAO {
 
     /**
      * Inserts a row into the submissionAnswer table
-     * @param submissionAnswerID the auto-incrementing primary key of this table
      * @param surveySubmissionID the unofficial foreign key from the surveySubmission table
      * @param questionID the question ID
      * @param answer the answer
      * @return -1 if the insertion failed, or a row ID otherwise
      */
-    public long insertSubmissionAnswer(Integer submissionAnswerID, Integer surveySubmissionID, String questionID, Integer answer){
+    public long insertSubmissionAnswer(Integer surveySubmissionID, String questionID, Integer answer){
+
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
 
-        values.put("submissionAnswerID", submissionAnswerID);
         values.put("surveySubmissionID", surveySubmissionID);
         values.put("questionID", questionID);
         values.put("answer", answer);
@@ -271,16 +267,13 @@ public class DAO {
 
     /**
      * Inserts a row into the surveySubmission table
-     * @param surveySubmissionID the survey submission ID
      * @param surveyID the ID of the survey
      * @return -1 if the insertion failed, or a row ID otherwise
      */
-    public long insertSurveySubmission(Integer surveySubmissionID, String surveyID){
+    public long insertSurveySubmission(String surveyID){
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
-
-        values.put("surveySubmissionID", surveySubmissionID);
         values.put("surveyID", surveyID);
 
         // The result of the row insertion
