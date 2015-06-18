@@ -5,7 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -13,6 +15,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import static edu.missouri.nimh.emotion.database.DatabaseHelper.*;
 
 import edu.missouri.nimh.emotion.location.LocationBroadcast;
 
@@ -86,7 +90,7 @@ public class DAO {
         try {
             db.beginTransaction();
 
-            success = db.insert("survey", null, values) != -1;
+            success = db.insert(SURVEY_TABLE, null, values) != -1;
 
             if (success) {
                 db.setTransactionSuccessful();
@@ -119,7 +123,7 @@ public class DAO {
 
             db.beginTransaction();
 
-            success = db.insert("questionOnSurvey", null, values) != -1;
+            success = db.insert(QUESTION_ON_SURVEY_TABLE, null, values) != -1;
 
             if(success) {
                 db.setTransactionSuccessful();
@@ -155,7 +159,7 @@ public class DAO {
         try {
             db.beginTransaction();
 
-            result = db.insert("locationData", null, values);
+            result = db.insert(LOCATION_DATA_TABLE, null, values);
 
             if (result != -1) {
                 db.setTransactionSuccessful();
@@ -178,7 +182,7 @@ public class DAO {
             db.beginTransaction();
 
             values.put("userId",             userId);
-            values.put("timestamp",          timestamp.toString());
+            values.put("timestamp", timestamp.toString());
             values.put("type",               type);
             values.put("studyDay",           studyDay);
             values.put("scheduledTS",        scheduledTS.toString());
@@ -187,8 +191,9 @@ public class DAO {
             values.put("surveySubmissionId", surveySubmissionId);
             values.put("locationDataId",     locationDataId);
             values.put("hardwareInfo",       hardwareInfoId);
+            values.put("isSynchronized",     false);
 
-            result = db.insert("event", null, values);
+            result = db.insert(EVENT_TABLE, null, values);
 
             if (result != -1) {
                 db.setTransactionSuccessful();
@@ -219,7 +224,7 @@ public class DAO {
         try {
 
             // Attempt to insert the row into "event," and store the result.
-           result = db.insert("hardwareInfo", null, values);
+           result = db.insert(HARDWARE_INFO_TABLE, null, values);
 
            // If the result returns -1, it failed. If it returns anything else, it was successful.
            if(result != -1) {
@@ -257,7 +262,7 @@ public class DAO {
         try {
 
             // Attempt to insert the row into "event," and store the result.
-            result = db.insert("submissionAnswer", null, values);
+            result = db.insert(SUBMISSION_ANSWER_TABLE, null, values);
 
             // If the result returns -1, it failed. If it returns anything else, it was successful.
             if(result != -1) {
@@ -290,7 +295,7 @@ public class DAO {
         try {
 
             // Attempt to insert the row into "event," and store the result.
-            result = db.insert("surveySubmission", null, values);
+            result = db.insert(SURVEY_SUBMISSION_TABLE, null, values);
 
             // If the result returns -1, it failed. If it returns anything else, it was successful.
             if(result != -1) {
@@ -305,10 +310,8 @@ public class DAO {
     }
 
     // *************************************** Data to JSON ********************************
-
-
     //               Functions which load data and return them as JSON will be here.
-
+    // *************************************************************************************
 
     /**
      * Retrieves a row from the hardwareInfo table as JSON
@@ -324,7 +327,7 @@ public class DAO {
         String[] arguments = { Integer.toString(hardwareInfoID) };
 
 
-        cursor = db.query("hardwareInfo", columns, "hardwareInfoID = ?", arguments, null, null, null);
+        cursor = db.query(HARDWARE_INFO_TABLE, columns, "hardwareInfoID = ?", arguments, null, null, null);
 
         assert cursor.getCount() > 0;
 
@@ -360,7 +363,7 @@ public class DAO {
         String[] arguments = { questionID };
 
 
-        cursor = db.query("question", columns, "questionID = ?", arguments, null, null, null);
+        cursor = db.query(QUESTION_TABLE, columns, "questionID = ?", arguments, null, null, null);
 
         assert cursor.getCount() > 0;
 
@@ -394,7 +397,7 @@ public class DAO {
         String[] arguments = { surveyID };
 
 
-        cursor = db.query("survey", columns, "surveyID = ?", arguments, null, null, null);
+        cursor = db.query(SURVEY_TABLE, columns, "surveyID = ?", arguments, null, null, null);
 
         assert cursor.getCount() > 0;
 
@@ -425,38 +428,34 @@ public class DAO {
 
         Cursor cursor;
 
-        String[] columns   = { "locationDataId", "longitude", "unknown1", "unknown2", "type" };
-        String[] arguments = { Integer.toString(locationDataID) };
+        String[] columns = {"locationDataId", "longitude", "unknown1", "unknown2", "type"};
+        String[] arguments = {Integer.toString(locationDataID)};
 
-        cursor = db.query("locationData", columns, "locationDataID = ?", arguments, null, null, null);
+        cursor = db.query(LOCATION_DATA_TABLE, columns, "locationDataID = ?", arguments, null, null, null);
 
         assert cursor.getCount() == 1;
 
         cursor.moveToFirst();
 
-        int    locationDataId = cursor.getInt(0);
-        double latitude       = cursor.getDouble(1);
-        double longitude      = cursor.getDouble(2);
-        float  accuracy       = cursor.getFloat(3);
-        String provider       = cursor.getString(4);
-        String type           = cursor.getString(5);
+        int locationDataId = cursor.getInt(0);
+        double latitude = cursor.getDouble(1);
+        double longitude = cursor.getDouble(2);
+        float accuracy = cursor.getFloat(3);
+        String provider = cursor.getString(4);
+        String type = cursor.getString(5);
 
         cursor.close();
 
         JSONObject locationData = new JSONObject();
 
         locationData.put("locationDataId", locationDataId);
-        locationData.put("latitude",       latitude);
-        locationData.put("longitude",      longitude);
-        locationData.put("accuracy",       accuracy);
-        locationData.put("provider",       provider);
-        locationData.put("type",           type);
+        locationData.put("latitude", latitude);
+        locationData.put("longitude", longitude);
+        locationData.put("accuracy", accuracy);
+        locationData.put("provider", provider);
+        locationData.put("type", type);
 
-        return  locationData;
+        return locationData;
 
     }
-
-
-   // **************************************** Data to JSON ********************************
-
 }
