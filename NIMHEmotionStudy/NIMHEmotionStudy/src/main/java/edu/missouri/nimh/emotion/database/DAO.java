@@ -23,11 +23,10 @@ import edu.missouri.nimh.emotion.location.LocationBroadcast;
  * Contains functions to insert into the database and to retrieve database information in JSON.
  */
 public class DAO {
-    private final DatabaseHelper helper;
     private final SQLiteDatabase db;
 
     public DAO(Context context) {
-        helper = DatabaseHelper.getInstance(context);
+        DatabaseHelper helper = DatabaseHelper.getInstance(context);
         db = helper.getWritableDatabase();
     }
 
@@ -320,12 +319,13 @@ public class DAO {
         cursor.close();
 
         JSONObject locationData = new JSONObject();
+
         locationData.put("locationDataId", locationDataId);
-        locationData.put("latitude", latitude);
-        locationData.put("longitude", longitude);
-        locationData.put("accuracy", accuracy);
-        locationData.put("provider", provider);
-        locationData.put("type", type);
+        locationData.put("latitude",       latitude);
+        locationData.put("longitude",      longitude);
+        locationData.put("accuracy",       accuracy);
+        locationData.put("provider",       provider);
+        locationData.put("type",           type);
 
         return  locationData;
 
