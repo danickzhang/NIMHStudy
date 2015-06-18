@@ -36,9 +36,10 @@ public class DAO {
     }
 
     /**
-     * Writes the current location of the phone to the database
-     * @param location the location of the phone
-     * @param type the means by which the location was obtained (GPS, WiFi?)
+     * Writes the current location of the phone to the database.
+     *
+     * @param  location the location of the phone
+     * @param  type the means by which the location was obtained (GPS, WiFi?)
      * @return true if the write succeeded, false otherwise
      */
     public boolean writeLocationToDatabase(Location location, String type) {
@@ -65,10 +66,11 @@ public class DAO {
     // ******************** Functions which insert only their parameters into the database *********
 
     /**
-     * Inserts a row into the survey table
+     * Inserts a row into the survey table.
+     *
      * @param surveyId the ID of the survey
-     * @param name the name of the survey
-     * @return true if the insertion succeeded, or false otherwise.
+     * @param name     the name of the survey
+     * @return         true if the insertion succeeded, or false otherwise.
      */
     public boolean insertSurvey(String surveyId, String name) {
         ContentValues values = new ContentValues();
@@ -96,11 +98,11 @@ public class DAO {
     }
 
     /**
-     * Inserts a row into the questionOnSurvey table
+     * Inserts a row into the questionOnSurvey table.
      *
-     * @param surveyId the survey ID
+     * @param surveyId   the survey ID
      * @param questionId the question ID
-     * @return true if the insertion succeeded, or false otherwise
+     * @return           true if the insertion succeeded, or false otherwise
      */
     public boolean insertQuestionOnSurvey(String surveyId, String questionId) {
         ContentValues values = new ContentValues();
@@ -134,11 +136,12 @@ public class DAO {
      * @param accuracy   The accuracy of the measurement
      * @param provider   The source of the location information
      * @param type       The users activity type
-     * @return returns a row id on success or -1 on failure
+     * @return           Returns a row id on success or -1 on failure
      */
     public long insertLocation(double latitude, double longitude, float accuracy, String provider, String type) {
         ContentValues values = new ContentValues();
-        values.put("latitude", latitude);
+
+        values.put("latitude",  latitude);
         values.put("longitude", longitude);
         values.put("accuracy",  accuracy);
         values.put("provider",  provider);
@@ -195,8 +198,9 @@ public class DAO {
     }
 
     /**
-     * Inserts a row into the hardwareInfo table
-     * @param message the text of the hardware information
+     * Inserts a row into the hardwareInfo table.
+     *
+     * @param  message the text of the hardware information
      * @return -1 if the insertion failed, or a row ID otherwise
      */
     public long insertHardwareInfo(String message){
@@ -205,7 +209,6 @@ public class DAO {
         ContentValues values = new ContentValues();
 
         values.put("message", message);
-
 
         // The result of the row insertion
         long result;
@@ -228,10 +231,11 @@ public class DAO {
     }
 
     /**
-     * Inserts a row into the submissionAnswer table
-     * @param surveySubmissionID the unofficial foreign key from the surveySubmission table
-     * @param questionID the question ID
-     * @param answer the answer
+     * Inserts a row into the submissionAnswer table.
+     *
+     * @param  surveySubmissionID the unofficial foreign key from the surveySubmission table
+     * @param  questionID the question ID
+     * @param  answer the answer
      * @return -1 if the insertion failed, or a row ID otherwise
      */
     public long insertSubmissionAnswer(Integer surveySubmissionID, String questionID, Integer answer){
@@ -241,8 +245,8 @@ public class DAO {
         ContentValues values = new ContentValues();
 
         values.put("surveySubmissionID", surveySubmissionID);
-        values.put("questionID", questionID);
-        values.put("answer", answer);
+        values.put("questionID",         questionID);
+        values.put("answer",             answer);
 
         // The result of the row insertion
         long result;
@@ -266,8 +270,9 @@ public class DAO {
     }
 
     /**
-     * Inserts a row into the surveySubmission table
-     * @param surveyID the ID of the survey
+     * Inserts a row into the surveySubmission table.
+     *
+     * @param  surveyID the ID of the survey
      * @return -1 if the insertion failed, or a row ID otherwise
      */
     public long insertSurveySubmission(String surveyID){
@@ -304,7 +309,8 @@ public class DAO {
 
     /**
      * Loads a locationData row by id returning it in JSON.
-     * @param locationDataID The id of the LocationData object to retrieve
+     *
+     * @param  locationDataID The id of the LocationData object to retrieve
      * @return A JSON object representing a row of the LocationData table
      * @throws JSONException
      */
@@ -315,7 +321,7 @@ public class DAO {
         String[] columns   = { "locationDataId", "longitude", "unknown1", "unknown2", "type" };
         String[] arguments = { Integer.toString(locationDataID) };
 
-        cursor = db.query("locationData", columns, "locationID = ?", arguments, null,null,null);
+        cursor = db.query("locationData", columns, "locationID = ?", arguments, null, null, null);
 
         assert cursor.getCount() == 1;
 
