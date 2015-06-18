@@ -35,6 +35,9 @@ public class DAO {
 
     }
 
+
+
+
     /**
      * Writes the current location of the phone to the database.
      *
@@ -308,6 +311,110 @@ public class DAO {
 
 
     /**
+     * Retrieves a row from the hardwareInfo table as JSON
+     * @param hardwareInfoID the hardwareInfoID by which the row is retrieved
+     * @return the JSONObject containing the row that has been retrieved
+     * @throws JSONException
+     */
+    public JSONObject getHardwareInfo(int hardwareInfoID) throws JSONException {
+
+        Cursor cursor;
+
+        String[] columns   = { "hardwareInfoID", "message" };
+        String[] arguments = { Integer.toString(hardwareInfoID) };
+
+
+        cursor = db.query("hardwareInfo", columns, "hardwareInfoID = ?", arguments, null, null, null);
+
+        assert cursor.getCount() > 0;
+
+        cursor.moveToFirst();
+
+        int    hardwareInfoId = cursor.getInt(0);
+        String messageText = cursor.getString(1);
+
+        cursor.close();
+
+        JSONObject hardwareInfo = new JSONObject();
+
+        // Don't include this line because hardwareInfoID auto-increments on the server
+//        hardwareInfo.put("hardwareInfoID", hardwareInfoId);
+        hardwareInfo.put("message", messageText);
+
+
+        return  hardwareInfo;
+
+    }
+
+    /**
+     * Retrieves a question from the question table
+     * @param questionID the questionID of the question to be retrieved
+     * @return the JSONObject of the question retrieved
+     * @throws JSONException
+     */
+    public JSONObject getQuestion(String questionID) throws JSONException {
+
+        Cursor cursor;
+
+        String[] columns   = { "questionID", "text" };
+        String[] arguments = { questionID };
+
+
+        cursor = db.query("question", columns, "questionID = ?", arguments, null, null, null);
+
+        assert cursor.getCount() > 0;
+
+        cursor.moveToFirst();
+
+        String questionId = cursor.getString(0);
+        String text = cursor.getString(1);
+
+        cursor.close();
+
+        JSONObject question = new JSONObject();
+
+        question.put("questionID", questionId);
+        question.put("text", text);
+
+        return  question;
+
+    }
+
+    /**
+     * Retrieves a row from the survey table in the database
+     * @param surveyID the ID of the survey to retrieve
+     * @return the JSONObject of the retrieved survey
+     * @throws JSONException
+     */
+    public JSONObject getSurvey(String surveyID) throws JSONException {
+
+        Cursor cursor;
+
+        String[] columns   = { "surveyID", "name" };
+        String[] arguments = { surveyID };
+
+
+        cursor = db.query("survey", columns, "surveyID = ?", arguments, null, null, null);
+
+        assert cursor.getCount() > 0;
+
+        cursor.moveToFirst();
+
+        String surveyId = cursor.getString(0);
+        String name = cursor.getString(1);
+
+        cursor.close();
+
+        JSONObject survey = new JSONObject();
+
+        survey.put("surveyID", surveyId);
+        survey.put("name", name);
+
+        return  survey;
+
+    }
+
+    /**
      * Loads a locationData row by id returning it in JSON.
      *
      * @param  locationDataID The id of the LocationData object to retrieve
@@ -321,7 +428,7 @@ public class DAO {
         String[] columns   = { "locationDataId", "longitude", "unknown1", "unknown2", "type" };
         String[] arguments = { Integer.toString(locationDataID) };
 
-        cursor = db.query("locationData", columns, "locationID = ?", arguments, null, null, null);
+        cursor = db.query("locationData", columns, "locationDataID = ?", arguments, null, null, null);
 
         assert cursor.getCount() == 1;
 
