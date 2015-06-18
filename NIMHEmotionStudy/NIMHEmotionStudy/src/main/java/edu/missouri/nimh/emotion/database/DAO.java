@@ -36,6 +36,12 @@ public class DAO {
 
     }
 
+    /**
+     * Writes the current location of the phone to the database
+     * @param location the location of the phone
+     * @param type the means by which the location was obtained (GPS, WiFi?)
+     * @return true if the write succeeded, false otherwise
+     */
     public boolean writeLocationToDatabase(Location location, String type) {
 
         Date time = Calendar.getInstance().getTime();
@@ -59,6 +65,12 @@ public class DAO {
 
     // ******************** Functions which insert only their parameters into the database **********************
 
+    /**
+     * Inserts a row into the survey table
+     * @param surveyId the ID of the survey
+     * @param name the name of the survey
+     * @return true if the insertion succeeded, or false otherwise.
+     */
     public boolean insertSurvey(String surveyId, String name) {
         ContentValues values = new ContentValues();
 
@@ -84,6 +96,13 @@ public class DAO {
 
     }
 
+    /**
+     * Inserts a row into the questionOnSurvey table
+     *
+     * @param surveyId the survey ID
+     * @param questionId the question ID
+     * @return true if the insertion succeeded, or false otherwise
+     */
     public boolean insertQuestionOnSurvey(String surveyId, String questionId) {
         ContentValues values = new ContentValues();
 
