@@ -452,7 +452,7 @@ public class DAO {
 
         Cursor cursor;
 
-        String[] columns = {"locationDataId", "longitude", "unknown1", "unknown2", "type"};
+        String[] columns = { "longitude", "unknown1", "unknown2", "type"};
         String[] arguments = {Integer.toString(locationDataID)};
 
         cursor = db.query(LOCATION_DATA_TABLE, columns, "locationDataID = ?", arguments, null, null, null);
@@ -461,7 +461,6 @@ public class DAO {
 
         cursor.moveToFirst();
 
-        int locationDataId = cursor.getInt(0);
         double latitude = cursor.getDouble(1);
         double longitude = cursor.getDouble(2);
         float accuracy = cursor.getFloat(3);
@@ -472,7 +471,6 @@ public class DAO {
 
         JSONObject locationData = new JSONObject();
 
-        locationData.put("locationDataId", locationDataId);
         locationData.put("latitude", latitude);
         locationData.put("longitude", longitude);
         locationData.put("accuracy", accuracy);
@@ -494,7 +492,6 @@ public class DAO {
         Cursor cursor;
 
         String[] columns = {
-                "eventID",
                 "userID",
                 "timestamp",
                 "type",
@@ -517,7 +514,6 @@ public class DAO {
         while(!cursor.isLast()) {
             JSONObject event = new JSONObject();
 
-            int    eventId            = cursor.getInt(0);
             String userId             = cursor.getString(1);
             String timestamp          = cursor.getString(2);
             String type               = cursor.getString(3);
@@ -530,7 +526,6 @@ public class DAO {
             int    hardwareInfoId     = cursor.getInt(10);
 
             try {
-                event.put("eventID",     eventId);
                 event.put("userID",      userId);
                 event.put("timestamp",   timestamp);
 
