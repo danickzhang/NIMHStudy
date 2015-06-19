@@ -186,17 +186,17 @@ public class DAO {
     /**
      * Inserts a new record into the event table.
      *
-     * @param userId The id of the user
-     * @param timestamp
-     * @param type
-     * @param studyDay
-     * @param scheduledTS
-     * @param startTS
-     * @param endTS
-     * @param surveySubmissionId
-     * @param locationDataId
-     * @param hardwareInfoId
-     * @return
+     * @param userId             The id of the user
+     * @param timestamp          The time the event occurred
+     * @param type               The type of the event
+     * @param studyDay           The day since the study started
+     * @param scheduledTS        The scheduled time (for a survey to be started)
+     * @param startTS            The actual time the user started (for a survey)
+     * @param endTS              The actual time the user finished (for a survey)
+     * @param surveySubmissionId The id of the surveySubmission record (for a survey submission event)
+     * @param locationDataId     The id of the locationData record (for a location report event)
+     * @param hardwareInfoId     The id of the hardwareInfo record (for a hardware setting change event)
+     * @return                   The id of the new event
      */
     public long insertEvent(String userId, Date timestamp, String type, int studyDay, Date scheduledTS, Date startTS, Date endTS, Long surveySubmissionId, Long locationDataId, Long hardwareInfoId) {
 
