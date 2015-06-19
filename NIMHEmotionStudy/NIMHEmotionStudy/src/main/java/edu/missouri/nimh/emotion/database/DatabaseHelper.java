@@ -46,21 +46,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String SURVEY_SQL =
             "CREATE TABLE " + SURVEY_TABLE +" ("              +
-            "    `surveyID` VARCHAR(45) NOT NULL," +
-            "    `name`     VARCHAR(45) NOT NULL," +
-            "    PRIMARY KEY (`surveyID`)"         +
+            "    `surveyID` VARCHAR(45) NOT NULL,"            +
+            "    `name`     VARCHAR(45) NOT NULL,"            +
+            "    PRIMARY KEY (`surveyID`)"                    +
             ");";
 
     private static final String QUESTION_SQL =
             "CREATE TABLE " + QUESTION_TABLE +" ("          +
-            "    `questionID` VARCHAR(45) NULL," +
-            "    `text`       TEXT NOT NULL"     +
+            "    `questionID` VARCHAR(45) NULL,"            +
+            "    `text`       TEXT NOT NULL"                +
             ");";
 
     private static final String QUESTION_SURVEY =
-            "CREATE TABLE " + QUESTION_ON_SURVEY_TABLE + " ("          +
-            "    `surveyID`   INT NOT NULL,"             +
-            "    `questionID` VARCHAR(45) NOT NULL,"     +
+            "CREATE TABLE " + QUESTION_ON_SURVEY_TABLE + " (" +
+            "    `surveyID`   INT NOT NULL,"                  +
+            "    `questionID` VARCHAR(45) NOT NULL,"        +
             "    PRIMARY KEY (`surveyID`, `questionID`)" +
             ");";
 
