@@ -29,23 +29,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 
     private static final String LOCATION_DATA_SQL =
-            "CREATE TABLE " + LOCATION_DATA_TABLE + " ("         +
+            "CREATE TABLE " + LOCATION_DATA_TABLE + " (" +
             "    `locationDataId` INTEGER PRIMARY KEY NOT NULL," +
-            "    `latitude`  DOUBLE      NOT NULL,"              +
-            "    `longitude` DOUBLE      NOT NULL,"              +
-            "    `accuracy`  Float       NOT NULL,"              +
-            "    `provider`  VARCHAR(45) NOT NULL,"              +
-            "    `type`      VARCHAR(45) NOT NULL"               +
+            "    `latitude`  DOUBLE NULL,"                       +
+            "    `longitude` DOUBLE NULL,"                       +
+            "    `accuracy`  Float NULL,"                        +
+            "    `provider`  VARCHAR(45) NULL,"                  +
+            "    `type`      VARCHAR(45) NULL"                   +
             ");";
 
     private static final String HARDWARE_INFO_SQL =
-            "CREATE TABLE " + HARDWARE_INFO_TABLE + " ("         +
+            "CREATE TABLE " + HARDWARE_INFO_TABLE + " (" +
             "    `hardwareInfoID` INTEGER PRIMARY KEY NOT NULL," +
-            "    `message`        TEXT                NOT NULL"  +
+            "    `message` TEXT NOT NULL"                        +
             ");";
 
     private static final String SURVEY_SQL =
-            "CREATE TABLE " + SURVEY_TABLE +" ("   +
+            "CREATE TABLE " + SURVEY_TABLE +" ("              +
             "    `surveyID` VARCHAR(45) NOT NULL," +
             "    `name`     VARCHAR(45) NOT NULL," +
             "    PRIMARY KEY (`surveyID`)"         +
@@ -65,22 +65,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ");";
 
     private static final String SurveySubmission =
-            "CREATE TABLE " + SURVEY_SUBMISSION_TABLE + " ("         +
+            "CREATE TABLE " + SURVEY_SUBMISSION_TABLE + " ("                      +
             "    `surveySubmissionID` INTEGER PRIMARY KEY NOT NULL," +
-            "    `surveyID`           VARCHAR(45)         NOT NULL"  +
+            "    `surveyID` VARCHAR(45) NOT NULL"                    +
              ");";
 
     private static final String SUBMISSION_ANSWER =
-            "CREATE TABLE " + SUBMISSION_ANSWER_TABLE + " ("             +
+            "CREATE TABLE " + SUBMISSION_ANSWER_TABLE + " (" +
             "        `submissionAnswerID` INTEGER PRIMARY KEY NOT NULL," +
-            "        `surveySubmissionID` INT                 NOT NULL," +
-            "        `questionID`         VARCHAR(45)         NOT NULL," +
-            "        `answer`             INT                 NOT NULL"  +
+            "        `surveySubmissionID` INT NOT NULL,"                 +
+            "        `questionID`         VARCHAR(45) NOT NULL,"         +
+            "        `answer`             INT NOT NULL"                  +
             ");";
 
    private static final String EVENT_SQL =
-            " CREATE TABLE " + EVENT_TABLE + " ("             +
-            "    `eventID` INTEGER PRIMARY KEY    NOT NULL"   +
+            " CREATE TABLE " + EVENT_TABLE + " ("                         +
+            "    `eventID` VARCHAR(45) NOT NULL,"             +
             "    `userID`             VARCHAR(8)  NOT NULL,"  +
             "    `timestamp`          TIMESTAMP   NOT NULL,"  +
             "    `type`               VARCHAR(45) NULL,"      +
@@ -92,7 +92,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "    `locationDataID`     INT         NULL,"      +
             "    `hardwareInfoID`     INT         NULL,"      +
             "    `isSynchronized`     BOOL        NOT NULL,"  +
-            "    PRIMARY KEY (`eventID`)"                     +
+            "    PRIMARY KEY (`eventID`)" +
             ");";
 
     private static String[] TABLES_SQL = {

@@ -16,9 +16,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import static edu.missouri.nimh.emotion.database.DatabaseHelper.*;
-
 import edu.missouri.nimh.emotion.location.LocationBroadcast;
+
+import static edu.missouri.nimh.emotion.database.DatabaseHelper.EVENT_TABLE;
+import static edu.missouri.nimh.emotion.database.DatabaseHelper.HARDWARE_INFO_TABLE;
+import static edu.missouri.nimh.emotion.database.DatabaseHelper.LOCATION_DATA_TABLE;
+import static edu.missouri.nimh.emotion.database.DatabaseHelper.QUESTION_ON_SURVEY_TABLE;
+import static edu.missouri.nimh.emotion.database.DatabaseHelper.QUESTION_TABLE;
+import static edu.missouri.nimh.emotion.database.DatabaseHelper.SUBMISSION_ANSWER_TABLE;
+import static edu.missouri.nimh.emotion.database.DatabaseHelper.SURVEY_SUBMISSION_TABLE;
+import static edu.missouri.nimh.emotion.database.DatabaseHelper.SURVEY_TABLE;
 
 /**
  * @author Andrew Smith
@@ -29,6 +36,10 @@ import edu.missouri.nimh.emotion.location.LocationBroadcast;
 public class DAO {
     private final SQLiteDatabase db;
 
+    /**
+     *
+     * @param context
+     */
     public DAO(Context context) {
         DatabaseHelper helper = DatabaseHelper.getInstance(context);
         db = helper.getWritableDatabase();
@@ -172,6 +183,21 @@ public class DAO {
     }
 
 
+    /**
+     * Inserts a new record into the event table.
+     *
+     * @param userId             The id of the user
+     * @param timestamp          The time the event occurred
+     * @param type               The type of the event
+     * @param studyDay           The day since the study started
+     * @param scheduledTS        The scheduled time (for a survey to be started)
+     * @param startTS            The actual time the user started (for a survey)
+     * @param endTS              The actual time the user finished (for a survey)
+     * @param surveySubmissionId The id of the surveySubmission record (for a survey submission event)
+     * @param locationDataId     The id of the locationData record (for a location report event)
+     * @param hardwareInfoId     The id of the hardwareInfo record (for a hardware setting change event)
+     * @return                   The id of the new event
+     */
     public long insertEvent(String userId, Date timestamp, String type, int studyDay, Date scheduledTS, Date startTS, Date endTS, Long surveySubmissionId, Long locationDataId, Long hardwareInfoId) {
 
         ContentValues values = new ContentValues();
@@ -323,7 +349,7 @@ public class DAO {
 
         Cursor cursor;
 
-        String[] columns   = { "hardwareInfoID", "message" };
+        String[] columns   = { "message" };
         String[] arguments = { Integer.toString(hardwareInfoID) };
 
 
@@ -332,9 +358,7 @@ public class DAO {
         assert cursor.getCount() > 0;
 
         cursor.moveToFirst();
-
-        int    hardwareInfoId = cursor.getInt(0);
-        String messageText = cursor.getString(1);
+        String messageText = cursor.getString(0);
 
         cursor.close();
 
@@ -457,5 +481,98 @@ public class DAO {
 
         return locationData;
 
+    }
+
+    /**
+     * Returns all of the unsynchronized events as a JSON array of JSON objects.
+     *
+     * @return JSON encoded events not yet synchronized.
+     */
+    public JSONArray getEventsToSync() {
+        JSONArray events = new JSONArray();
+
+        Cursor cursor;
+
+        String[] columns = {
+                "eventID",
+                "userID",
+                "timestamp",
+                "type",
+                "studyDay",
+                "scheduledTS",
+                "startTS",
+                "endTS",
+                "surveySubmissionID",
+                "locationDataID",
+                "hardwareInfoID",
+                "isSynchronized"
+        };
+
+        String[] arguments = {Boolean.toString(false)};
+
+        cursor = db.query(EVENT_TABLE, columns, "isSynchronized = ?", arguments, null, null, null);
+
+        cursor.moveToFirst();
+
+        while(!cursor.isLast()) {
+            JSONObject event = new JSONObject();
+
+            int    eventId            = cursor.getInt(0);
+            String userId             = cursor.getString(1);
+            String timestamp          = cursor.getString(2);
+            String type               = cursor.getString(3);
+            int    studyDay           = cursor.getInt(4);
+            String scheduledTS        = cursor.getString(5);
+            String startTS            = cursor.getString(6);
+            String endTS              = cursor.getString(7);
+            int    locationDataId     = cursor.getInt(8);
+            int    surveySubmissionId = cursor.getInt(9);
+            int    hardwareInfoId     = cursor.getInt(10);
+
+            try {
+                event.put("eventID",     eventId);
+                event.put("userID",      userId);
+                event.put("timestamp",   timestamp);
+
+                if(!cursor.isNull(3)) {
+                    event.put("type", type);
+                }
+
+                if(!cursor.isNull(4)) {
+                    event.put("studyDay", studyDay);
+                }
+
+                if(!cursor.isNull(5)) {
+                    event.put("scheduledTS", scheduledTS);
+                }
+
+                if(!cursor.isNull(6)) {
+                    event.put("startTS", startTS);
+                }
+
+                if(!cursor.isNull(7)) {
+                    event.put("endTS", endTS);
+                }
+
+                if (!cursor.isNull(8)) {
+                    event.put("locationData", getLocationData(locationDataId));
+                }
+
+                if (!cursor.isNull(9)) {
+                    //event.put("surveySubmission", getSurveySubmission(surveySubmissionId));
+                }
+
+                if (!cursor.isNull(10)) {
+                    event.put("hardwareInfo", getHardwareInfo(hardwareInfoId));
+                }
+
+                events.put(event);
+            } catch(JSONException e) {
+                Log.e("DAO", "JSONException converting event rows to JSON");
+                e.printStackTrace();
+            }
+        }
+
+        return events;
     }
 }
