@@ -533,11 +533,26 @@ public class DAO {
                 event.put("eventID",     eventId);
                 event.put("userID",      userId);
                 event.put("timestamp",   timestamp);
-                event.put("type",        type);
-                event.put("studyDay",    studyDay);
-                event.put("scheduledTS", scheduledTS);
-                event.put("startTS",     startTS);
-                event.put("endTS",       endTS);
+
+                if(!cursor.isNull(3)) {
+                    event.put("type", type);
+                }
+
+                if(!cursor.isNull(4)) {
+                    event.put("studyDay", studyDay);
+                }
+
+                if(!cursor.isNull(5)) {
+                    event.put("scheduledTS", scheduledTS);
+                }
+
+                if(!cursor.isNull(6)) {
+                    event.put("startTS", startTS);
+                }
+
+                if(!cursor.isNull(7)) {
+                    event.put("endTS", endTS);
+                }
 
                 if (!cursor.isNull(8)) {
                     event.put("locationData", getLocationData(locationDataId));
