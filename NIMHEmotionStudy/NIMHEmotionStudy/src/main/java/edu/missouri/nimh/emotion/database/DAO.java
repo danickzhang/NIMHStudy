@@ -511,7 +511,7 @@ public class DAO {
 
         cursor.moveToFirst();
 
-        while(!cursor.isLast()) {
+        while(!cursor.isAfterLast()) {
             JSONObject event = new JSONObject();
 
             String userId             = cursor.getString(1);
@@ -591,14 +591,10 @@ public class DAO {
 
         assert cursor.getCount() == 1;
 
-        while(!cursor.isAfterLast()) {
+        String surveyId = cursor.getString(0);
 
-
-            String surveyId = cursor.getString(0);
-
-            jsonObject.put("surveyID", surveyId);
-            jsonObject.put("submissionAnswer", getAnswersForSurveySubmission(surveySubmissionId));
-        }
+        jsonObject.put("surveyID",         surveyId);
+        jsonObject.put("submissionAnswer", getAnswersForSurveySubmission(surveySubmissionId));
 
         return  jsonObject;
 
@@ -622,7 +618,7 @@ public class DAO {
         cursor = db.query(SUBMISSION_ANSWER_TABLE, columns, "surveySubmissionID = ?", arguments, null, null, null);
         cursor.moveToFirst();
 
-        while(!cursor.isLast()) {
+        while(!cursor.isAfterLast()) {
 
             JSONObject jsonObject = new JSONObject();
 
