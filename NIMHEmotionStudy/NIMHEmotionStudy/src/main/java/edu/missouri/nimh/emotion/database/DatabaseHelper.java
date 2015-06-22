@@ -16,7 +16,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String DB_NAME     = "db.db";
     private static final String DB_LOCATION = "";
-    private static final int    DB_VERSION  = 1;
+
+    // Manually incrementing DB VERSION will cause the app to update the schema
+    private static final int    DB_VERSION  = 69;
 
     public static final String LOCATION_DATA_TABLE      = "locationData";
     public static final String HARDWARE_INFO_TABLE      = "hardwareInfo";
@@ -80,7 +82,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
    private static final String EVENT_SQL =
             " CREATE TABLE " + EVENT_TABLE + " ("                         +
-            "    `eventID` VARCHAR(45) NOT NULL,"             +
+            "    `eventID` INTEGER PRIMARY KEY NOT NULL,"             +
             "    `userID`             VARCHAR(8)  NOT NULL,"  +
             "    `timestamp`          TIMESTAMP   NOT NULL,"  +
             "    `type`               VARCHAR(45) NULL,"      +
@@ -91,8 +93,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "    `surveySubmissionID` VARCHAR(45) NULL,"      +
             "    `locationDataID`     INT         NULL,"      +
             "    `hardwareInfoID`     INT         NULL,"      +
-            "    `isSynchronized`     BOOL        NOT NULL,"  +
-            "    PRIMARY KEY (`eventID`)" +
+            "    `isSynchronized`     BOOL        NOT NULL" +
             ");";
 
     private static String[] TABLES_SQL = {

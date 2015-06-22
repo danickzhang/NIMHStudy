@@ -70,7 +70,7 @@ public class DAO {
         float  accuracy  = location.getAccuracy();
         String provider  = location.getProvider();
 
-        long result = insertLocation(latitude, longitude, accuracy, provider, type);
+        long result = insertLocationData(latitude, longitude, accuracy, provider, type);
 
         if(result == -1) {
             return false;
@@ -157,7 +157,7 @@ public class DAO {
      * @param type       The users activity type
      * @return           Returns a row id on success or -1 on failure
      */
-    public long insertLocation(double latitude, double longitude, float accuracy, String provider, String type) {
+    public long insertLocationData(double latitude, double longitude, float accuracy, String provider, String type) {
         ContentValues values = new ContentValues();
 
         values.put("latitude",  latitude);
@@ -208,16 +208,16 @@ public class DAO {
         try {
             db.beginTransaction();
 
-            values.put("userId",             userId);
+            values.put("userID",             userId);
             values.put("timestamp", timestamp.toString());
             values.put("type",               type);
             values.put("studyDay",           studyDay);
             values.put("scheduledTS",        scheduledTS.toString());
             values.put("startTS",            startTS.toString());
             values.put("endTS",              endTS.toString());
-            values.put("surveySubmissionId", surveySubmissionId);
-            values.put("locationDataId",     locationDataId);
-            values.put("hardwareInfo",       hardwareInfoId);
+            values.put("surveySubmissionID", surveySubmissionId);
+            values.put("locationDataID",     locationDataId);
+            values.put("hardwareInfoID",       hardwareInfoId);
             values.put("isSynchronized",     false);
 
             result = db.insert(EVENT_TABLE, null, values);
@@ -249,6 +249,7 @@ public class DAO {
         long result;
 
         try {
+            db.beginTransaction();
 
             // Attempt to insert the row into "event," and store the result.
            result = db.insert(HARDWARE_INFO_TABLE, null, values);
@@ -287,7 +288,8 @@ public class DAO {
         long result;
 
         try {
-
+            db.beginTransaction();
+            
             // Attempt to insert the row into "event," and store the result.
             result = db.insert(SUBMISSION_ANSWER_TABLE, null, values);
 
@@ -323,7 +325,8 @@ public class DAO {
         long result;
 
         try {
-
+            db.beginTransaction();
+            
             // Attempt to insert the row into "event," and store the result.
             result = db.insert(SURVEY_SUBMISSION_TABLE, null, values);
 
