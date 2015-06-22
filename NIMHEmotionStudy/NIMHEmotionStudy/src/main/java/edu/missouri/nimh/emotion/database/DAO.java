@@ -15,6 +15,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 import edu.missouri.nimh.emotion.location.LocationBroadcast;
 
@@ -198,7 +199,7 @@ public class DAO {
      * @param hardwareInfoId     The id of the hardwareInfo record (for a hardware setting change event)
      * @return                   The id of the new event
      */
-    public long insertEvent(String userId, Date timestamp, String type, int studyDay, Date scheduledTS, Date startTS, Date endTS, Long surveySubmissionId, Long locationDataId, Long hardwareInfoId) {
+    public long insertEvent(String userId, Date timestamp, String type, int studyDay, Date scheduledTS, Date startTS, Date endTS, String surveySubmissionId, Long locationDataId, Long hardwareInfoId) {
 
         ContentValues values = new ContentValues();
 
@@ -272,7 +273,7 @@ public class DAO {
      * @param  answer the answer
      * @return -1 if the insertion failed, or a row ID otherwise
      */
-    public long insertSubmissionAnswer(Integer surveySubmissionID, String questionID, Integer answer){
+    public long insertSubmissionAnswer(String surveySubmissionID, String questionID, Integer answer){
 
 
         // The values that will be inserted in the new row
@@ -313,7 +314,10 @@ public class DAO {
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
-        values.put("surveyID", surveyID);
+        String uuid = UUID.randomUUID().toString();
+
+        values.put("surveySubmissionID", uuid);
+        values.put("surveyID",           surveyID);
 
         // The result of the row insertion
         long result;
@@ -522,7 +526,7 @@ public class DAO {
             String startTS            = cursor.getString(6);
             String endTS              = cursor.getString(7);
             int    locationDataId     = cursor.getInt(8);
-            int    surveySubmissionId = cursor.getInt(9);
+            String surveySubmissionId = cursor.getString(9);
             int    hardwareInfoId     = cursor.getInt(10);
 
             try {
@@ -574,17 +578,17 @@ public class DAO {
     /**
      * Returns all of the data for a survey submission as a JSON object.
      *
-     * @param surveySubmissionId
-     * @return
+     * @param surveySubmissionId The id of the submission
+     * @return                   A JSON representation of the specified surveySubmission and its associated answers.
      * @throws JSONException
      */
-    public JSONObject getSurveySubmission(int surveySubmissionId) throws JSONException {
+    public JSONObject getSurveySubmission(String surveySubmissionId) throws JSONException {
         JSONObject jsonObject = new JSONObject();
 
         Cursor cursor;
 
-        String[] columns = {"surveyID"};
-        String[] arguments = {Integer.toString(surveySubmissionId)};
+        String[] columns   = { "surveyID"};
+        String[] arguments = { surveySubmissionId };
 
         cursor = db.query(SURVEY_SUBMISSION_TABLE, columns, "surveySubmissionID = ?", arguments, null, null, null);
         cursor.moveToFirst();
@@ -607,13 +611,13 @@ public class DAO {
      * @return                   Answers for specified survey submission
      * @throws JSONException
      */
-    public JSONObject getAnswersForSurveySubmission(int surveySubmissionId) throws JSONException {
+    public JSONObject getAnswersForSurveySubmission(String surveySubmissionId) throws JSONException {
         JSONObject jsonObject = new JSONObject();
 
         Cursor cursor;
 
         String[] columns   = { "questionID", "answer"};
-        String[] arguments = { Integer.toString(surveySubmissionId)        };
+        String[] arguments = { surveySubmissionId    };
 
         cursor = db.query(SUBMISSION_ANSWER_TABLE, columns, "surveySubmissionID = ?", arguments, null, null, null);
         cursor.moveToFirst();

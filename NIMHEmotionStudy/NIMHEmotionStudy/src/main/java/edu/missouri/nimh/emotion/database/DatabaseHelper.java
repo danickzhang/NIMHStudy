@@ -66,14 +66,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static final String SurveySubmission =
             "CREATE TABLE " + SURVEY_SUBMISSION_TABLE + " ("                      +
-            "    `surveySubmissionID` INTEGER PRIMARY KEY NOT NULL," +
+            "    `surveySubmissionID` CHAR(36) PRIMARY KEY NOT NULL," +
             "    `surveyID` VARCHAR(45) NOT NULL"                    +
              ");";
 
     private static final String SUBMISSION_ANSWER =
             "CREATE TABLE " + SUBMISSION_ANSWER_TABLE + " (" +
             "        `submissionAnswerID` INTEGER PRIMARY KEY NOT NULL," +
-            "        `surveySubmissionID` INT NOT NULL,"                 +
+            "        `surveySubmissionID` CHAR(36),"                 +
             "        `questionID`         VARCHAR(45) NOT NULL,"         +
             "        `answer`             INT NOT NULL"                  +
             ");";
@@ -142,7 +142,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         Log.d("DB", "Database is being upgraded");
         Log.d("DB", "Deleting tables");
-
 
         for(String table : TABLE_NAMES) {
             db.execSQL(String.format("DROP TABLE %s;", table));
