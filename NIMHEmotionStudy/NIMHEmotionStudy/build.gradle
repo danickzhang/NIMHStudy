@@ -16,9 +16,17 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
+
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+        }
+    }
 }
 
 dependencies {
     compile files('libs/android-support-v4.jar')
     compile files('libs/google-play-services.jar')
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:2.0.20-beta'
 }
