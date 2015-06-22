@@ -601,38 +601,30 @@ public class DAO {
     }
 
     /**
-     * Returns all of the answers for a particular survey submission as a JSONArray.
+     * Returns all of the answers for a particular survey submission as a JSONObject.
      *
      * @param surveySubmissionId The id of the survey submission to get answers for
      * @return                   Answers for specified survey submission
      * @throws JSONException
      */
-    public JSONArray getAnswersForSurveySubmission(int surveySubmissionId) throws JSONException {
-        JSONArray answers = new JSONArray();
+    public JSONObject getAnswersForSurveySubmission(int surveySubmissionId) throws JSONException {
+        JSONObject jsonObject = new JSONObject();
 
         Cursor cursor;
 
-        String[] columns   = { "surveySubmissionID", "questionID", "answer"};
+        String[] columns   = { "questionID", "answer"};
         String[] arguments = { Integer.toString(surveySubmissionId)        };
 
         cursor = db.query(SUBMISSION_ANSWER_TABLE, columns, "surveySubmissionID = ?", arguments, null, null, null);
         cursor.moveToFirst();
 
         while(!cursor.isAfterLast()) {
+            String questionId = cursor.getString(0);
+            int answer = cursor.getInt(1);
 
-            JSONObject jsonObject = new JSONObject();
-
-            String surveySubmissionIdStr = cursor.getString(1);
-            String questionId = cursor.getString(2);
-            int answer = cursor.getInt(3);
-
-            jsonObject.put("surveySubmissionID", surveySubmissionIdStr);
-            jsonObject.put("questionID", questionId);
-            jsonObject.put("answer", answer);
-
-            answers.put(jsonObject);
+            jsonObject.put(questionId, Integer.toString(answer));
         }
 
-        return answers;
+        return jsonObject;
     }
 }
