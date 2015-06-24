@@ -311,9 +311,9 @@ public class DAO {
      * Inserts a row into the surveySubmission table.
      *
      * @param  surveyID the ID of the survey
-     * @return -1 if the insertion failed, or a row ID otherwise
+     * @return null if the insertion failed, or a row ID otherwise
      */
-    public long insertSurveySubmission(String surveyID){
+    public String insertSurveySubmission(String surveyID){
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
@@ -334,13 +334,15 @@ public class DAO {
             // If the result returns -1, it failed. If it returns anything else, it was successful.
             if(result != -1) {
                 db.setTransactionSuccessful();
+            } else {
+                return null;
             }
 
         } finally {
             db.endTransaction();
         }
         
-        return result;
+        return uuid;
     }
 
     // *************************************** Data to JSON ********************************
@@ -591,7 +593,7 @@ public class DAO {
 
         Cursor cursor;
 
-        String[] columns   = { "surveyID"};
+        String[] columns   = { "surveyID", "surveySubmissionID"};
         String[] arguments = { surveySubmissionId };
 
         cursor = db.query(SURVEY_SUBMISSION_TABLE, columns, "surveySubmissionID = ?", arguments, null, null, null);
@@ -600,7 +602,9 @@ public class DAO {
         assert cursor.getCount() == 1;
 
         String surveyId = cursor.getString(0);
+        String surveySubmissionID = cursor.getString(1);
 
+        jsonObject.put("surveySubmissionID", surveySubmissionID);
         jsonObject.put("surveyID",         surveyId);
         jsonObject.put("submissionAnswer", getAnswersForSurveySubmission(surveySubmissionId));
 
@@ -630,7 +634,9 @@ public class DAO {
             String questionId = cursor.getString(0);
             int answer = cursor.getInt(1);
 
-            jsonObject.put(questionId, Integer.toString(answer));
+            jsonObject.put(questionId, answer);
+
+            cursor.moveToNext();
         }
 
         return jsonObject;
