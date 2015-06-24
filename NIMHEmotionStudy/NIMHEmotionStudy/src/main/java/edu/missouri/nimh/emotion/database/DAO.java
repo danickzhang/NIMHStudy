@@ -311,9 +311,9 @@ public class DAO {
      * Inserts a row into the surveySubmission table.
      *
      * @param  surveyID the ID of the survey
-     * @return -1 if the insertion failed, or a row ID otherwise
+     * @return null if the insertion failed, or a row ID otherwise
      */
-    public long insertSurveySubmission(String surveyID){
+    public String insertSurveySubmission(String surveyID){
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
@@ -334,13 +334,15 @@ public class DAO {
             // If the result returns -1, it failed. If it returns anything else, it was successful.
             if(result != -1) {
                 db.setTransactionSuccessful();
+            } else {
+                return null;
             }
 
         } finally {
             db.endTransaction();
         }
         
-        return result;
+        return uuid;
     }
 
     // *************************************** Data to JSON ********************************

@@ -83,11 +83,11 @@ public class DAOTest extends ApplicationTestCase<Application> {
             expected.put("longitude", -6.5);
             expected.put("accuracy",   0.3);
             expected.put("provider",   "provider");
-            expected.put("type", "type");
+            expected.put("type",       "type");
 
             JSONObject actual = dao.getLocationData(id);
 
-            assertJsonEquals(actual.toString(), expected.toString());
+            assertJsonEquals(expected.toString(), actual.toString());
         } catch(JSONException e) {
             Assert.fail();
         }
@@ -95,6 +95,23 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
     // getQuestion
     // getSurvey
+    @SmallTest
+    public void testGetSurvey() {
+        dao.insertSurvey("SurveyID", "SurveyName");
+
+        try{
+            JSONObject expected = new JSONObject();
+
+            expected.put("surveyID", "SurveyID");
+            expected.put("name", "SurveyName");
+
+            JSONObject actual = dao.getSurvey("SurveyID");
+
+            assertJsonEquals(expected.toString(), actual.toString());
+        } catch(JSONException e) {
+            Assert.fail();
+        }
+    }
     // getSurveySubmission
     // getEventsToSync
     // getAnswersForSurveySubmission
