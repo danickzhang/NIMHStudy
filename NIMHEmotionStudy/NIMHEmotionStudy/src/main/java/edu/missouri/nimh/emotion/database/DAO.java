@@ -579,6 +579,8 @@ public class DAO {
             }
         }
 
+        cursor.close();
+
         return events;
     }
 
@@ -608,6 +610,8 @@ public class DAO {
         jsonObject.put("surveySubmissionID", surveySubmissionID);
         jsonObject.put("surveyID",         surveyId);
         jsonObject.put("submissionAnswer", getAnswersForSurveySubmission(surveySubmissionId));
+
+        cursor.close();
 
         return  jsonObject;
 

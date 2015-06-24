@@ -3,30 +3,25 @@ package edu.missouri.nimh.emotion.test;
 import android.app.Application;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
-import android.test.AndroidTestCase;
 import android.test.ApplicationTestCase;
-import android.test.InstrumentationTestCase;
 import android.test.RenamingDelegatingContext;
-import android.test.mock.MockContext;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import junit.framework.Assert;
 
-import static net.javacrumbs.jsonunit.JsonAssert.*;
-
-import java.lang.Exception;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.missouri.nimh.emotion.database.DAO;
 import edu.missouri.nimh.emotion.database.DatabaseHelper;
 
-public class DAOTest extends ApplicationTestCase<Application> {
-    Context context;
-    DAO dao;
-    private SQLiteDatabase db;
+import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
+import static net.javacrumbs.jsonunit.JsonAssert.setTolerance;
 
+public class DAOTest extends ApplicationTestCase<Application> {
+    private Context        context;
+    private DAO            dao;
     public DAOTest() {
         super(Application.class);
 
@@ -54,13 +49,12 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
         JSONObject expected = new JSONObject();
 
-
         try {
             expected.put("message", "testMessage");
 
             JSONObject hardwareInfo = dao.getHardwareInfo(id);
 
-            Log.d("DAOTest", hardwareInfo.toString(4));
+            Log.e("DAOTest", hardwareInfo.toString(4));
 
             Assert.assertEquals(expected.toString(), hardwareInfo.toString());
         } catch (JSONException e) {
@@ -82,7 +76,7 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
             JSONObject actual = dao.getLocationData(id);
 
-            Log.d("DAOTest", actual.toString(4));
+            Log.e("DAOTest", actual.toString(4));
 
             assertJsonEquals(expected.toString(), actual.toString());
         } catch(JSONException e) {
@@ -90,8 +84,6 @@ public class DAOTest extends ApplicationTestCase<Application> {
         }
     }
 
-    // getQuestion
-    // getSurvey
     @SmallTest
     public void testGetSurvey() {
         dao.insertSurvey("SurveyID", "SurveyName");
@@ -100,17 +92,17 @@ public class DAOTest extends ApplicationTestCase<Application> {
             JSONObject expected = new JSONObject();
 
             expected.put("surveyID", "SurveyID");
-            expected.put("name", "SurveyName");
+            expected.put("name",     "SurveyName");
 
             JSONObject actual = dao.getSurvey("SurveyID");
 
-            Log.d("DAOTest", actual.toString(4));
+            Log.e("DAOTest", actual.toString(4));
             assertJsonEquals(expected.toString(), actual.toString());
         } catch(JSONException e) {
             Assert.fail();
         }
     }
-    // getSurveySubmission
+
     @SmallTest
     public void testGetSurveySubmission() {
         String id = dao.insertSurveySubmission("SurveyID");
@@ -127,8 +119,8 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
             JSONObject expected = new JSONObject();
             expected.put("surveySubmissionID", id);
-            expected.put("surveyID", "SurveyID");
-            expected.put("submissionAnswer", object);
+            expected.put("surveyID",           "SurveyID");
+            expected.put("submissionAnswer",   object);
 
 
             JSONObject actual = dao.getSurveySubmission(id);
@@ -141,6 +133,35 @@ public class DAOTest extends ApplicationTestCase<Application> {
             Assert.fail();
         }
     }
+
+    // getQuestion
     // getEventsToSync
     // getAnswersForSurveySubmission
+
+    @SmallTest
+    public void testGetAnswersForSurveySubmission() {
+        String uuid = dao.insertSurveySubmission("survey");
+        dao.insertSubmissionAnswer(uuid, "Question1", 0);
+        dao.insertSubmissionAnswer(uuid, "Question2", 1);
+        dao.insertSubmissionAnswer(uuid, "Question3", 2);
+
+        try {
+            JSONObject object = new JSONObject();
+
+            object.put("Question1", 0);
+            object.put("Question2", 1);
+            object.put("Question3", 2);
+
+            JSONObject actual = dao.getAnswersForSurveySubmission(uuid);
+
+
+            Log.e("DAOTest", actual.toString(4));
+
+            assertJsonEquals(object.toString(), actual.toString());
+
+        } catch(JSONException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+    }
 }
