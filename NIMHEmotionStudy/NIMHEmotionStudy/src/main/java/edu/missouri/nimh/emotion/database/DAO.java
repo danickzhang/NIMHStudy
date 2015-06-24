@@ -11,7 +11,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -499,6 +498,8 @@ public class DAO {
     public JSONArray getEventsToSync() {
         JSONArray events = new JSONArray();
 
+        Integer UNSYNCHRONIZED = 0;
+
         Cursor cursor;
 
         String[] columns = {
@@ -515,7 +516,7 @@ public class DAO {
                 "isSynchronized"
         };
 
-        String[] arguments = {Boolean.toString(false)};
+        String[] arguments = {UNSYNCHRONIZED.toString()};
 
         cursor = db.query(EVENT_TABLE, columns, "isSynchronized = ?", arguments, null, null, null);
 
