@@ -8,6 +8,8 @@ android {
         applicationId "edu.missouri.nimh.emotion"
         minSdkVersion 19
         targetSdkVersion 19
+        testApplicationId "edu.missouri.nimh.emotion.test"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
     buildTypes {
@@ -17,16 +19,17 @@ android {
         }
     }
 
+
     testOptions {
         unitTests {
             returnDefaultValues = true
         }
     }
+
 }
 
 dependencies {
     compile files('libs/android-support-v4.jar')
     compile files('libs/google-play-services.jar')
     testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.0.20-beta'
 }

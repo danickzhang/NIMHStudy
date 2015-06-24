@@ -352,12 +352,12 @@ public class DAO {
      * @return the JSONObject containing the row that has been retrieved
      * @throws JSONException
      */
-    public JSONObject getHardwareInfo(int hardwareInfoID) throws JSONException {
+    public JSONObject getHardwareInfo(long hardwareInfoID) throws JSONException {
 
         Cursor cursor;
 
         String[] columns   = { "message" };
-        String[] arguments = { Integer.toString(hardwareInfoID) };
+        String[] arguments = { Long.toString(hardwareInfoID) };
 
 
         cursor = db.query(HARDWARE_INFO_TABLE, columns, "hardwareInfoID = ?", arguments, null, null, null);
@@ -633,5 +633,9 @@ public class DAO {
         }
 
         return jsonObject;
+    }
+
+    public SQLiteDatabase getDb() {
+        return db;
     }
 }
