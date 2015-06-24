@@ -26,10 +26,13 @@ android {
         }
     }
 
+
 }
 
 dependencies {
     compile files('libs/android-support-v4.jar')
     compile files('libs/google-play-services.jar')
     testCompile 'junit:junit:4.12'
+    compile 'net.javacrumbs.json-unit:json-unit:1.5.3'
+    compile 'com.google.code.gson:gson:2.3.1'
 }

@@ -11,6 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -455,12 +456,12 @@ public class DAO {
      * @return A JSON object representing a row of the LocationData table
      * @throws JSONException
      */
-    public JSONObject getLocationData(int locationDataID) throws JSONException {
+    public JSONObject getLocationData(long locationDataID) throws JSONException {
 
         Cursor cursor;
 
-        String[] columns = { "longitude", "unknown1", "unknown2", "type"};
-        String[] arguments = {Integer.toString(locationDataID)};
+        String[] columns = { "latitude", "longitude", "accuracy", "provider", "type"};
+        String[] arguments = {Long.toString(locationDataID)};
 
         cursor = db.query(LOCATION_DATA_TABLE, columns, "locationDataID = ?", arguments, null, null, null);
 
@@ -468,11 +469,11 @@ public class DAO {
 
         cursor.moveToFirst();
 
-        double latitude = cursor.getDouble(1);
-        double longitude = cursor.getDouble(2);
-        float accuracy = cursor.getFloat(3);
-        String provider = cursor.getString(4);
-        String type = cursor.getString(5);
+        double latitude = cursor.getDouble(0);
+        double longitude = cursor.getDouble(1);
+        float accuracy = cursor.getFloat(2);
+        String provider = cursor.getString(3);
+        String type = cursor.getString(4);
 
         cursor.close();
 

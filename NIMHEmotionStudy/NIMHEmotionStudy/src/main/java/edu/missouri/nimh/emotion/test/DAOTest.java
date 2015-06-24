@@ -14,6 +14,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import junit.framework.Assert;
 
+import static net.javacrumbs.jsonunit.JsonAssert.*;
+
 import java.lang.Exception;
 
 import edu.missouri.nimh.emotion.database.DAO;
@@ -26,6 +28,8 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
     public DAOTest() {
         super(Application.class);
+
+        setTolerance(.001);
     }
 
     public void setUp() throws Exception {
@@ -36,7 +40,6 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
 
         context.deleteDatabase(DatabaseHelper.DB_NAME);
-
 
        dao = new DAO(context);
 
@@ -61,15 +64,38 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
             JSONObject hardwareInfo = dao.getHardwareInfo(id);
 
-            Assert.assertEquals("",expected.toString(), hardwareInfo.toString());
+            Assert.assertEquals(expected.toString(), hardwareInfo.toString());
         } catch (JSONException e) {
             Assert.fail();
         }
 
-        Assert.assertEquals(true, true);
-    }
 
-    public void insertHardwareInfoTestData() {
 
     }
+
+    @SmallTest
+    public void testGetLocationData() {
+        long id = dao.insertLocationData(10.5, -6.5, .3f, "provider", "type");
+
+        try {
+            JSONObject expected = new JSONObject();
+            expected.put("latitude",   10.5);
+            expected.put("longitude", -6.5);
+            expected.put("accuracy",   0.3);
+            expected.put("provider",   "provider");
+            expected.put("type", "type");
+
+            JSONObject actual = dao.getLocationData(id);
+
+            assertJsonEquals(actual.toString(), expected.toString());
+        } catch(JSONException e) {
+            Assert.fail();
+        }
+    }
+
+    // getQuestion
+    // getSurvey
+    // getSurveySubmission
+    // getEventsToSync
+    // getAnswersForSurveySubmission
 }
