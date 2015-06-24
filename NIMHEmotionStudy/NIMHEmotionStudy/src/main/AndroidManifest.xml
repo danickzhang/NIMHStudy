@@ -132,4 +132,7 @@
 
     </application>
 
+    <instrumentation
+        android:name="android.test.InstrumentationTestRunner"
+        android:targetPackage="edu.missouri.nimh.emotion"/>
 </manifest>

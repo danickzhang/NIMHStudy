@@ -14,7 +14,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper databaseHelper;
 
-    private static final String DB_NAME     = "db.db";
+    public static final String DB_NAME     = "db.db";
     private static final String DB_LOCATION = "";
 
     // Manually incrementing DB VERSION will cause the app to update the schema
