@@ -47,7 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ");";
 
     private static final String SURVEY_SQL =
-            "CREATE TABLE " + SURVEY_TABLE +" ("              +
+            "CREATE TABLE " + SURVEY_TABLE +" ("   +
             "    `surveyID` VARCHAR(45) NOT NULL," +
             "    `name`     VARCHAR(45) NOT NULL," +
             "    PRIMARY KEY (`surveyID`)"         +
@@ -67,36 +67,36 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             ");";
 
     private static final String SurveySubmission =
-            "CREATE TABLE " + SURVEY_SUBMISSION_TABLE + " ("                      +
+            "CREATE TABLE " + SURVEY_SUBMISSION_TABLE + " ("          +
             "    `surveySubmissionID` CHAR(36) PRIMARY KEY NOT NULL," +
-            "    `surveyID` VARCHAR(45) NOT NULL"                    +
+            "    `surveyID` VARCHAR(45) NOT NULL"                     +
              ");";
 
     private static final String SUBMISSION_ANSWER =
             "CREATE TABLE " + SUBMISSION_ANSWER_TABLE + " (" +
             "        `submissionAnswerID` INTEGER PRIMARY KEY NOT NULL," +
-            "        `surveySubmissionID` CHAR(36),"                 +
+            "        `surveySubmissionID` CHAR(36),"                     +
             "        `questionID`         VARCHAR(45) NOT NULL,"         +
             "        `answer`             INT NOT NULL"                  +
             ");";
 
    private static final String EVENT_SQL =
-            " CREATE TABLE " + EVENT_TABLE + " ("                         +
-            "    `eventID` INTEGER PRIMARY KEY NOT NULL,"             +
+            " CREATE TABLE " + EVENT_TABLE + " ("             +
+            "    `eventID` INTEGER PRIMARY KEY NOT NULL,"     +
             "    `userID`             VARCHAR(8)  NOT NULL,"  +
             "    `timestamp`          TIMESTAMP   NOT NULL,"  +
             "    `type`               VARCHAR(45) NULL,"      +
-            "    `studyDay`           DATE        NULL,"      +
+            "    `studyDay`           DATE        NOT NULL,"  +
             "    `scheduledTS`        TIMESTAMP   NULL,"      +
             "    `startTS`            TIMESTAMP   NULL,"      +
             "    `endTS`              TIMESTAMP   NULL,"      +
             "    `surveySubmissionID` VARCHAR(45) NULL,"      +
             "    `locationDataID`     INT         NULL,"      +
             "    `hardwareInfoID`     INT         NULL,"      +
-            "    `isSynchronized`     BOOL        NOT NULL" +
+            "    `isSynchronized`     BOOL        NOT NULL"   +
             ");";
 
-    private static String[] TABLES_SQL = {
+    private static final String[] TABLES_SQL = {
             LOCATION_DATA_SQL,
             HARDWARE_INFO_SQL,
             SURVEY_SQL,
@@ -107,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             EVENT_SQL
     };
 
-    private static String[] TABLE_NAMES = {
+    private static final String[] TABLE_NAMES = {
             LOCATION_DATA_TABLE,
             HARDWARE_INFO_TABLE,
             SURVEY_TABLE,

@@ -122,7 +122,6 @@ public class DAOTest extends ApplicationTestCase<Application> {
             expected.put("surveyID",           "SurveyID");
             expected.put("submissionAnswer",   object);
 
-
             JSONObject actual = dao.getSurveySubmission(id);
 
             assertJsonEquals(expected.toString(), actual.toString());
@@ -136,7 +135,6 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
     // getQuestion
     // getEventsToSync
-    // getAnswersForSurveySubmission
 
     @SmallTest
     public void testGetAnswersForSurveySubmission() {
@@ -153,7 +151,6 @@ public class DAOTest extends ApplicationTestCase<Application> {
             object.put("Question3", 2);
 
             JSONObject actual = dao.getAnswersForSurveySubmission(uuid);
-
 
             Log.e("DAOTest", actual.toString(4));
 
