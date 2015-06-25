@@ -525,16 +525,16 @@ public class DAO {
         while(!cursor.isAfterLast()) {
             JSONObject event = new JSONObject();
 
-            String userId             = cursor.getString(1);
-            String timestamp          = cursor.getString(2);
-            String type               = cursor.getString(3);
-            int    studyDay           = cursor.getInt(4);
-            String scheduledTS        = cursor.getString(5);
-            String startTS            = cursor.getString(6);
-            String endTS              = cursor.getString(7);
-            int    locationDataId     = cursor.getInt(8);
-            String surveySubmissionId = cursor.getString(9);
-            int    hardwareInfoId     = cursor.getInt(10);
+            String userId             = cursor.getString(0);
+            String timestamp          = cursor.getString(1);
+            String type               = cursor.getString(2);
+            int    studyDay           = cursor.getInt(3);
+            String scheduledTS        = cursor.getString(4);
+            String startTS            = cursor.getString(5);
+            String endTS              = cursor.getString(6);
+            int    locationDataId     = cursor.getInt(7);
+            String surveySubmissionId = cursor.getString(8);
+            int    hardwareInfoId     = cursor.getInt(9);
 
             try {
                 event.put("userID",      userId);
