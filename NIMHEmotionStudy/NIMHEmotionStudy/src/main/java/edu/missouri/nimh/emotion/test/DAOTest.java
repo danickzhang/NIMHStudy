@@ -122,7 +122,6 @@ public class DAOTest extends ApplicationTestCase<Application> {
             expected.put("surveyID",           "SurveyID");
             expected.put("submissionAnswer",   object);
 
-
             JSONObject actual = dao.getSurveySubmission(id);
 
             assertJsonEquals(expected.toString(), actual.toString());

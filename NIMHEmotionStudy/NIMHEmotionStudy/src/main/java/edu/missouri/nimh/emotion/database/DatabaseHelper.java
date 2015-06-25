@@ -96,7 +96,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "    `isSynchronized`     BOOL        NOT NULL"   +
             ");";
 
-    private static String[] TABLES_SQL = {
+    private static final String[] TABLES_SQL = {
             LOCATION_DATA_SQL,
             HARDWARE_INFO_SQL,
             SURVEY_SQL,
@@ -107,7 +107,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             EVENT_SQL
     };
 
-    private static String[] TABLE_NAMES = {
+    private static final String[] TABLE_NAMES = {
             LOCATION_DATA_TABLE,
             HARDWARE_INFO_TABLE,
             SURVEY_TABLE,

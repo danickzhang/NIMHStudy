@@ -9,8 +9,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import junit.framework.Assert;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,11 +42,11 @@ public class DAO {
 
     /**
      *
-     * @param context
+     * @param context A context
      */
     public DAO(Context context) {
         DatabaseHelper helper = DatabaseHelper.getInstance(context);
-        db = helper.getWritableDatabase();
+        db                    = helper.getWritableDatabase();
     }
 
     // *************************** Functions which emulate existing CSV functions ****************
@@ -176,7 +174,13 @@ public class DAO {
      * @param type       The users activity type
      * @return           Returns a row id on success or -1 on failure
      */
-    public long insertLocationData(double latitude, double longitude, float accuracy, @NonNull String provider, @NonNull String type) {
+    public long insertLocationData(
+            double   latitude,
+            double   longitude,
+            float    accuracy,
+            @NonNull String provider,
+            @NonNull String type
+    ) {
         ContentValues values = new ContentValues();
 
         values.put("latitude",  latitude);
@@ -343,11 +347,12 @@ public class DAO {
      * @param  surveyID the ID of the survey
      * @return null if the insertion failed, or a row ID otherwise
      */
+    @Nullable
     public String insertSurveySubmission(@NonNull String surveyID){
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
-        String uuid = UUID.randomUUID().toString();
+        String uuid          = UUID.randomUUID().toString();
 
         values.put("surveySubmissionID", uuid);
         values.put("surveyID",           surveyID);
@@ -387,10 +392,12 @@ public class DAO {
      */
     public JSONObject getHardwareInfo(long hardwareInfoID) throws JSONException {
 
+        final int MESSAGE = 0;
+
         Cursor cursor;
 
-        String[] columns   = { "message" };
-        String[] arguments = { Long.toString(hardwareInfoID) };
+        final String[] columns   = { "message" };
+        final String[] arguments = { Long.toString(hardwareInfoID) };
 
 
         cursor = db.query(HARDWARE_INFO_TABLE, columns, "hardwareInfoID = ?", arguments, null, null, null);
@@ -404,7 +411,8 @@ public class DAO {
         }
 
         cursor.moveToFirst();
-        String messageText = cursor.getString(0);
+
+        String messageText = cursor.getString(MESSAGE);
 
         cursor.close();
 
@@ -427,13 +435,13 @@ public class DAO {
      */
     public JSONObject getQuestion(@NonNull String questionID) throws JSONException {
 
-        Cursor cursor;
+        final int QUESTION_ID = 0;
+        final int TEXT        = 1;
 
-        String[] columns   = { "questionID", "text" };
-        String[] arguments = { questionID };
+        final String[] columns   = { "questionID", "text" };
+        final String[] arguments = { questionID           };
 
-
-        cursor = db.query(QUESTION_TABLE, columns, "questionID = ?", arguments, null, null, null);
+        Cursor cursor = db.query(QUESTION_TABLE, columns, "questionID = ?", arguments, null, null, null);
 
         if(cursor.getCount() <= 0) {
             Log.e("DAO", String.format("Question with an ID of %s does not exist", questionID));
@@ -445,8 +453,8 @@ public class DAO {
 
         cursor.moveToFirst();
 
-        String questionId = cursor.getString(0);
-        String text = cursor.getString(1);
+        String questionId = cursor.getString(QUESTION_ID);
+        String text       = cursor.getString(TEXT);
 
         cursor.close();
 
@@ -467,13 +475,13 @@ public class DAO {
      */
     public JSONObject getSurvey(@NonNull String surveyID) throws JSONException {
 
-        Cursor cursor;
+        final int SURVEY_ID = 0;
+        final int NAME      = 1;
 
-        String[] columns   = { "surveyID", "name" };
-        String[] arguments = { surveyID };
+        final String[] columns   = { "surveyID", "name" };
+        final String[] arguments = { surveyID           };
 
-
-        cursor = db.query(SURVEY_TABLE, columns, "surveyID = ?", arguments, null, null, null);
+        Cursor cursor = db.query(SURVEY_TABLE, columns, "surveyID = ?", arguments, null, null, null);
 
         if(cursor.getCount() <= 0) {
             Log.e("DAO", String.format("Survey with an ID of %s does not exist", surveyID));
@@ -486,15 +494,15 @@ public class DAO {
 
         cursor.moveToFirst();
 
-        String surveyId = cursor.getString(0);
-        String name = cursor.getString(1);
+        String surveyId = cursor.getString(SURVEY_ID);
+        String name     = cursor.getString(NAME);
 
         cursor.close();
 
         JSONObject survey = new JSONObject();
 
         survey.put("surveyID", surveyId);
-        survey.put("name", name);
+        survey.put("name",     name);
 
         return  survey;
 
@@ -508,11 +516,16 @@ public class DAO {
      * @throws JSONException
      */
     public JSONObject getLocationData(long locationDataID) throws JSONException {
+        final int LATITUDE  = 0;
+        final int LONGITUDE = 1;
+        final int ACCURACY  = 2;
+        final int PROVIDER  = 3;
+        final int TYPE      = 4;
+
+        final String[] columns   = { "latitude", "longitude", "accuracy", "provider", "type"};
+        final String[] arguments = { Long.toString(locationDataID)                          };
 
         Cursor cursor;
-
-        String[] columns = { "latitude", "longitude", "accuracy", "provider", "type"};
-        String[] arguments = {Long.toString(locationDataID)};
 
         cursor = db.query(LOCATION_DATA_TABLE, columns, "locationDataId = ?", arguments, null, null, null);
 
@@ -526,24 +539,23 @@ public class DAO {
 
         cursor.moveToFirst();
 
-        double latitude = cursor.getDouble(0);
-        double longitude = cursor.getDouble(1);
-        float accuracy = cursor.getFloat(2);
-        String provider = cursor.getString(3);
-        String type = cursor.getString(4);
+        double latitude  = cursor.getDouble(LATITUDE);
+        double longitude = cursor.getDouble(LONGITUDE);
+        float accuracy   = cursor.getFloat(ACCURACY);
+        String provider  = cursor.getString(PROVIDER);
+        String type      = cursor.getString(TYPE);
 
         cursor.close();
 
         JSONObject locationData = new JSONObject();
 
-        locationData.put("latitude", latitude);
+        locationData.put("latitude",  latitude);
         locationData.put("longitude", longitude);
-        locationData.put("accuracy", accuracy);
+        locationData.put("accuracy",  accuracy);
         locationData.put("provider", provider);
         locationData.put("type", type);
 
         return locationData;
-
     }
 
     /**
@@ -552,13 +564,19 @@ public class DAO {
      * @return JSON encoded events not yet synchronized.
      */
     public JSONArray getEventsToSync() {
-        JSONArray events = new JSONArray();
 
-        Integer UNSYNCHRONIZED = 0;
+        final int USER_ID              = 0;
+        final int TIMESTAMP            = 1;
+        final int TYPE                 = 2;
+        final int STUDY_DAY            = 3;
+        final int SCHEDULED_TS         = 4;
+        final int START_TS             = 5;
+        final int END_TS               = 6;
+        final int LOCATION_DATA_ID     = 7;
+        final int SURVEY_SUBMISSION_ID = 8;
+        final int HARDWARE_INFO_ID     = 9;
 
-        Cursor cursor;
-
-        String[] columns = {
+        final String[] columns = {
                 "userID",
                 "timestamp",
                 "type",
@@ -572,7 +590,12 @@ public class DAO {
                 "isSynchronized"
         };
 
-        String[] arguments = {UNSYNCHRONIZED.toString()};
+        final String   UNSYNCHRONIZED = Integer.toString(0);
+        final String[] arguments      = { UNSYNCHRONIZED };
+
+        JSONArray events = new JSONArray();
+
+        Cursor cursor;
 
         cursor = db.query(EVENT_TABLE, columns, "isSynchronized = ?", arguments, null, null, null);
 
@@ -581,52 +604,29 @@ public class DAO {
         while(!cursor.isAfterLast()) {
             JSONObject event = new JSONObject();
 
-            String userId             = cursor.getString(0);
-            String timestamp          = cursor.getString(1);
-            String type               = cursor.getString(2);
-            int    studyDay           = cursor.getInt(3);
-            String scheduledTS        = cursor.getString(4);
-            String startTS            = cursor.getString(5);
-            String endTS              = cursor.getString(6);
-            int    locationDataId     = cursor.getInt(7);
-            String surveySubmissionId = cursor.getString(8);
-            int    hardwareInfoId     = cursor.getInt(9);
+            String userId             = cursor.getString(USER_ID);
+            String timestamp          = cursor.getString(TIMESTAMP);
+            String type               = cursor.getString(TYPE);
+            int    studyDay           = cursor.getInt(STUDY_DAY);
+            String scheduledTS        = cursor.getString(SCHEDULED_TS);
+            String startTS            = cursor.getString(START_TS);
+            String endTS              = cursor.getString(END_TS);
+            int    locationDataId     = cursor.getInt(LOCATION_DATA_ID);
+            String surveySubmissionId = cursor.getString(SURVEY_SUBMISSION_ID);
+            int    hardwareInfoId     = cursor.getInt(HARDWARE_INFO_ID);
 
             try {
                 event.put("userID",      userId);
                 event.put("timestamp",   timestamp);
 
-                if(!cursor.isNull(3)) {
-                    event.put("type", type);
-                }
-
-                if(!cursor.isNull(4)) {
-                    event.put("studyDay", studyDay);
-                }
-
-                if(!cursor.isNull(5)) {
-                    event.put("scheduledTS", scheduledTS);
-                }
-
-                if(!cursor.isNull(6)) {
-                    event.put("startTS", startTS);
-                }
-
-                if(!cursor.isNull(7)) {
-                    event.put("endTS", endTS);
-                }
-
-                if (!cursor.isNull(8)) {
-                    event.put("locationData", getLocationData(locationDataId));
-                }
-
-                if (!cursor.isNull(9)) {
-                    event.put("surveySubmission", getSurveySubmission(surveySubmissionId));
-                }
-
-                if (!cursor.isNull(10)) {
-                    event.put("hardwareInfo", getHardwareInfo(hardwareInfoId));
-                }
+                if (!cursor.isNull(TYPE))                   event.put("type",            type);
+                if (!cursor.isNull(STUDY_DAY))              event.put("studyDay",        studyDay);
+                if (!cursor.isNull(SCHEDULED_TS))           event.put("scheduledTS",     scheduledTS);
+                if (!cursor.isNull(START_TS))               event.put("startTS",         startTS);
+                if (!cursor.isNull(END_TS))                 event.put("endTS",           endTS);
+                if (!cursor.isNull(LOCATION_DATA_ID))      event.put("locationData",     getLocationData(locationDataId));
+                if (!cursor.isNull(SURVEY_SUBMISSION_ID))  event.put("surveySubmission", getSurveySubmission(surveySubmissionId));
+                if (!cursor.isNull(HARDWARE_INFO_ID))      event.put("hardwareInfo",     getHardwareInfo(hardwareInfoId));
 
                 events.put(event);
             } catch(JSONException e) {
@@ -648,18 +648,20 @@ public class DAO {
      * @throws JSONException
      */
     public JSONObject getSurveySubmission(@NonNull String surveySubmissionId) throws JSONException {
+
+        final int SURVEY_ID            = 0;
+        final int SURVEY_SUBMISSION_ID = 1;
+
+        final String[] columns   = { "surveyID", "surveySubmissionID"};
+        final String[] arguments = { surveySubmissionId              };
+
         JSONObject jsonObject = new JSONObject();
 
-        Cursor cursor;
+        Cursor cursor = db.query(SURVEY_SUBMISSION_TABLE, columns, "surveySubmissionID = ?", arguments, null, null, null);
 
-        String[] columns   = { "surveyID", "surveySubmissionID"};
-        String[] arguments = { surveySubmissionId };
-
-        cursor = db.query(SURVEY_SUBMISSION_TABLE, columns, "surveySubmissionID = ?", arguments, null, null, null);
         cursor.moveToFirst();
 
         if(cursor.getCount() <= 0) {
-
             Log.e("DAO", String.format("SurveySubmission with an ID of %s does not exist", surveySubmissionId));
 
             if(BuildConfig.DEBUG) {
@@ -667,11 +669,11 @@ public class DAO {
             }
         }
 
-        String surveyId = cursor.getString(0);
-        String surveySubmissionID = cursor.getString(1);
+        String surveyId           = cursor.getString(SURVEY_ID);
+        String surveySubmissionID = cursor.getString(SURVEY_SUBMISSION_ID);
 
         jsonObject.put("surveySubmissionID", surveySubmissionID);
-        jsonObject.put("surveyID",         surveyId);
+        jsonObject.put("surveyID",           surveyId);
         jsonObject.put("submissionAnswer", getAnswersForSurveySubmission(surveySubmissionId));
 
         cursor.close();
@@ -688,19 +690,23 @@ public class DAO {
      * @throws JSONException
      */
     public JSONObject getAnswersForSurveySubmission(@NonNull String surveySubmissionId) throws JSONException {
+
+        final int QUESTION_ID = 0;
+        final int ANSWER      = 1;
+
+        final String[] columns   = { "questionID", "answer"};
+        final String[] arguments = { surveySubmissionId    };
+
         JSONObject jsonObject = new JSONObject();
 
         Cursor cursor;
-
-        String[] columns   = { "questionID", "answer"};
-        String[] arguments = { surveySubmissionId    };
 
         cursor = db.query(SUBMISSION_ANSWER_TABLE, columns, "surveySubmissionID = ?", arguments, null, null, null);
         cursor.moveToFirst();
 
         while(!cursor.isAfterLast()) {
-            String questionId = cursor.getString(0);
-            int answer = cursor.getInt(1);
+            String questionId = cursor.getString(QUESTION_ID);
+            int    answer     = cursor.getInt(ANSWER);
 
             jsonObject.put(questionId, answer);
 
