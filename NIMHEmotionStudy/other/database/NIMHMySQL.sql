@@ -117,7 +117,7 @@ COMMENT = 'This table represents a particular question on a particular survey.';
 -- Table `surveySubmission`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `surveySubmission` (
-  `surveySubmissionID` INT NOT NULL AUTO_INCREMENT,
+  `surveySubmissionID` CHAR(36) NOT NULL,
   `surveyID` VARCHAR(45) NOT NULL COMMENT 'The survey that this is a submission (collection of answers) for.',
   PRIMARY KEY (`surveySubmissionID`),
   INDEX `fk_SurveySubmission_Survey1_idx` (`surveyID` ASC))
@@ -130,7 +130,7 @@ COMMENT = 'Represents a completed survey as comleted by a user.';
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `submissionAnswer` (
   `submissionAnswerID` INT NOT NULL AUTO_INCREMENT,
-  `surveySubmissionID` INT NOT NULL COMMENT 'A link to a particular survey submission.',
+  `surveySubmissionID` CHAR(36) NOT NULL COMMENT 'A link to a particular survey submission.',
   `questionID` VARCHAR(45) NOT NULL COMMENT 'A link to the question that this is an answer to.',
   `answer` INT NOT NULL COMMENT 'The answer to the question.',
   PRIMARY KEY (`submissionAnswerID`),
@@ -152,7 +152,7 @@ CREATE TABLE IF NOT EXISTS `event` (
   `scheduledTS` TIMESTAMP NULL,
   `startTS` TIMESTAMP NULL,
   `endTS` TIMESTAMP NULL,
-  `surveySubmissionID` VARCHAR(45) NULL COMMENT 'If the type of the event is a submission, this is the foreign key which links to the matching record in the SurveySubmission table.',
+  `surveySubmissionID` CHAR(36) NULL COMMENT 'If the type of the event is a submission, this is the foreign key which links to the matching record in the SurveySubmission table.',
   `locationDataID` INT NULL COMMENT 'If the event a location report, this foreign key will point to the matching row in the LocationData table.',
   `hardwareInfoID` INT NULL COMMENT 'If the event type is a report of a hardware settings change, this foreign key will point to the matching entry in the HardwareInfo table.',
   `isSynchronized` TINYINT(1) NOT NULL,
