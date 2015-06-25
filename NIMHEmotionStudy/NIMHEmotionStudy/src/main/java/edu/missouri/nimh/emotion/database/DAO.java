@@ -707,6 +707,8 @@ public class DAO {
             cursor.moveToNext();
         }
 
+        cursor.close();
+
         return jsonObject;
     }
 
