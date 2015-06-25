@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.location.Location;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -49,6 +51,20 @@ public class DAO {
     // *************************** Functions which emulate existing CSV functions ****************
     protected void writeSurveyToDatabase(String survey, HashMap<String, List<String>> surveyData) {
 
+        /*
+        hashmap of
+            survey question name ->
+                question -> answer
+         */
+
+        /*
+        create event
+        create a surveySubmission
+        for each entry in the hashmap
+            create a submission answer record
+            The answer is the result of concatenating every value in the answer list
+         */
+
     }
 
 
@@ -91,7 +107,7 @@ public class DAO {
      * @param name     the name of the survey
      * @return         true if the insertion succeeded, or false otherwise.
      */
-    public boolean insertSurvey(String surveyId, String name) {
+    public boolean insertSurvey(@NonNull String surveyId, @NonNull String name) {
         ContentValues values = new ContentValues();
 
         values.put("surveyID", surveyId);
@@ -123,7 +139,7 @@ public class DAO {
      * @param questionId the question ID
      * @return           true if the insertion succeeded, or false otherwise
      */
-    public boolean insertQuestionOnSurvey(String surveyId, String questionId) {
+    public boolean insertQuestionOnSurvey(@NonNull String surveyId, @NonNull String questionId) {
         ContentValues values = new ContentValues();
 
         values.put("surveyID",   surveyId);
@@ -157,7 +173,7 @@ public class DAO {
      * @param type       The users activity type
      * @return           Returns a row id on success or -1 on failure
      */
-    public long insertLocationData(double latitude, double longitude, float accuracy, String provider, String type) {
+    public long insertLocationData(double latitude, double longitude, float accuracy, @NonNull String provider, @NonNull String type) {
         ContentValues values = new ContentValues();
 
         values.put("latitude",  latitude);
@@ -199,7 +215,17 @@ public class DAO {
      * @param hardwareInfoId     The id of the hardwareInfo record (for a hardware setting change event)
      * @return                   The id of the new event
      */
-    public long insertEvent(String userId, Date timestamp, String type, int studyDay, Date scheduledTS, Date startTS, Date endTS, String surveySubmissionId, Long locationDataId, Long hardwareInfoId) {
+    public long insertEvent(
+            @NonNull  String userId,
+            @NonNull  Date   timestamp,
+            @Nullable String type,
+                      int    studyDay,
+            @Nullable Date   scheduledTS,
+            @Nullable Date   startTS,
+            @Nullable Date   endTS,
+            @Nullable String surveySubmissionId,
+            @Nullable Long   locationDataId,
+            @Nullable Long   hardwareInfoId) {
 
         ContentValues values = new ContentValues();
 
@@ -238,7 +264,7 @@ public class DAO {
      * @param  message the text of the hardware information
      * @return -1 if the insertion failed, or a row ID otherwise
      */
-    public long insertHardwareInfo(String message){
+    public long insertHardwareInfo(@NonNull String message){
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
@@ -274,9 +300,7 @@ public class DAO {
      * @param  answer the answer
      * @return -1 if the insertion failed, or a row ID otherwise
      */
-    public long insertSubmissionAnswer(String surveySubmissionID, String questionID, Integer answer){
-
-
+    public long insertSubmissionAnswer(@NonNull String surveySubmissionID, @NonNull String questionID, @NonNull Integer answer){
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
 
@@ -312,7 +336,7 @@ public class DAO {
      * @param  surveyID the ID of the survey
      * @return null if the insertion failed, or a row ID otherwise
      */
-    public String insertSurveySubmission(String surveyID){
+    public String insertSurveySubmission(@NonNull String surveyID){
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
@@ -388,7 +412,7 @@ public class DAO {
      * @return the JSONObject of the question retrieved
      * @throws JSONException
      */
-    public JSONObject getQuestion(String questionID) throws JSONException {
+    public JSONObject getQuestion(@NonNull String questionID) throws JSONException {
 
         Cursor cursor;
 
@@ -422,7 +446,7 @@ public class DAO {
      * @return the JSONObject of the retrieved survey
      * @throws JSONException
      */
-    public JSONObject getSurvey(String surveyID) throws JSONException {
+    public JSONObject getSurvey(@NonNull String surveyID) throws JSONException {
 
         Cursor cursor;
 
@@ -591,7 +615,7 @@ public class DAO {
      * @return                   A JSON representation of the specified surveySubmission and its associated answers.
      * @throws JSONException
      */
-    public JSONObject getSurveySubmission(String surveySubmissionId) throws JSONException {
+    public JSONObject getSurveySubmission(@NonNull String surveySubmissionId) throws JSONException {
         JSONObject jsonObject = new JSONObject();
 
         Cursor cursor;
@@ -624,7 +648,7 @@ public class DAO {
      * @return                   Answers for specified survey submission
      * @throws JSONException
      */
-    public JSONObject getAnswersForSurveySubmission(String surveySubmissionId) throws JSONException {
+    public JSONObject getAnswersForSurveySubmission(@NonNull String surveySubmissionId) throws JSONException {
         JSONObject jsonObject = new JSONObject();
 
         Cursor cursor;

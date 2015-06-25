@@ -136,7 +136,6 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
     // getQuestion
     // getEventsToSync
-    // getAnswersForSurveySubmission
 
     @SmallTest
     public void testGetAnswersForSurveySubmission() {
@@ -153,7 +152,6 @@ public class DAOTest extends ApplicationTestCase<Application> {
             object.put("Question3", 2);
 
             JSONObject actual = dao.getAnswersForSurveySubmission(uuid);
-
 
             Log.e("DAOTest", actual.toString(4));
 
