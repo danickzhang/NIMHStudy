@@ -464,7 +464,7 @@ public class DAO {
         String[] columns = { "latitude", "longitude", "accuracy", "provider", "type"};
         String[] arguments = {Long.toString(locationDataID)};
 
-        cursor = db.query(LOCATION_DATA_TABLE, columns, "locationDataID = ?", arguments, null, null, null);
+        cursor = db.query(LOCATION_DATA_TABLE, columns, "locationDataId = ?", arguments, null, null, null);
 
         assert cursor.getCount() == 1;
 
