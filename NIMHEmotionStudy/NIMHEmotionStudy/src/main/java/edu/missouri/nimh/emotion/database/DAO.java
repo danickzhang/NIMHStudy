@@ -9,6 +9,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import junit.framework.Assert;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import edu.missouri.nimh.emotion.BuildConfig;
 import edu.missouri.nimh.emotion.location.LocationBroadcast;
 
 import static edu.missouri.nimh.emotion.database.DatabaseHelper.EVENT_TABLE;
@@ -234,16 +237,20 @@ public class DAO {
         try {
             db.beginTransaction();
 
+            String scheduledTSValue = scheduledTS != null ? scheduledTS.toString() : null;
+            String startTSValue     = startTS     != null ? startTS.toString()     : null;
+            String endTSValue       = endTS       != null ? endTS.toString()       : null;
+
             values.put("userID",             userId);
-            values.put("timestamp", timestamp.toString());
+            values.put("timestamp",          timestamp.toString());
             values.put("type",               type);
             values.put("studyDay",           studyDay);
-            values.put("scheduledTS",        scheduledTS.toString());
-            values.put("startTS",            startTS.toString());
-            values.put("endTS",              endTS.toString());
+            values.put("scheduledTS",        scheduledTSValue);
+            values.put("startTS",            startTSValue);
+            values.put("endTS",              endTSValue);
             values.put("surveySubmissionID", surveySubmissionId);
             values.put("locationDataID",     locationDataId);
-            values.put("hardwareInfoID",       hardwareInfoId);
+            values.put("hardwareInfoID",     hardwareInfoId);
             values.put("isSynchronized",     false);
 
             result = db.insert(EVENT_TABLE, null, values);
@@ -388,7 +395,13 @@ public class DAO {
 
         cursor = db.query(HARDWARE_INFO_TABLE, columns, "hardwareInfoID = ?", arguments, null, null, null);
 
-        assert cursor.getCount() > 0;
+        if(cursor.getCount() <= 0) {
+            Log.e("DAO", String.format("HardwareInfo record with an ID of %s does not exist.", hardwareInfoID));
+
+            if(BuildConfig.DEBUG) {
+                throw new AssertionError("HardwareInfo requested does not exist");
+            }
+        }
 
         cursor.moveToFirst();
         String messageText = cursor.getString(0);
@@ -422,7 +435,13 @@ public class DAO {
 
         cursor = db.query(QUESTION_TABLE, columns, "questionID = ?", arguments, null, null, null);
 
-        assert cursor.getCount() > 0;
+        if(cursor.getCount() <= 0) {
+            Log.e("DAO", String.format("Question with an ID of %s does not exist", questionID));
+
+            if (BuildConfig.DEBUG) {
+                throw new AssertionError("Question requested does not exist");
+            }
+        }
 
         cursor.moveToFirst();
 
@@ -456,7 +475,14 @@ public class DAO {
 
         cursor = db.query(SURVEY_TABLE, columns, "surveyID = ?", arguments, null, null, null);
 
-        assert cursor.getCount() > 0;
+        if(cursor.getCount() <= 0) {
+            Log.e("DAO", String.format("Survey with an ID of %s does not exist", surveyID));
+
+            if (BuildConfig.DEBUG) {
+                throw new AssertionError("Requested survey does not exist");
+
+            }
+        }
 
         cursor.moveToFirst();
 
@@ -490,7 +516,13 @@ public class DAO {
 
         cursor = db.query(LOCATION_DATA_TABLE, columns, "locationDataId = ?", arguments, null, null, null);
 
-        assert cursor.getCount() == 1;
+        if(cursor.getCount() <= 0) {
+            Log.e("DAO", String.format("LocationData with an ID of %s does not exist", locationDataID));
+
+            if (BuildConfig.DEBUG) {
+                throw new AssertionError("Requested locationData row does not exist");
+            }
+        }
 
         cursor.moveToFirst();
 
@@ -626,7 +658,14 @@ public class DAO {
         cursor = db.query(SURVEY_SUBMISSION_TABLE, columns, "surveySubmissionID = ?", arguments, null, null, null);
         cursor.moveToFirst();
 
-        assert cursor.getCount() == 1;
+        if(cursor.getCount() <= 0) {
+
+            Log.e("DAO", String.format("SurveySubmission with an ID of %s does not exist", surveySubmissionId));
+
+            if(BuildConfig.DEBUG) {
+                throw new AssertionError("Requested surveySubmission does not exist");
+            }
+        }
 
         String surveyId = cursor.getString(0);
         String surveySubmissionID = cursor.getString(1);
