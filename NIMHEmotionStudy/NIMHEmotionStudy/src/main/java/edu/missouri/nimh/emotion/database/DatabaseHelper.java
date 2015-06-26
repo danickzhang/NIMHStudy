@@ -3,7 +3,10 @@ package edu.missouri.nimh.emotion.database;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.support.annotation.NonNull;
 import android.util.Log;
+
+import org.jetbrains.annotations.NotNull;
 
 /**
  *
@@ -14,11 +17,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper databaseHelper;
 
-    public static final String DB_NAME     = "db.db";
-    private static final String DB_LOCATION = "";
+    public  static final String DB_NAME      = "db.db";
+    private static final String DB_LOCATION  = "";
+    private static final String LOG_TAG      = "DB";
 
-    // Manually incrementing DB VERSION will cause the app to update the schema
-    private static final int    DB_VERSION  = 69;
+    /**
+     * DO <b>NOT</b> update DB_VERSION without reason.
+     *
+     *  Manually incrementing DB VERSION <i><b>will</b></i> cause the app to drop and recreate the
+     *  database tables when opening an older database, <b>losing all existing database data in the process</b>.
+     */
+     private static final int    DB_VERSION  = 1;
 
     public static final String LOCATION_DATA_TABLE      = "locationData";
     public static final String HARDWARE_INFO_TABLE      = "hardwareInfo";
@@ -118,11 +127,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             EVENT_TABLE
     };
 
-    private DatabaseHelper(Context context) {
+    private DatabaseHelper(@NonNull Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
-    public static synchronized DatabaseHelper getInstance(Context context) {
+    public static synchronized DatabaseHelper getInstance(@NonNull Context context) {
         if(databaseHelper == null) {
             databaseHelper = new DatabaseHelper(context);
         }
@@ -131,24 +140,24 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(SQLiteDatabase db) {
-            Log.d("DB", "Creating database");
-            for (String createStatement : TABLES_SQL) {
-                db.execSQL(createStatement);
-            }
+    public void onCreate(@NotNull SQLiteDatabase db) {
+        Log.d(LOG_TAG, "Creating database");
+        for (String createStatement : TABLES_SQL) {
+            db.execSQL(createStatement);
+        }
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
 
-        Log.d("DB", "Database is being upgraded");
-        Log.d("DB", "Deleting tables");
+        Log.d(LOG_TAG, "Database is being upgraded");
+        Log.d(LOG_TAG, "Deleting tables");
 
         for(String table : TABLE_NAMES) {
             db.execSQL(String.format("DROP TABLE %s;", table));
         }
 
-        Log.d("DB", "Creating tables");
+        Log.d(LOG_TAG, "Creating tables");
 
         onCreate(db);
     }
