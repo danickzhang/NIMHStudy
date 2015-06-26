@@ -161,4 +161,23 @@ public class DAOTest extends ApplicationTestCase<Application> {
             Assert.fail();
         }
     }
+
+    public void testGetQuestion() throws Exception {
+        long result = dao.insertQuestion("question", "text");
+
+        if (result != -1) {
+
+            JSONObject expected = new JSONObject();
+
+            expected.put("questionID", "question");
+            expected.put("text", "text");
+
+            JSONObject actual = dao.getQuestion("question");
+
+            assertJsonEquals(expected, actual);
+
+        } else {
+            Assert.fail();
+        }
+    }
 }

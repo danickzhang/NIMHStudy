@@ -6,8 +6,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import org.jetbrains.annotations.NotNull;
-
 /**
  *
  * @author Andrew Smith

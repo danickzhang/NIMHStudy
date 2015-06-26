@@ -548,7 +548,7 @@ public class DAO {
 
         locationData.put("latitude",  latitude);
         locationData.put("longitude", longitude);
-        locationData.put("accuracy",  accuracy);
+        locationData.put("accuracy", accuracy);
         locationData.put("provider",  provider);
         locationData.put("type",      type);
 
@@ -720,5 +720,32 @@ public class DAO {
 
     public SQLiteDatabase getDb() {
         return db;
+    }
+
+    public long insertQuestion(@NonNull String questionId, @NonNull String text) {
+
+        // The values that will be inserted in the new row
+        ContentValues values = new ContentValues();
+
+        values.put("questionID", questionId);
+        values.put("text",       text);
+
+        // The result of the row insertion
+        long result = -1;
+
+        try {
+            db.beginTransaction();
+
+            // Attempt to insert the row into "Question" and store the result.
+            result = db.insert(QUESTION_TABLE, null, values);
+
+            // If the result returns -1, it failed. If it returns anything else, it was successful.
+            if(result != -1) {
+                db.setTransactionSuccessful();
+            }
+        } finally {
+            db.endTransaction();
+            return result;
+        }
     }
 }
