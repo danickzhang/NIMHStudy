@@ -38,6 +38,7 @@ import static edu.missouri.nimh.emotion.database.DatabaseHelper.SURVEY_TABLE;
  * Contains functions to insert into the database and to retrieve database information in JSON.
  */
 public class DAO {
+    public static final String LOG_TAG = "DAO";
     private final SQLiteDatabase db;
 
     /**
@@ -68,9 +69,6 @@ public class DAO {
 
     }
 
-
-
-
     /**
      * Writes the current location of the phone to the database.
      *
@@ -97,7 +95,6 @@ public class DAO {
 
         return result != -1;
     }
-
 
     // ******************** Functions which insert only their parameters into the database *********
 
@@ -390,6 +387,7 @@ public class DAO {
      * @return the JSONObject containing the row that has been retrieved
      * @throws JSONException
      */
+    @NonNull
     public JSONObject getHardwareInfo(long hardwareInfoID) throws JSONException {
 
         final int MESSAGE = 0;
@@ -403,7 +401,7 @@ public class DAO {
         cursor = db.query(HARDWARE_INFO_TABLE, columns, "hardwareInfoID = ?", arguments, null, null, null);
 
         if(cursor.getCount() <= 0) {
-            Log.e("DAO", String.format("HardwareInfo record with an ID of %s does not exist.", hardwareInfoID));
+            Log.e(LOG_TAG, String.format("HardwareInfo record with an ID of %s does not exist.", hardwareInfoID));
 
             if(BuildConfig.DEBUG) {
                 throw new AssertionError("HardwareInfo requested does not exist");
@@ -433,6 +431,7 @@ public class DAO {
      * @return the JSONObject of the question retrieved
      * @throws JSONException
      */
+    @NonNull
     public JSONObject getQuestion(@NonNull String questionID) throws JSONException {
 
         final int QUESTION_ID = 0;
@@ -444,7 +443,7 @@ public class DAO {
         Cursor cursor = db.query(QUESTION_TABLE, columns, "questionID = ?", arguments, null, null, null);
 
         if(cursor.getCount() <= 0) {
-            Log.e("DAO", String.format("Question with an ID of %s does not exist", questionID));
+            Log.e(LOG_TAG, String.format("Question with an ID of %s does not exist", questionID));
 
             if (BuildConfig.DEBUG) {
                 throw new AssertionError("Question requested does not exist");
@@ -473,6 +472,7 @@ public class DAO {
      * @return the JSONObject of the retrieved survey
      * @throws JSONException
      */
+    @NonNull
     public JSONObject getSurvey(@NonNull String surveyID) throws JSONException {
 
         final int SURVEY_ID = 0;
@@ -484,7 +484,7 @@ public class DAO {
         Cursor cursor = db.query(SURVEY_TABLE, columns, "surveyID = ?", arguments, null, null, null);
 
         if(cursor.getCount() <= 0) {
-            Log.e("DAO", String.format("Survey with an ID of %s does not exist", surveyID));
+            Log.e(LOG_TAG, String.format("Survey with an ID of %s does not exist", surveyID));
 
             if (BuildConfig.DEBUG) {
                 throw new AssertionError("Requested survey does not exist");
@@ -515,6 +515,7 @@ public class DAO {
      * @return A JSON object representing a row of the LocationData table
      * @throws JSONException
      */
+    @NonNull
     public JSONObject getLocationData(long locationDataID) throws JSONException {
         final int LATITUDE  = 0;
         final int LONGITUDE = 1;
@@ -530,7 +531,7 @@ public class DAO {
         cursor = db.query(LOCATION_DATA_TABLE, columns, "locationDataId = ?", arguments, null, null, null);
 
         if(cursor.getCount() <= 0) {
-            Log.e("DAO", String.format("LocationData with an ID of %s does not exist", locationDataID));
+            Log.e(LOG_TAG, String.format("LocationData with an ID of %s does not exist", locationDataID));
 
             if (BuildConfig.DEBUG) {
                 throw new AssertionError("Requested locationData row does not exist");
@@ -552,8 +553,8 @@ public class DAO {
         locationData.put("latitude",  latitude);
         locationData.put("longitude", longitude);
         locationData.put("accuracy",  accuracy);
-        locationData.put("provider", provider);
-        locationData.put("type", type);
+        locationData.put("provider",  provider);
+        locationData.put("type",      type);
 
         return locationData;
     }
@@ -563,6 +564,7 @@ public class DAO {
      *
      * @return JSON encoded events not yet synchronized.
      */
+    @NonNull
     public JSONArray getEventsToSync() {
 
         final int USER_ID              = 0;
@@ -630,7 +632,7 @@ public class DAO {
 
                 events.put(event);
             } catch(JSONException e) {
-                Log.e("DAO", "JSONException converting event rows to JSON");
+                Log.e(LOG_TAG, "JSONException converting event rows to JSON");
                 e.printStackTrace();
             }
         }
@@ -647,6 +649,7 @@ public class DAO {
      * @return                   A JSON representation of the specified surveySubmission and its associated answers.
      * @throws JSONException
      */
+    @NonNull
     public JSONObject getSurveySubmission(@NonNull String surveySubmissionId) throws JSONException {
 
         final int SURVEY_ID            = 0;
@@ -662,7 +665,7 @@ public class DAO {
         cursor.moveToFirst();
 
         if(cursor.getCount() <= 0) {
-            Log.e("DAO", String.format("SurveySubmission with an ID of %s does not exist", surveySubmissionId));
+            Log.e(LOG_TAG, String.format("SurveySubmission with an ID of %s does not exist", surveySubmissionId));
 
             if(BuildConfig.DEBUG) {
                 throw new AssertionError("Requested surveySubmission does not exist");
@@ -689,6 +692,7 @@ public class DAO {
      * @return                   Answers for specified survey submission
      * @throws JSONException
      */
+    @NonNull
     public JSONObject getAnswersForSurveySubmission(@NonNull String surveySubmissionId) throws JSONException {
 
         final int QUESTION_ID = 0;
