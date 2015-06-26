@@ -397,7 +397,6 @@ public class DAO {
         final String[] columns   = { "message" };
         final String[] arguments = { Long.toString(hardwareInfoID) };
 
-
         cursor = db.query(HARDWARE_INFO_TABLE, columns, "hardwareInfoID = ?", arguments, null, null, null);
 
         if(cursor.getCount() <= 0) {
@@ -416,10 +415,7 @@ public class DAO {
 
         JSONObject hardwareInfo = new JSONObject();
 
-        // Don't include this line because hardwareInfoID auto-increments on the server
-//        hardwareInfo.put("hardwareInfoID", hardwareInfoId);
         hardwareInfo.put("message", messageText);
-
 
         return  hardwareInfo;
 
