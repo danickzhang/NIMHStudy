@@ -140,7 +140,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onCreate(@NotNull SQLiteDatabase db) {
+    public void onCreate(@NonNull SQLiteDatabase db) {
         Log.d(LOG_TAG, "Creating database");
         for (String createStatement : TABLES_SQL) {
             db.execSQL(createStatement);
@@ -148,7 +148,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(@NotNull SQLiteDatabase db, int oldVersion, int newVersion) {
+    public void onUpgrade(@NonNull SQLiteDatabase db, int oldVersion, int newVersion) {
 
         Log.d(LOG_TAG, "Database is being upgraded");
         Log.d(LOG_TAG, "Deleting tables");
