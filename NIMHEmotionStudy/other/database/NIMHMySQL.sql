@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `event` (
   `userID` VARCHAR(8) NOT NULL COMMENT 'The user who\'s phone generated this event.',
   `timestamp` TIMESTAMP NOT NULL COMMENT 'The time the event record was created on the client.',
   `type` VARCHAR(45) NULL COMMENT 'The type of data reported by this event.  This value determines which foreign key to use to obtain the events information.',
-  `studyDay` DATE NULL,
+  `studyDay` INT NOT NULL,
   `scheduledTS` TIMESTAMP NULL,
   `startTS` TIMESTAMP NULL,
   `endTS` TIMESTAMP NULL,
