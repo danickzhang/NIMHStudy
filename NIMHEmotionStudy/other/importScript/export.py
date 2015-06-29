@@ -8,16 +8,6 @@ import xml.etree.ElementTree as ET
 import glob
 import os.path
 
-
-class SurveyImporter:
-    """
-    Loads survey and question information from XML files and outputs insert statements
-    """
-
-    def __init__(self):
-        pass
-
-
 def insert_survey(survey_id, survey_name):
     return "insert into survey(surveyID, name) values('%s', '%s')" % (survey_id, survey_name)
 
@@ -105,14 +95,15 @@ if __name__ == '__main__':
 ██║╚██╗██║██║██║╚██╔╝██║██╔══██║
 ██║ ╚████║██║██║ ╚═╝ ██║██║  ██║
 ╚═╝  ╚═══╝╚═╝╚═╝     ╚═╝╚═╝  ╚═╝
+--------------------------------
      XML to SQL Exporter
+--------------------------------
 """
 
     sys.stderr.write(logo)
     parser = argparse.ArgumentParser(
         description="Loads NIMH Parcel files and generates SQL insert statements to create the surveys and questions.")
     parser.add_argument("inputDir", help="The directory containing the xml files.  Probably assets/")
-    # parser.add_argument("outputFile", help="The path to the output SQL file")
 
     args = parser.parse_args()
 
