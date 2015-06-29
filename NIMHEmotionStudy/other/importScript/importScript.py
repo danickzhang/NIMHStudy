@@ -1,5 +1,7 @@
 __author__ = 'Andrew Smith'
 
+import argparse
+
 '''
 Loads survey and question information from XML files and outputs insert statements
 '''
@@ -50,17 +52,10 @@ def process_data(data):
     return ";\n".join(sql)
 
 if __name__ == '__main__':
-    a = {
-        "questions": {
-            "questionid1": "questiontext1",
-            "questionid2" : "questiontext2",
-            "questionid3" : "questiontext3"
-        },
-        "surveys": {
-            "survey1": ["questionid1", "questionid2"],
-            "survey2": ["questionid3"]
-        }
-    }
+    parser = argparse.ArgumentParser(description="Loads NIMH Parcel files and generates SQL insert statements to create the surveys and questions.")
+    parser.add_argument("inputDir", help="The directory containing the xml files.  Probably assets/")
+    parser.add_argument("outputFile", help="The path to the output SQL file")
 
-    print process_data(a)
+    args = parser.parse_args()
+
 
