@@ -41,6 +41,7 @@ import edu.missouri.nimh.emotion.location.LocationBroadcast;
 import edu.missouri.nimh.emotion.location.LocationUtilities;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Application;
 import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -1264,7 +1265,15 @@ public class Utilities {
 	}
 	
 	
-	
-	
+
+	public static Application getApplication() throws Exception {
+		return (Application) Class.forName("android.app.ActivityThread").getMethod("currentApplication").invoke(null, (Object[]) null);
+	}
+
+	public static Context getContext() throws Exception {
+		Application app = getApplication();
+
+		return app.getApplicationContext();
+	}
 	
 }
