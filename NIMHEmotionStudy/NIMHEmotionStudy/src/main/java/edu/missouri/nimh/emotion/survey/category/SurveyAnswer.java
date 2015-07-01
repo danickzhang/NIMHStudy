@@ -139,7 +139,7 @@ public class SurveyAnswer implements Answer, Cloneable {
 		if(this.getId().equals(answer.getId()) &&
 				this.getAnswerText().equals(answer.getAnswerText()))
 			return true;
-		return false;		
+		return false;
 	}
 	
 	@Override

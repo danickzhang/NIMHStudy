@@ -107,8 +107,8 @@ public class DAOTest extends ApplicationTestCase<Application> {
     public void testGetSurveySubmission() {
         String id = dao.insertSurveySubmission("SurveyID");
 
-        dao.insertSubmissionAnswer(id, "Question1", 0);
-        dao.insertSubmissionAnswer(id, "Question2", 1);
+        dao.insertSubmissionAnswer(id, "Question1", "0");
+        dao.insertSubmissionAnswer(id, "Question2", "1");
 
         try {
             JSONObject object = new JSONObject();
@@ -139,9 +139,9 @@ public class DAOTest extends ApplicationTestCase<Application> {
     @SmallTest
     public void testGetAnswersForSurveySubmission() {
         String uuid = dao.insertSurveySubmission("survey");
-        dao.insertSubmissionAnswer(uuid, "Question1", 0);
-        dao.insertSubmissionAnswer(uuid, "Question2", 1);
-        dao.insertSubmissionAnswer(uuid, "Question3", 2);
+        dao.insertSubmissionAnswer(uuid, "Question1", "0");
+        dao.insertSubmissionAnswer(uuid, "Question2", "1");
+        dao.insertSubmissionAnswer(uuid, "Question3", "2");
 
         try {
             JSONObject object = new JSONObject();

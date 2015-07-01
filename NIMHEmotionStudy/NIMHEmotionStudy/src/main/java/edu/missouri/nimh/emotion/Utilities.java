@@ -395,7 +395,7 @@ public class Utilities {
 				strArr[i] = sdf.format(c2.getTime());
 				i++;
 			}
-			
+
 			try {
 				//nimh gonna be different
 				writeEventToFile(context, (autoTriggered ? CODE_SCHEDULE_AUTOMATIC : CODE_SCHEDULE_MANUALLY),

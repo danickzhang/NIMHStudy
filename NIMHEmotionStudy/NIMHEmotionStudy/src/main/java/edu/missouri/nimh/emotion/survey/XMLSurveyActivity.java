@@ -23,6 +23,7 @@ import org.xml.sax.InputSource;
 
 import edu.missouri.nimh.emotion.R;
 import edu.missouri.nimh.emotion.Utilities;
+import edu.missouri.nimh.emotion.database.DAO;
 import edu.missouri.nimh.emotion.survey.category.Answer;
 import edu.missouri.nimh.emotion.survey.category.Category;
 import edu.missouri.nimh.emotion.survey.category.Question;
@@ -978,17 +979,28 @@ public class XMLSurveyActivity extends Activity {
 //		it.putExtra(Utilities.SV_NAME, surveyName);
 //		sendBroadcast(it);
     	
-		//recording
-    	try {
-			writeSurveyToFile(answerMap);
+		   //recording
+		   DAO dao = new DAO(this);
+
+			Calendar endCal = Calendar.getInstance();
+
+			int userID = Integer.parseInt(Utilities.getSP(this, Utilities.SP_LOGIN).getString(Utilities.SP_KEY_LOGIN_USERID, "0000"));
+			int studyDay = Utilities.getStudyDay(this);
+			int type = getSurveyType();
+
+			String scheduleTS = getScheduleTimeStamp();
+
+			String startTS = Utilities.sdf.format(startCal.getTime());
+			String endTS = Utilities.sdf.format(endCal.getTime());
+
+			String[] rem = getReminderTimeStamp(context);
+
+			dao.writeSurveyToDatabase(surveyName, userID, studyDay, type, scheduleTS, startTS, endTS, rem, answerMap);
 
 			if(autoTriggered) {
 				Utilities.getSP(this, Utilities.SP_REMINDER_INFO).edit().clear().commit();
 			}
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
 		
     	Toast.makeText(this, R.string.survey_completed, Toast.LENGTH_LONG).show();
     	finish();
