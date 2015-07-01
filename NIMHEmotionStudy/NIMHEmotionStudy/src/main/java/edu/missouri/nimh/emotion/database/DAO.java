@@ -17,6 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import edu.missouri.nimh.emotion.BuildConfig;
@@ -40,6 +41,7 @@ import static edu.missouri.nimh.emotion.database.DatabaseHelper.SURVEY_TABLE;
 public class DAO {
     public static final String LOG_TAG = "DAO";
     private final SQLiteDatabase db;
+    private final Context context;
 
     /**
      *
@@ -48,25 +50,69 @@ public class DAO {
     public DAO(Context context) {
         DatabaseHelper helper = DatabaseHelper.getInstance(context);
         db                    = helper.getWritableDatabase();
+
+        this.context = context;
     }
 
     // *************************** Functions which emulate existing CSV functions ****************
-    protected void writeSurveyToDatabase(String survey, HashMap<String, List<String>> surveyData) {
+    public void writeSurveyToDatabase(
+            @NonNull String surveyName,
+                      int      userID,
+                      int      studyDay,
+                      int      type,
+            @Nullable String   scheduleTS,
+            @Nullable String   startTS,
+            @Nullable String   endTS,
+            @Nullable String[] reminderTS,
+            @NonNull HashMap<String, List<String>> surveyData
+    ) {
+        final String formatMsg = "writeSurveyToDatabase(userID = %s, studyDay = %s, type = %s, scheduleTS = %s, startTS = %s, endTS = %s, ...)";
+        final String message = String.format(formatMsg, userID, studyDay, type, scheduleTS, startTS, endTS);
 
-        /*
-        hashmap of
-            survey question name ->
-                question -> answer
-         */
+        Log.d(LOG_TAG, message);
 
-        /*
-        create event
-        create a surveySubmission
-        for each entry in the hashmap
-            create a submission answer record
-            The answer is the result of concatenating every value in the answer list
-         */
+        // insert submission record
+        String surveySubmissionId = insertSurveySubmission(surveyName);
 
+        if (surveySubmissionId != null) {
+            //TODO: event needs the three reminder fields
+            // insert event record
+            final String userId = Integer.toString(userID);
+            final Date timestamp = Calendar.getInstance().getTime();
+            final String surveyType = Integer.toString(type);
+
+            long eventId = insertEvent(userId, timestamp, surveyType, studyDay, scheduleTS, startTS, endTS, surveySubmissionId, null, null);
+
+            // insert submissionAnswer records
+            for (Map.Entry<String, List<String>> question : surveyData.entrySet()) {
+                String textAnswers = "";
+
+                if (question.getValue() == null || question.getValue().isEmpty()) {
+                    textAnswers = "-1";
+                } else {
+                    for (String answer : question.getValue()) {
+                        textAnswers += answer;
+                    }
+                }
+
+                // insert submission Answer record
+                insertSubmissionAnswer(surveySubmissionId, question.getKey(), textAnswers);
+            }
+
+            //Ricky 2014/4/1
+            //dealing with the random sequence
+            /*
+            Not sure what to do with this code - Andrew Smith 2015/06/01
+
+            if (surveyName.equals(Utilities.SV_NAME_RANDOM)) {
+                //random sequence
+                int i = shp.getInt(Utilities.SP_KEY_SURVEY_TRIGGER_SEQ_RANDOM, -1);
+                sb.append(",seq:"+ (i==0? Utilities.MAX_TRIGGER_MAP.get(surveyName): i));
+            }
+            */
+        } else {
+            Log.e(LOG_TAG, "Survey Insert Failure: Failed to create a new survey submission");
+        }
     }
 
     /**
@@ -224,13 +270,15 @@ public class DAO {
             @NonNull  Date   timestamp,
             @Nullable String type,
                       int    studyDay,
-            @Nullable Date   scheduledTS,
-            @Nullable Date   startTS,
-            @Nullable Date   endTS,
+            @Nullable String scheduledTS,
+            @Nullable String startTS,
+            @Nullable String endTS,
             @Nullable String surveySubmissionId,
             @Nullable Long   locationDataId,
             @Nullable Long   hardwareInfoId) {
 
+        final String fmt = "insertEvent(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)";
+        Log.d(LOG_TAG, String.format(fmt, userId, timestamp, type, studyDay, scheduledTS, startTS, endTS, surveySubmissionId, locationDataId, hardwareInfoId));
         ContentValues values = new ContentValues();
 
         long result = -1;
@@ -238,17 +286,13 @@ public class DAO {
         try {
             db.beginTransaction();
 
-            String scheduledTSValue = scheduledTS != null ? scheduledTS.toString() : null;
-            String startTSValue     = startTS     != null ? startTS.toString()     : null;
-            String endTSValue       = endTS       != null ? endTS.toString()       : null;
-
             values.put("userID",             userId);
             values.put("timestamp",          timestamp.toString());
             values.put("type",               type);
             values.put("studyDay",           studyDay);
-            values.put("scheduledTS",        scheduledTSValue);
-            values.put("startTS",            startTSValue);
-            values.put("endTS",              endTSValue);
+            values.put("scheduledTS",        scheduledTS);
+            values.put("startTS",            startTS);
+            values.put("endTS",              endTS);
             values.put("surveySubmissionID", surveySubmissionId);
             values.put("locationDataID",     locationDataId);
             values.put("hardwareInfoID",     hardwareInfoId);
@@ -308,7 +352,12 @@ public class DAO {
      * @param  answer the answer
      * @return -1 if the insertion failed, or a row ID otherwise
      */
-    public long insertSubmissionAnswer(@NonNull String surveySubmissionID, @NonNull String questionID, @NonNull Integer answer){
+    public long insertSubmissionAnswer(@NonNull String surveySubmissionID, @NonNull String questionID, @NonNull String answer){
+
+        final String fmt = "insertSubmissionAnswer(%s, %s, %s)";
+
+        Log.d(LOG_TAG, String.format(fmt, surveySubmissionID, questionID, answer));
+
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
 
@@ -346,6 +395,7 @@ public class DAO {
      */
     @Nullable
     public String insertSurveySubmission(@NonNull String surveyID){
+        Log.d(LOG_TAG, String.format("insertSurveySubmission(%s)", surveyID));
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
@@ -582,8 +632,8 @@ public class DAO {
                 "scheduledTS",
                 "startTS",
                 "endTS",
-                "surveySubmissionID",
                 "locationDataID",
+                "surveySubmissionID",
                 "hardwareInfoID",
                 "isSynchronized"
         };
@@ -743,9 +793,11 @@ public class DAO {
             if(result != -1) {
                 db.setTransactionSuccessful();
             }
+
         } finally {
             db.endTransaction();
-            return result;
         }
+
+        return result;
     }
 }
