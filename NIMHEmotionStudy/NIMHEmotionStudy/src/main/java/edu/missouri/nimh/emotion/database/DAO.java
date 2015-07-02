@@ -681,6 +681,8 @@ public class DAO {
                 Log.e(LOG_TAG, "JSONException converting event rows to JSON");
                 e.printStackTrace();
             }
+
+            cursor.moveToNext();
         }
 
         cursor.close();
