@@ -107,7 +107,6 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("json", message));
 
-
         try {
             request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
             HttpResponse response = new DefaultHttpClient().execute(request);

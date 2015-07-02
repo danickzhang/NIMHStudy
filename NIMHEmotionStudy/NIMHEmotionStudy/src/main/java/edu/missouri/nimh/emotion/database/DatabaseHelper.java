@@ -13,19 +13,21 @@ import android.util.Log;
  */
 public class DatabaseHelper extends SQLiteOpenHelper {
 
-    private static DatabaseHelper databaseHelper;
-
-    public  static final String DB_NAME      = "db.db";
-    private static final String DB_LOCATION  = "";
-    private static final String LOG_TAG      = "DB";
-
     /**
      * DO <b>NOT</b> update DB_VERSION without reason.
      *
      *  Manually incrementing DB VERSION <i><b>will</b></i> cause the app to drop and recreate the
      *  database tables when opening an older database, <b>losing all existing database data in the process</b>.
      */
-     private static final int    DB_VERSION  = 1;
+    private static final int    DB_VERSION  = 1;
+
+    private static DatabaseHelper databaseHelper;
+
+    public  static final String DB_NAME      = "db.db";
+    private static final String DB_LOCATION  = "";
+    private static final String LOG_TAG      = "DB";
+
+
 
     public static final String LOCATION_DATA_TABLE      = "locationData";
     public static final String HARDWARE_INFO_TABLE      = "hardwareInfo";
@@ -43,12 +45,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "    `latitude`  DOUBLE NULL,"                       +
             "    `longitude` DOUBLE NULL,"                       +
             "    `accuracy`  Float NULL,"                        +
-            "    `provider`  VARCHAR(45) NULL,"                  +
-            "    `type`      VARCHAR(45) NULL"                   +
+            "    `provider`  TEXT NULL,"                         +
+            "    `type`      TEXT NULL"                          +
             ");";
 
     private static final String HARDWARE_INFO_SQL =
-            "CREATE TABLE " + HARDWARE_INFO_TABLE + " (" +
+            "CREATE TABLE " + HARDWARE_INFO_TABLE + " ("         +
             "    `hardwareInfoID` INTEGER PRIMARY KEY NOT NULL," +
             "    `message` TEXT NOT NULL"                        +
             ");";
@@ -56,7 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SURVEY_SQL =
             "CREATE TABLE " + SURVEY_TABLE +" ("   +
             "    `surveyID` VARCHAR(45) NOT NULL," +
-            "    `name`     VARCHAR(45) NOT NULL," +
+            "    `name`     TEXT NOT NULL,"        +
             "    PRIMARY KEY (`surveyID`)"         +
             ");";
 
@@ -84,7 +86,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "        `submissionAnswerID` INTEGER PRIMARY KEY NOT NULL," +
             "        `surveySubmissionID` CHAR(36),"                     +
             "        `questionID`         VARCHAR(45) NOT NULL,"         +
-            "        `answer`             INT NOT NULL"                  +
+            "        `answer`             TEXT NOT NULL"                 +
             ");";
 
    private static final String EVENT_SQL =
@@ -92,12 +94,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "    `eventID` INTEGER PRIMARY KEY NOT NULL,"     +
             "    `userID`             VARCHAR(8)  NOT NULL,"  +
             "    `timestamp`          TIMESTAMP   NOT NULL,"  +
-            "    `type`               VARCHAR(45) NULL,"      +
+            "    `type`               TEXT        NULL,"      +
             "    `studyDay`           DATE        NOT NULL,"  +
             "    `scheduledTS`        TIMESTAMP   NULL,"      +
             "    `startTS`            TIMESTAMP   NULL,"      +
             "    `endTS`              TIMESTAMP   NULL,"      +
-            "    `surveySubmissionID` VARCHAR(45) NULL,"      +
+            "    `surveySubmissionID` CHAR(36)    NULL,"      +
             "    `locationDataID`     INT         NULL,"      +
             "    `hardwareInfoID`     INT         NULL,"      +
             "    `isSynchronized`     BOOL        NOT NULL"   +
@@ -140,6 +142,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(@NonNull SQLiteDatabase db) {
         Log.d(LOG_TAG, "Creating database");
+
         for (String createStatement : TABLES_SQL) {
             db.execSQL(createStatement);
         }

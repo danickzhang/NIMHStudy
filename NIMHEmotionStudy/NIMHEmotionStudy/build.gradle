@@ -12,6 +12,11 @@ android {
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -19,14 +24,11 @@ android {
         }
     }
 
-
     testOptions {
         unitTests {
             returnDefaultValues = true
         }
     }
-
-
 }
 
 dependencies {
