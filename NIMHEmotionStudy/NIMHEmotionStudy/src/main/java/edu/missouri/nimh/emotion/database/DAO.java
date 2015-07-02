@@ -70,7 +70,7 @@ public class DAO {
         Log.d(LOG_TAG, message);
 
         // insert submission record
-        String surveySubmissionId = insertSurveySubmission(surveyName);
+        String surveySubmissionId = insertSurveySubmission(surveyName, reminderTS[0], reminderTS[1], reminderTS[2]);
 
         if (surveySubmissionId != null) {
             //TODO: event needs the three reminder fields
@@ -392,16 +392,37 @@ public class DAO {
      * @return null if the insertion failed, or a row ID otherwise
      */
     @Nullable
-    public String insertSurveySubmission(@NonNull String surveyID){
+    public String insertSurveySubmission(@NonNull String surveyID, String reminderTS1, String reminderTS2, String reminderTS3){
         Log.d(LOG_TAG, String.format("insertSurveySubmission(%s)", surveyID));
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
         String uuid          = UUID.randomUUID().toString();
 
+        boolean rem1Present = (reminderTS1 != null) && (!reminderTS1.isEmpty());
+        boolean rem2Present = (reminderTS2 != null) && (!reminderTS2.isEmpty());
+        boolean rem3Present = (reminderTS3 != null) && (!reminderTS3.isEmpty());
+
         values.put("surveySubmissionID", uuid);
         values.put("surveyID",           surveyID);
 
+        if(rem1Present) {
+            values.put("reminderTS1", reminderTS1);
+        } else {
+            values.putNull("reminderTS1");
+        }
+
+        if(rem2Present) {
+            values.put("reminderTS2", reminderTS2);
+        } else {
+            values.putNull("reminderTS2");
+        }
+
+        if(rem3Present) {
+            values.put("reminderTS3", reminderTS3);
+        } else {
+            values.putNull("reminderTS3");
+        }
         // The result of the row insertion
         long result;
 
@@ -750,7 +771,7 @@ public class DAO {
         final int SURVEY_ID            = 0;
         final int SURVEY_SUBMISSION_ID = 1;
 
-        final String[] columns   = { "surveyID", "surveySubmissionID"};
+        final String[] columns   = { "surveyID", "surveySubmissionID", "reminderTS1", "reminderTS2", "reminderTS3"};
         final String[] arguments = { surveySubmissionId              };
 
         JSONObject jsonObject = new JSONObject();
@@ -769,10 +790,17 @@ public class DAO {
 
             String surveyId = cursor.getString(SURVEY_ID);
             String surveySubmissionID = cursor.getString(SURVEY_SUBMISSION_ID);
+            String reminderTS1 = cursor.getString(2);
+            String reminderTS2 = cursor.getString(3);
+            String reminderTS3 = cursor.getString(4);
 
             jsonObject.put("surveySubmissionID", surveySubmissionID);
             jsonObject.put("surveyID", surveyId);
             jsonObject.put("submissionAnswer", getAnswersForSurveySubmission(surveySubmissionId));
+            jsonObject.put("reminderTS1", reminderTS1);
+            jsonObject.put("reminderTS2", reminderTS2);
+            jsonObject.put("reminderTS3", reminderTS3);
+
         }
 
         return  jsonObject;

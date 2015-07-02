@@ -19,7 +19,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *  Manually incrementing DB VERSION <i><b>will</b></i> cause the app to drop and recreate the
      *  database tables when opening an older database, <b>losing all existing database data in the process</b>.
      */
-    private static final int    DB_VERSION  = 1;
+    private static final int    DB_VERSION  = 2;
 
     private static DatabaseHelper databaseHelper;
 
@@ -78,7 +78,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String SurveySubmission =
             "CREATE TABLE " + SURVEY_SUBMISSION_TABLE + " ("          +
             "    `surveySubmissionID` CHAR(36) PRIMARY KEY NOT NULL," +
-            "    `surveyID` VARCHAR(45) NOT NULL"                     +
+            "    `surveyID` VARCHAR(45) NOT NULL,"                    +
+                    "reminderTS1 TEXT NULL," +
+                    "reminderTS2 TEXT NULL," +
+                    "reminderTS3 TEXT NULL"  +
              ");";
 
     private static final String SUBMISSION_ANSWER =

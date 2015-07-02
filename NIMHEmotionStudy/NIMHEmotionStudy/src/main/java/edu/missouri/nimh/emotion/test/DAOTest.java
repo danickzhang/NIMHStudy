@@ -19,6 +19,11 @@ import edu.missouri.nimh.emotion.database.DatabaseHelper;
 import static net.javacrumbs.jsonunit.JsonAssert.assertJsonEquals;
 import static net.javacrumbs.jsonunit.JsonAssert.setTolerance;
 
+/**
+ * Tests for the DAO class.
+ *
+ * @author Andrew Smith
+ */
 public class DAOTest extends ApplicationTestCase<Application> {
     private Context        context;
     private DAO            dao;
@@ -105,7 +110,7 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
     @SmallTest
     public void testGetSurveySubmission() {
-        String id = dao.insertSurveySubmission("SurveyID");
+        String id = dao.insertSurveySubmission("SurveyID", "rem1", "rem2", "rem3");
 
         dao.insertSubmissionAnswer(id, "Question1", "0");
         dao.insertSubmissionAnswer(id, "Question2", "1");
@@ -120,6 +125,9 @@ public class DAOTest extends ApplicationTestCase<Application> {
             JSONObject expected = new JSONObject();
             expected.put("surveySubmissionID", id);
             expected.put("surveyID",           "SurveyID");
+            expected.put("reminderTS1", "rem1");
+            expected.put("reminderTS2", "rem2");
+            expected.put("reminderTS3", "rem3");
             expected.put("submissionAnswer",   object);
 
             JSONObject actual = dao.getSurveySubmission(id);
@@ -138,7 +146,7 @@ public class DAOTest extends ApplicationTestCase<Application> {
 
     @SmallTest
     public void testGetAnswersForSurveySubmission() {
-        String uuid = dao.insertSurveySubmission("survey");
+        String uuid = dao.insertSurveySubmission("survey", "rem1", "rem2", "rem3");
         dao.insertSubmissionAnswer(uuid, "Question1", "0");
         dao.insertSubmissionAnswer(uuid, "Question2", "1");
         dao.insertSubmissionAnswer(uuid, "Question3", "2");
