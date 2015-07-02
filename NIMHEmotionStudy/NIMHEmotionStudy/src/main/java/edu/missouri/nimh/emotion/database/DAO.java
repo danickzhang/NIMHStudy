@@ -39,9 +39,8 @@ import static edu.missouri.nimh.emotion.database.DatabaseHelper.SURVEY_TABLE;
  * Contains functions to insert into the database and to retrieve database information in JSON.
  */
 public class DAO {
-    public static final String LOG_TAG = "DAO";
+    private static final String LOG_TAG = "DAO";
     private final SQLiteDatabase db;
-    private final Context context;
 
     /**
      *
@@ -51,7 +50,6 @@ public class DAO {
         DatabaseHelper helper = DatabaseHelper.getInstance(context);
         db                    = helper.getWritableDatabase();
 
-        this.context = context;
     }
 
     // *************************** Functions which emulate existing CSV functions ****************
@@ -81,7 +79,7 @@ public class DAO {
             final Date timestamp = Calendar.getInstance().getTime();
             final String surveyType = Integer.toString(type);
 
-            long eventId = insertEvent(userId, timestamp, surveyType, studyDay, scheduleTS, startTS, endTS, surveySubmissionId, null, null);
+            insertEvent(userId, timestamp, surveyType, studyDay, scheduleTS, startTS, endTS, surveySubmissionId, null, null);
 
             // insert submissionAnswer records
             for (Map.Entry<String, List<String>> question : surveyData.entrySet()) {
@@ -599,8 +597,8 @@ public class DAO {
         locationData.put("latitude",  latitude);
         locationData.put("longitude", longitude);
         locationData.put("accuracy", accuracy);
-        locationData.put("provider",  provider);
-        locationData.put("type",      type);
+        locationData.put("provider", provider);
+        locationData.put("type", type);
 
         return locationData;
     }
@@ -688,6 +686,69 @@ public class DAO {
         cursor.close();
 
         return events;
+    }
+
+    /**
+     * Given a JSON array of JSON event objects, this method marks the corresponding
+     * database records as having been synchronized with the remote server.
+     *
+     * @param events The events to mark as synchronized
+     */
+    public void markEventsAsProcessed(@NonNull JSONArray events) {
+        try {
+            Log.d(LOG_TAG, "Marking multiple events as synchronized");
+
+            for (int i = 0; i < events.length(); i++) {
+                JSONObject event = events.getJSONObject(i);
+
+                String userId = event.getString("userID");
+                String timestamp = event.getString("timestamp");
+                String type = event.getString("type");
+
+                markEventAsProcessed(userId, timestamp, type);
+            }
+        } catch(JSONException e) {
+            Log.e(LOG_TAG, "JSONException marking multiple events as synchronized");
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     *
+     * Marks an event as having been synchronized with the remote server.
+     *
+     * @param userId    The id of the user who generated the event
+     * @param timestamp The time the event occurred
+     * @param type      The type of event that occurred
+     */
+    public void markEventAsProcessed(@NonNull String userId, @NonNull String timestamp, @NonNull String type) {
+        try {
+            ContentValues values = new ContentValues();
+
+            values.put("synced", 1);
+
+            final String whereClause = "userID = ? and timestamp = ? and type = ?";
+            String[] whereArgs = {userId, timestamp, type};
+
+            final String MARKING_EVENT_FMT = "Marking event(userId=%s, timestamp=%s, type=%s) as synced";
+            final String DEBUG_MSG = String.format(MARKING_EVENT_FMT, userId, timestamp, type);
+
+            Log.d(LOG_TAG, DEBUG_MSG);
+
+            db.beginTransaction();
+            int result = db.update(DatabaseHelper.EVENT_TABLE, values, whereClause, whereArgs);
+
+            if (result == -1) {
+                final String ERROR_FMT = "Error marking event(userId=%s, timestamp=%s, type=%s) as synced";
+                final String ERROR_MSG = String.format(ERROR_FMT, userId, timestamp, type);
+
+                Log.e(LOG_TAG, ERROR_MSG);
+            } else {
+                db.setTransactionSuccessful();
+            }
+        } finally {
+            db.endTransaction();
+        }
     }
 
     /**
