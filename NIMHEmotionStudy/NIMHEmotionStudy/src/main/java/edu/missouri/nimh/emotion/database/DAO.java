@@ -46,7 +46,7 @@ public class DAO {
      *
      * @param context A context
      */
-    public DAO(Context context) {
+    public DAO(@NonNull Context context) {
         DatabaseHelper helper = DatabaseHelper.getInstance(context);
         db                    = helper.getWritableDatabase();
 
@@ -120,7 +120,7 @@ public class DAO {
      * @param  type the means by which the location was obtained (GPS, WiFi?)
      * @return true if the write succeeded, false otherwise
      */
-    public boolean writeLocationToDatabase(Location location, String type) {
+    public boolean writeLocationToDatabase(@NonNull Location location, @NonNull String type) {
 
         Date time = Calendar.getInstance().getTime();
 
@@ -814,6 +814,7 @@ public class DAO {
         return jsonObject;
     }
 
+    @NonNull
     public SQLiteDatabase getDb() {
         return db;
     }

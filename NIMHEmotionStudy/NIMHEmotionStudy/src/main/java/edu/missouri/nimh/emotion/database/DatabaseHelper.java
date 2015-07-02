@@ -131,6 +131,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         super(context, DB_NAME, null, DB_VERSION);
     }
 
+    @NonNull
     public static synchronized DatabaseHelper getInstance(@NonNull Context context) {
         if(databaseHelper == null) {
             databaseHelper = new DatabaseHelper(context);
