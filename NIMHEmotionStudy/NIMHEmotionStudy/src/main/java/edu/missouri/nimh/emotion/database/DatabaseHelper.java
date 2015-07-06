@@ -25,7 +25,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
      *  Manually incrementing DB VERSION <i><b>will</b></i> cause the app to drop and recreate the
      *  database tables when opening an older database, <b>losing all existing database data in the process</b>.
      */
-     private static final int    DB_VERSION  = 2;
+     private static final int    DB_VERSION  = 74;
 
     public static final String LOCATION_DATA_TABLE      = "locationData";
     public static final String HARDWARE_INFO_TABLE      = "hardwareInfo";

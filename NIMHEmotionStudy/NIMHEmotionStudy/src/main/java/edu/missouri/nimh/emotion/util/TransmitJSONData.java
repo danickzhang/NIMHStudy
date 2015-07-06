@@ -3,6 +3,7 @@ package edu.missouri.nimh.emotion.util;
 import android.os.AsyncTask;
 import android.util.Log;
 
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.apache.http.NameValuePair;
@@ -11,7 +12,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,6 +22,8 @@ import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.missouri.nimh.emotion.database.DAO;
 
 /**
  * Sends JSON to a URI using HTTP POST.
@@ -47,6 +49,8 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
     private final URI      uri;
     private final String   uriString;
     private final JSONMode mode;
+    private final DAO      db;
+
 
     /**
      * Controls how to represent objects as JSON when there is only one element
@@ -64,17 +68,19 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
      * @param uri  The uri to POST the JSON to.
      * @param mode The way to represent a single object as JSON
      */
-    public TransmitJSONData(URI uri, JSONMode mode) {
+    public TransmitJSONData(URI uri, JSONMode mode, DAO db) {
         this.uri       = uri;
         this.uriString = uri.toASCIIString();
         this.mode      = mode;
+        this.db        = db;
     }
 
     @Override
     protected Boolean doInBackground(JSONObject... objects) {
         String message = null;
+        boolean status200 = false;
 
-        if(objects == null || objects.length == 0) {
+        if (objects == null || objects.length == 0) {
             Log.e(TAG, LOG_NO_DATA_MSG);
             return false;
         }
@@ -90,11 +96,10 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
                         message = new JSONArray(objects).toString(JSON_INDENTION);
                         break;
                 }
-            }
-            else {
+            } else {
                 message = new JSONArray(objects).toString(JSON_INDENTION);
             }
-        } catch(JSONException e) {
+        } catch (JSONException e) {
             Log.e(TAG, JSON_EXCEPTION_MSG);
             e.printStackTrace();
             return false;
@@ -109,34 +114,57 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
 
 
         try {
-            request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+            request.setEntity(new UrlEncodedFormEntity(params));
             HttpResponse response = new DefaultHttpClient().execute(request);
+            HttpEntity entity = response.getEntity();
+            String responseString = EntityUtils.toString(entity, "UTF-8");
+            Log.w("html", responseString);
 
+            // This is returning an incorrect status code. I don't understand.
             int statusCode = response.getStatusLine().getStatusCode();
 
             switch (statusCode) {
                 case HttpStatus.SC_OK:
-                    String result = EntityUtils.toString(response.getEntity());
+//                    String result = EntityUtils.toString(response.getEntity());
+                    String result = "Nominal request status code received.";
                     Log.d(TAG, result);
-                    return true;
+                    Log.d(TAG, "The parameters sent to the server are as follows: " + params.toString());
+                    break;
+                case HttpStatus.SC_BAD_REQUEST:
+                    String results = "BAD REQUEST ENCOUNTERED";
+                    status200 = true;
+                    Log.d(TAG, results);
+                    Log.d(TAG, "Params sent: " + params.toString());
+                    break;
                 default:
                     Log.w(TAG, String.format(POST_ERROR_MSG, uriString, statusCode));
+                    Log.w(TAG, "Params sent to server are lookie like: "+ params.toString());
                     return false;
             }
-        } catch(UnsupportedEncodingException e) {
+        } catch (UnsupportedEncodingException e) {
             Log.e(TAG, String.format(UNSUPPORTED_ENCODING_MSG, params.get(0)));
             e.printStackTrace();
             return false;
-        }
-        catch(ClientProtocolException e) {
+        } catch (ClientProtocolException e) {
             Log.e(TAG, String.format(CLIENT_PROTOCOL_EXCEPTION_MSG, uriString));
             e.printStackTrace();
             return false;
-        }
-        catch(IOException e) {
+        } catch (IOException e) {
             Log.e(TAG, String.format(IO_ERROR_MSG, uriString));
             e.printStackTrace();
             return false;
         }
+
+//        // If the server returned a status 200 code, mark the events received as processed.
+//        if (status200) {
+//            JSONArray jsonArray = new JSONArray();
+//            for (JSONObject jo : objects) {
+//                jsonArray.put(jo);
+//            }
+//            db.markEventsAsProcessed(jsonArray);
+//            return true;
+//        }
+
+        return status200;
     }
 }

@@ -1,32 +1,6 @@
 package edu.missouri.nimh.emotion;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.math.BigInteger;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.RSAPublicKeySpec;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-
-import edu.missouri.nimh.emotion.activity.AdminManageActivity;
-import edu.missouri.nimh.emotion.activity.MorningScheduler;
-import edu.missouri.nimh.emotion.activity.SurveyMenu;
-import edu.missouri.nimh.emotion.activity.SuspensionTimePicker;
-import edu.missouri.nimh.emotion.location.LocationUtilities;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -57,6 +31,33 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.math.BigInteger;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.RSAPublicKeySpec;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import edu.missouri.nimh.emotion.activity.AdminManageActivity;
+import edu.missouri.nimh.emotion.activity.MorningScheduler;
+import edu.missouri.nimh.emotion.activity.SurveyMenu;
+import edu.missouri.nimh.emotion.activity.SuspensionTimePicker;
+import edu.missouri.nimh.emotion.location.LocationUtilities;
+import edu.missouri.nimh.emotion.util.SyncService;
 
 
 public class MainActivity extends Activity {
@@ -96,7 +97,10 @@ public class MainActivity extends Activity {
 		setListeners();
 		
 		setSharedValue();
-		
+
+		Intent mIntent = new Intent(this, SyncService.class);
+		startService(mIntent);
+
 		IntentFilter suspensionIntent = new IntentFilter(Utilities.BD_ACTION_SUSPENSION);
 		this.registerReceiver(suspensionReceiver, suspensionIntent);
 

@@ -130,6 +130,8 @@
             android:screenOrientation="portrait" >
         </activity>
 
+        <service android:name=".util.SyncService" />
+
     </application>
 
     <instrumentation
