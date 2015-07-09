@@ -1,32 +1,6 @@
 package edu.missouri.nimh.emotion;
 
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.ObjectInputStream;
-import java.math.BigInteger;
-import java.security.KeyFactory;
-import java.security.PublicKey;
-import java.security.spec.RSAPublicKeySpec;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.util.EntityUtils;
-
-import edu.missouri.nimh.emotion.activity.AdminManageActivity;
-import edu.missouri.nimh.emotion.activity.MorningScheduler;
-import edu.missouri.nimh.emotion.activity.SurveyMenu;
-import edu.missouri.nimh.emotion.activity.SuspensionTimePicker;
-import edu.missouri.nimh.emotion.location.LocationUtilities;
-
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -58,6 +32,33 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.util.EntityUtils;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.math.BigInteger;
+import java.security.KeyFactory;
+import java.security.PublicKey;
+import java.security.spec.RSAPublicKeySpec;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+import edu.missouri.nimh.emotion.activity.AdminManageActivity;
+import edu.missouri.nimh.emotion.activity.MorningScheduler;
+import edu.missouri.nimh.emotion.activity.SurveyMenu;
+import edu.missouri.nimh.emotion.activity.SuspensionTimePicker;
+import edu.missouri.nimh.emotion.location.LocationUtilities;
+import edu.missouri.nimh.emotion.util.SyncService;
+
 
 public class MainActivity extends Activity {
 
@@ -75,6 +76,8 @@ public class MainActivity extends Activity {
 	Button section_7;
 	Button section_8;
 	Button section_9;
+
+	Button syncWithServer;
 	
 	InputMethodManager imm;
 	SharedPreferences shp;
@@ -96,7 +99,7 @@ public class MainActivity extends Activity {
 		setListeners();
 		
 		setSharedValue();
-		
+
 		IntentFilter suspensionIntent = new IntentFilter(Utilities.BD_ACTION_SUSPENSION);
 		this.registerReceiver(suspensionReceiver, suspensionIntent);
 
@@ -271,7 +274,8 @@ public class MainActivity extends Activity {
 		section_7 = (Button) findViewById(R.id.section_label7);
 		section_8 = (Button) findViewById(R.id.section_label8);
 		section_9 = (Button) findViewById(R.id.section_label9);
-		
+
+		syncWithServer = (Button) findViewById(R.id.syncWithServer);
 
 		section_1.setOnClickListener(new OnClickListener(){
 
@@ -364,82 +368,80 @@ public class MainActivity extends Activity {
 		});
 		
 		setSuspensionText();
-		section_6.setOnClickListener(new OnClickListener(){
+		section_6.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
 				Utilities.Log(TAG, "section 6 on click listener");
-				
-				if(Utilities.completedMorningToday(MainActivity.this)){
-					if(section_6.getText().equals(MainActivity.this.getString(R.string.section_6))){
+
+				if (Utilities.completedMorningToday(MainActivity.this)) {
+					if (section_6.getText().equals(MainActivity.this.getString(R.string.section_6))) {
 						Log.d("test text 6", "suspension~~~~~~~~~~~");
-						
-						new AlertDialog.Builder(MainActivity.this)
-						.setTitle(R.string.suspension_title)
-						.setMessage(R.string.suspension_msg)
-						.setCancelable(false)
-						.setNegativeButton(android.R.string.cancel, null)
-						.setPositiveButton(android.R.string.ok, new android.content.DialogInterface.OnClickListener() {
 
-						    @Override
-							public void onClick(DialogInterface arg0, int arg1) {
-						    	Intent intent = new Intent(getApplicationContext(), SuspensionTimePicker.class);
-								startActivityForResult(intent, 2);
-						    }
-						}).create().show();
-					}
-					else{
+						new AlertDialog.Builder(MainActivity.this)
+								.setTitle(R.string.suspension_title)
+								.setMessage(R.string.suspension_msg)
+								.setCancelable(false)
+								.setNegativeButton(android.R.string.cancel, null)
+								.setPositiveButton(android.R.string.ok, new android.content.DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface arg0, int arg1) {
+										Intent intent = new Intent(getApplicationContext(), SuspensionTimePicker.class);
+										startActivityForResult(intent, 2);
+									}
+								}).create().show();
+					} else {
 						Log.d("test text 6", "break suspension~~~~~~~~~~~");
-						
-						new AlertDialog.Builder(MainActivity.this)
-						.setTitle(R.string.suspension_break_title)
-						.setMessage(R.string.suspension_break_msg)
-						.setCancelable(false)
-						.setNegativeButton(android.R.string.cancel, null)
-						.setPositiveButton(android.R.string.ok, new android.content.DialogInterface.OnClickListener() {
 
-						    @Override
-							public void onClick(DialogInterface arg0, int arg1) {
-						    	section_6.setText(R.string.section_6);
-								Utilities.getSP(MainActivity.this, Utilities.SP_SURVEY).edit().putBoolean(Utilities.SP_KEY_SURVEY_SUSPENSION, false).commit();
-								
-								//cancel suspension alarm
-								AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
-								
-								Intent breakIntent = new Intent(Utilities.BD_ACTION_SUSPENSION);
-				    			PendingIntent breakPi = PendingIntent.getBroadcast(getApplicationContext(), 0, breakIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
-			//					getApplicationContext().sendBroadcast(breakIntent);
-				    			
-				    			am.cancel(breakPi);
-				    			
-				    			//write to server
-				    			Calendar c = Calendar.getInstance();
-				    			SharedPreferences sp = getSharedPreferences(Utilities.SP_LOGIN, Context.MODE_PRIVATE); 
-				    			long startTimeStamp = sp.getLong(Utilities.SP_KEY_SUSPENSION_TS, c.getTimeInMillis());
-				    			c.setTimeInMillis(startTimeStamp);
-				    			
-				    			try {
-				    				Utilities.writeEventToFile(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
-				    						Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
-				    			} catch (IOException e) {
-				    				// TODO Auto-generated catch block
-				    				e.printStackTrace();
-				    			}
-				    			sp.edit().remove(Utilities.SP_KEY_SUSPENSION_TS).commit();
-				    			
-				    			//volume
-				            	AudioManager audiom = (AudioManager) MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
-				            	audiom.setStreamVolume(AudioManager.STREAM_MUSIC, Utilities.VOLUME, AudioManager.FLAG_PLAY_SOUND);
-				    			
-				            	Vibrator v = (Vibrator) MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
-				    	        v.vibrate(500);
-				    	        Toast.makeText(getApplicationContext(), R.string.suspension_end, Toast.LENGTH_LONG).show();
-						    }
-						}).create().show();
+						new AlertDialog.Builder(MainActivity.this)
+								.setTitle(R.string.suspension_break_title)
+								.setMessage(R.string.suspension_break_msg)
+								.setCancelable(false)
+								.setNegativeButton(android.R.string.cancel, null)
+								.setPositiveButton(android.R.string.ok, new android.content.DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface arg0, int arg1) {
+										section_6.setText(R.string.section_6);
+										Utilities.getSP(MainActivity.this, Utilities.SP_SURVEY).edit().putBoolean(Utilities.SP_KEY_SURVEY_SUSPENSION, false).commit();
+
+										//cancel suspension alarm
+										AlarmManager am = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
+
+										Intent breakIntent = new Intent(Utilities.BD_ACTION_SUSPENSION);
+										PendingIntent breakPi = PendingIntent.getBroadcast(getApplicationContext(), 0, breakIntent, Intent.FLAG_ACTIVITY_NEW_TASK);
+										//					getApplicationContext().sendBroadcast(breakIntent);
+
+										am.cancel(breakPi);
+
+										//write to server
+										Calendar c = Calendar.getInstance();
+										SharedPreferences sp = getSharedPreferences(Utilities.SP_LOGIN, Context.MODE_PRIVATE);
+										long startTimeStamp = sp.getLong(Utilities.SP_KEY_SUSPENSION_TS, c.getTimeInMillis());
+										c.setTimeInMillis(startTimeStamp);
+
+										try {
+											Utilities.writeEventToFile(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
+													Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
+										} catch (IOException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
+										sp.edit().remove(Utilities.SP_KEY_SUSPENSION_TS).commit();
+
+										//volume
+										AudioManager audiom = (AudioManager) MainActivity.this.getSystemService(Context.AUDIO_SERVICE);
+										audiom.setStreamVolume(AudioManager.STREAM_MUSIC, Utilities.VOLUME, AudioManager.FLAG_PLAY_SOUND);
+
+										Vibrator v = (Vibrator) MainActivity.this.getSystemService(Context.VIBRATOR_SERVICE);
+										v.vibrate(500);
+										Toast.makeText(getApplicationContext(), R.string.suspension_end, Toast.LENGTH_LONG).show();
+									}
+								}).create().show();
 					}
-				}
-				else{
+				} else {
 					Toast.makeText(MainActivity.this, R.string.morning_report_unfinished, Toast.LENGTH_LONG).show();
 				}
 			}
@@ -533,6 +535,14 @@ public class MainActivity extends Activity {
 //				shp.edit().putInt(Utilities.SP_KEY_SURVEY_REMINDER_SEQ, 0).commit();
 //				shp.edit().putBoolean(Utilities.SP_KEY_SURVEY_UNDERGOING, false).commit();
 //				shp.edit().putInt(triggerSeq, 0).commit(); 
+			}
+		});
+
+		syncWithServer.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent mIntent = new Intent(getApplicationContext(), SyncService.class);
+				startService(mIntent);
 			}
 		});
 	}

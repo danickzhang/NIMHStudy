@@ -64,4 +64,11 @@
         android:visibility="gone"
         />
 
+    <Button
+        style="@style/button_style"
+        android:id="@+id/syncWithServer"
+        android:text="Sync With Server"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

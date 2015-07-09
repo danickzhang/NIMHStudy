@@ -46,7 +46,7 @@ public class DAO {
      *
      * @param context A context
      */
-    public DAO(Context context) {
+    public DAO(@NonNull Context context) {
         DatabaseHelper helper = DatabaseHelper.getInstance(context);
         db                    = helper.getWritableDatabase();
 
@@ -64,37 +64,43 @@ public class DAO {
             @Nullable String[] reminderTS,
             @NonNull HashMap<String, List<String>> surveyData
     ) {
-        final String formatMsg = "writeSurveyToDatabase(userID = %s, studyDay = %s, type = %s, scheduleTS = %s, startTS = %s, endTS = %s, ...)";
+        final String formatMsg =
+                "writeSurveyToDatabase(userID = %s, studyDay = %s, type = %s," +
+                " scheduleTS = %s, startTS = %s, endTS = %s, ...)";
+
         final String message = String.format(formatMsg, userID, studyDay, type, scheduleTS, startTS, endTS);
 
         Log.d(LOG_TAG, message);
 
         // insert submission record
-        String surveySubmissionId = insertSurveySubmission(surveyName);
+        String surveySubmissionId = insertSurveySubmission(surveyName, reminderTS[0], reminderTS[1], reminderTS[2]);
 
         if (surveySubmissionId != null) {
-            //TODO: event needs the three reminder fields
             // insert event record
-            final String userId = Integer.toString(userID);
-            final Date timestamp = Calendar.getInstance().getTime();
+            final String userId     = Integer.toString(userID);
+            final Date timestamp    = Calendar.getInstance().getTime();
             final String surveyType = Integer.toString(type);
 
             insertEvent(userId, timestamp, surveyType, studyDay, scheduleTS, startTS, endTS, surveySubmissionId, null, null);
 
+            StringBuilder builder = new StringBuilder();
+
             // insert submissionAnswer records
             for (Map.Entry<String, List<String>> question : surveyData.entrySet()) {
-                String textAnswers = "";
 
                 if (question.getValue() == null || question.getValue().isEmpty()) {
-                    textAnswers = "-1";
+                    builder.append("-1");
                 } else {
                     for (String answer : question.getValue()) {
-                        textAnswers += answer;
+                        builder.append(answer);
                     }
                 }
 
                 // insert submission Answer record
-                insertSubmissionAnswer(surveySubmissionId, question.getKey(), textAnswers);
+                insertSubmissionAnswer(surveySubmissionId, question.getKey(),builder.toString());
+
+                // Clear the builder
+                builder.setLength(0);
             }
 
             //Ricky 2014/4/1
@@ -120,7 +126,7 @@ public class DAO {
      * @param  type the means by which the location was obtained (GPS, WiFi?)
      * @return true if the write succeeded, false otherwise
      */
-    public boolean writeLocationToDatabase(Location location, String type) {
+    public boolean writeLocationToDatabase(@NonNull Location location, @NonNull String type) {
 
         Date time = Calendar.getInstance().getTime();
 
@@ -276,7 +282,14 @@ public class DAO {
             @Nullable Long   hardwareInfoId) {
 
         final String fmt = "insertEvent(%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)";
-        Log.d(LOG_TAG, String.format(fmt, userId, timestamp, type, studyDay, scheduledTS, startTS, endTS, surveySubmissionId, locationDataId, hardwareInfoId));
+        final String msg = String.format(
+                fmt,                userId,         timestamp,     type,
+                studyDay,           scheduledTS,    startTS,       endTS,
+                surveySubmissionId, locationDataId, hardwareInfoId
+        );
+
+        Log.d(LOG_TAG, msg);
+
         ContentValues values = new ContentValues();
 
         long result = -1;
@@ -392,16 +405,37 @@ public class DAO {
      * @return null if the insertion failed, or a row ID otherwise
      */
     @Nullable
-    public String insertSurveySubmission(@NonNull String surveyID){
+    public String insertSurveySubmission(@NonNull String surveyID, String reminderTS1, String reminderTS2, String reminderTS3){
         Log.d(LOG_TAG, String.format("insertSurveySubmission(%s)", surveyID));
 
         // The values that will be inserted in the new row
         ContentValues values = new ContentValues();
         String uuid          = UUID.randomUUID().toString();
 
+        boolean rem1Present = (reminderTS1 != null) && !reminderTS1.isEmpty();
+        boolean rem2Present = (reminderTS2 != null) && !reminderTS2.isEmpty();
+        boolean rem3Present = (reminderTS3 != null) && !reminderTS3.isEmpty();
+
         values.put("surveySubmissionID", uuid);
         values.put("surveyID",           surveyID);
 
+        if(rem1Present) {
+            values.put("reminderTS1", reminderTS1);
+        } else {
+            values.putNull("reminderTS1");
+        }
+
+        if(rem2Present) {
+            values.put("reminderTS2", reminderTS2);
+        } else {
+            values.putNull("reminderTS2");
+        }
+
+        if(rem3Present) {
+            values.put("reminderTS3", reminderTS3);
+        } else {
+            values.putNull("reminderTS3");
+        }
         // The result of the row insertion
         long result;
 
@@ -442,6 +476,7 @@ public class DAO {
 
         final String[] columns   = { "message" };
         final String[] arguments = { Long.toString(hardwareInfoID) };
+
         JSONObject hardwareInfo = new JSONObject();
 
         try ( Cursor cursor = db.query(HARDWARE_INFO_TABLE, columns, "hardwareInfoID = ?", arguments, null, null, null)) {
@@ -495,10 +530,10 @@ public class DAO {
             cursor.moveToFirst();
 
             String questionId = cursor.getString(QUESTION_ID);
-            String text = cursor.getString(TEXT);
+            String text       = cursor.getString(TEXT);
 
             question.put("questionID", questionId);
-            question.put("text", text);
+            question.put("text",       text);
         }
 
         return  question;
@@ -528,17 +563,16 @@ public class DAO {
 
                 if (BuildConfig.DEBUG) {
                     throw new AssertionError("Requested survey does not exist");
-
                 }
             }
 
             cursor.moveToFirst();
 
             String surveyId = cursor.getString(SURVEY_ID);
-            String name = cursor.getString(NAME);
+            String name     = cursor.getString(NAME);
 
             survey.put("surveyID", surveyId);
-            survey.put("name", name);
+            survey.put("name",     name);
         }
         return  survey;
     }
@@ -575,17 +609,17 @@ public class DAO {
 
             cursor.moveToFirst();
 
-            double latitude = cursor.getDouble(LATITUDE);
+            double latitude  = cursor.getDouble(LATITUDE);
             double longitude = cursor.getDouble(LONGITUDE);
-            float accuracy = cursor.getFloat(ACCURACY);
-            String provider = cursor.getString(PROVIDER);
-            String type = cursor.getString(TYPE);
+            float accuracy   = cursor.getFloat(ACCURACY);
+            String provider  = cursor.getString(PROVIDER);
+            String type      = cursor.getString(TYPE);
 
-            locationData.put("latitude", latitude);
+            locationData.put("latitude",  latitude);
             locationData.put("longitude", longitude);
-            locationData.put("accuracy", accuracy);
-            locationData.put("provider", provider);
-            locationData.put("type", type);
+            locationData.put("accuracy",  accuracy);
+            locationData.put("provider",  provider);
+            locationData.put("type",      type);
         }
 
         return locationData;
@@ -636,30 +670,29 @@ public class DAO {
             while (!cursor.isAfterLast()) {
                 JSONObject event = new JSONObject();
 
-                String userId = cursor.getString(USER_ID);
-                String timestamp = cursor.getString(TIMESTAMP);
-                String type = cursor.getString(TYPE);
-                int studyDay = cursor.getInt(STUDY_DAY);
-                String scheduledTS = cursor.getString(SCHEDULED_TS);
-                String startTS = cursor.getString(START_TS);
-                String endTS = cursor.getString(END_TS);
-                int locationDataId = cursor.getInt(LOCATION_DATA_ID);
+                String userId             = cursor.getString(USER_ID);
+                String timestamp          = cursor.getString(TIMESTAMP);
+                String type               = cursor.getString(TYPE);
+                String scheduledTS        = cursor.getString(SCHEDULED_TS);
+                String startTS            = cursor.getString(START_TS);
+                String endTS              = cursor.getString(END_TS);
                 String surveySubmissionId = cursor.getString(SURVEY_SUBMISSION_ID);
-                int hardwareInfoId = cursor.getInt(HARDWARE_INFO_ID);
+                int    hardwareInfoId     = cursor.getInt(HARDWARE_INFO_ID);
+                int    studyDay           = cursor.getInt(STUDY_DAY);
+                int    locationDataId     = cursor.getInt(LOCATION_DATA_ID);
 
                 try {
-                    event.put("userID", userId);
+                    event.put("userID",    userId);
                     event.put("timestamp", timestamp);
 
-                    if (!cursor.isNull(TYPE)) event.put("type", type);
-                    if (!cursor.isNull(STUDY_DAY)) event.put("studyDay", studyDay);
-                    if (!cursor.isNull(SCHEDULED_TS)) event.put("scheduledTS", scheduledTS);
-                    if (!cursor.isNull(START_TS)) event.put("startTS", startTS);
-                    if (!cursor.isNull(END_TS)) event.put("endTS", endTS);
-                    if (!cursor.isNull(LOCATION_DATA_ID)) event.put("locationData", getLocationData(locationDataId));
-                    if (!cursor.isNull(SURVEY_SUBMISSION_ID))
-                        event.put("surveySubmission", getSurveySubmission(surveySubmissionId));
-                    if (!cursor.isNull(HARDWARE_INFO_ID)) event.put("hardwareInfo", getHardwareInfo(hardwareInfoId));
+                    if (!cursor.isNull(TYPE))                 event.put("type",             type);
+                    if (!cursor.isNull(STUDY_DAY))            event.put("studyDay",         studyDay);
+                    if (!cursor.isNull(SCHEDULED_TS))         event.put("scheduledTS",      scheduledTS);
+                    if (!cursor.isNull(START_TS))             event.put("startTS",          startTS);
+                    if (!cursor.isNull(END_TS))               event.put("endTS",            endTS);
+                    if (!cursor.isNull(LOCATION_DATA_ID))     event.put("locationData",     getLocationData(locationDataId));
+                    if (!cursor.isNull(SURVEY_SUBMISSION_ID)) event.put("surveySubmission", getSurveySubmission(surveySubmissionId));
+                    if (!cursor.isNull(HARDWARE_INFO_ID))     event.put("hardwareInfo",     getHardwareInfo(hardwareInfoId));
 
                     events.put(event);
                 } catch (JSONException e) {
@@ -687,9 +720,9 @@ public class DAO {
             for (int i = 0; i < events.length(); i++) {
                 JSONObject event = events.getJSONObject(i);
 
-                String userId = event.getString("userID");
+                String userId    = event.getString("userID");
                 String timestamp = event.getString("timestamp");
-                String type = event.getString("type");
+                String type      = event.getString("type");
 
                 markEventAsProcessed(userId, timestamp, type);
             }
@@ -713,11 +746,11 @@ public class DAO {
 
             values.put("synced", 1);
 
-            final String whereClause = "userID = ? and timestamp = ? and type = ?";
-            String[] whereArgs = {userId, timestamp, type};
+            final String   whereClause = "userID = ? and timestamp = ? and type = ?";
+                  String[] whereArgs   = {userId, timestamp, type};
 
             final String MARKING_EVENT_FMT = "Marking event(userId=%s, timestamp=%s, type=%s) as synced";
-            final String DEBUG_MSG = String.format(MARKING_EVENT_FMT, userId, timestamp, type);
+            final String DEBUG_MSG         = String.format(MARKING_EVENT_FMT, userId, timestamp, type);
 
             Log.d(LOG_TAG, DEBUG_MSG);
 
@@ -750,8 +783,8 @@ public class DAO {
         final int SURVEY_ID            = 0;
         final int SURVEY_SUBMISSION_ID = 1;
 
-        final String[] columns   = { "surveyID", "surveySubmissionID"};
-        final String[] arguments = { surveySubmissionId              };
+        final String[] columns   = { "surveyID", "surveySubmissionID", "reminderTS1", "reminderTS2", "reminderTS3" };
+        final String[] arguments = { surveySubmissionId };
 
         JSONObject jsonObject = new JSONObject();
 
@@ -767,12 +800,19 @@ public class DAO {
                 }
             }
 
-            String surveyId = cursor.getString(SURVEY_ID);
+            String surveyId           = cursor.getString(SURVEY_ID);
             String surveySubmissionID = cursor.getString(SURVEY_SUBMISSION_ID);
+            String reminderTS1        = cursor.getString(2);
+            String reminderTS2        = cursor.getString(3);
+            String reminderTS3        = cursor.getString(4);
 
             jsonObject.put("surveySubmissionID", surveySubmissionID);
-            jsonObject.put("surveyID", surveyId);
-            jsonObject.put("submissionAnswer", getAnswersForSurveySubmission(surveySubmissionId));
+            jsonObject.put("surveyID",           surveyId);
+            jsonObject.put("submissionAnswer",   getAnswersForSurveySubmission(surveySubmissionId));
+            jsonObject.put("reminderTS1",        reminderTS1);
+            jsonObject.put("reminderTS2",        reminderTS2);
+            jsonObject.put("reminderTS3",        reminderTS3);
+
         }
 
         return  jsonObject;
@@ -803,7 +843,7 @@ public class DAO {
 
             while (!cursor.isAfterLast()) {
                 String questionId = cursor.getString(QUESTION_ID);
-                int answer = cursor.getInt(ANSWER);
+                int    answer     = cursor.getInt(ANSWER);
 
                 jsonObject.put(questionId, answer);
 
@@ -814,6 +854,7 @@ public class DAO {
         return jsonObject;
     }
 
+    @NonNull
     public SQLiteDatabase getDb() {
         return db;
     }
