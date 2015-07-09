@@ -76,8 +76,6 @@ public class MainActivity extends Activity {
 	Button section_7;
 	Button section_8;
 	Button section_9;
-
-	Button syncWithServer;
 	
 	InputMethodManager imm;
 	SharedPreferences shp;
@@ -274,8 +272,6 @@ public class MainActivity extends Activity {
 		section_7 = (Button) findViewById(R.id.section_label7);
 		section_8 = (Button) findViewById(R.id.section_label8);
 		section_9 = (Button) findViewById(R.id.section_label9);
-
-		syncWithServer = (Button) findViewById(R.id.syncWithServer);
 
 		section_1.setOnClickListener(new OnClickListener(){
 
@@ -535,14 +531,6 @@ public class MainActivity extends Activity {
 //				shp.edit().putInt(Utilities.SP_KEY_SURVEY_REMINDER_SEQ, 0).commit();
 //				shp.edit().putBoolean(Utilities.SP_KEY_SURVEY_UNDERGOING, false).commit();
 //				shp.edit().putInt(triggerSeq, 0).commit(); 
-			}
-		});
-
-		syncWithServer.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent mIntent = new Intent(getApplicationContext(), SyncService.class);
-				startService(mIntent);
 			}
 		});
 	}
