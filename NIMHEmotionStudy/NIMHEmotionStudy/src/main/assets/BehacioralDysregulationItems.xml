@@ -1,0 +1,75 @@
+<root>
+	<category>
+  	    <description>Behacioral Dysregulation Items</description>
+ 	    	<questionblock type="radio">
+			<answer id = "1">1 - Very Slightly or Not At All</answer>
+			<answer id = "2">2 - A little</answer>
+			<answer id = "3">3 - Somewhat</answer>
+			<answer id = "4">4 - Quite a bit</answer>
+			<answer id = "5">5 - Extremely</answer>
+			<text id="01">How much are you focusing on your feelings right now?</text>
+			<text id="02">How much are you focusing on your problems right now?</text>
+		</questionblock>
+ 	    <question id="03" type = "radio">
+			<text>Since the last survey you answered, have you consumed alcohol? </text>
+			<answer id="1">YES</answer>
+			<answer id="2" skip="q506">NO</answer>
+		</question>
+		
+		<question id = "04" type = "number">
+			<text>How many alcoholic drinks did you have? </text>
+			<answer id = "item">drink(s)</answer>
+			<answer id = "min">1</answer>
+			<answer id = "max">24</answer>			
+		</question>	
+		<question id="05" type = "radio">
+		    <text>How well does this describe you? |I drank alcohol because it would make me feel less distressed</text>
+			<answer id = "1">1 - Very Slightly or Not At All</answer>
+			<answer id = "2">2 - A little</answer>
+			<answer id = "3">3 - Somewhat</answer>
+			<answer id = "4">4 - Quite a bit</answer>
+			<answer id = "5">5 - Extremely</answer>
+		</question>
+		
+		<question id="06" type = "radio">
+			<text>Since the last survey you answered, have you used drugs?</text>
+			<answer id="1">YES</answer>
+			<answer id="2" skip="q509">NO</answer>
+		</question>
+		
+		<question id= "07" type = "check">
+			<text>Select ALL of the following drugs you have used, since the last survey you answered</text>
+			<answer id = "01">Marijuana/cannabis</answer>
+			<answer id = "02">cocaine or crack</answer>
+			<answer id = "03">meth or speed or crank</answer>
+			<answer id = "04">heroin</answer>
+			<answer id = "05">painkillers/opioids</answer>
+			<answer id = "06">uppers/amphetamines</answer>
+			<answer id = "07">downers/sedatives</answer>
+			<answer id = "08">inhalants</answer>
+			<answer id = "09">ecstasy</answer>
+			<answer id = "A">other</answer>
+		</question>	
+		
+		<question id="08" type = "radio">
+		    <text>How well does this describe you? |I used drugs because it would make me feel less distressed</text>
+			<answer id = "1">1 - Very Slightly or Not At All</answer>
+			<answer id = "2">2 - A little</answer>
+			<answer id = "3">3 - Somewhat</answer>
+			<answer id = "4">4 - Quite a bit</answer>
+			<answer id = "5">5 - Extremely</answer>
+		</question>
+		
+		<questionblock type = "radio">	
+			<answer id="1">YES</answer>
+			<answer id="2">NO</answer>
+			<text id="09" >Since the last survey you answered, did you ask someone you feel close to how they truly feel about you or whether they really care about you? </text>
+			<text id="10" >Since the last survey you answered, have a period of uncontrollable eating?  </text>
+			<text id="11" >Since the last survey you answered, have you done anything to deliberately harm yourself (e.g., cutting your skin) without trying to kill yourself?   </text>
+			<text id="12" >Since the last survey you answered, have you spent more money than you meant to?  </text>
+			<text id="13" >Since the last survey you answered, have you gotten into arguments or physical fights with anyone?  </text>
+			<text id="14" >Since the last survey you answered, have you done anything else that might be considered dangerous or illegal?   </text>	
+		</questionblock>
+ 	    
+ 	</category>	
+</root>
