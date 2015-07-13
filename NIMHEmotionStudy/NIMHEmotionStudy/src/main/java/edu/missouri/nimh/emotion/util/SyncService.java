@@ -1,7 +1,10 @@
 package edu.missouri.nimh.emotion.util;
 
 import android.app.IntentService;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -15,7 +18,7 @@ import java.net.URISyntaxException;
 import edu.missouri.nimh.emotion.database.DAO;
 
 /**
- * Created by compsci on 7/2/15.
+ * Created by Jay Kelner on 7/2/15.
  */
 public class SyncService extends IntentService {
 
@@ -42,7 +45,19 @@ public class SyncService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         Log.w(TAG, "Service started in SyncService");
-        performSync();
+        // Create a connectivity manager to monitor our connection status.
+        ConnectivityManager cm =
+                (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        boolean isConnected = activeNetwork != null &&
+                activeNetwork.isConnectedOrConnecting();
+
+        // If the phone isConnected to the internet, perform the sync.
+        if (isConnected) {
+            performSync();
+        } else {
+            Log.w(TAG, "sync failed in onHandleIntent: no connectivity was detected.");
+        }
 
     }
 
@@ -50,6 +65,8 @@ public class SyncService extends IntentService {
      * Performs the synchronization with the server using TransmitJSONData
      */
     private void performSync() {
+
+
 
         DAO db = new DAO(this);
 

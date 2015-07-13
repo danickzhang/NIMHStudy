@@ -775,7 +775,7 @@ public class DAO {
         try {
             ContentValues values = new ContentValues();
 
-            values.put("synced", 1);
+            values.put("isSynchronized", 1);
 
             final String   whereClause = "userID = ? and timestamp = ? and type = ?";
                   String[] whereArgs   = {userId, timestamp, type};
