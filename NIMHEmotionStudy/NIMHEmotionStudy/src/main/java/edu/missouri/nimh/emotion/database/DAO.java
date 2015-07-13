@@ -13,6 +13,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -21,6 +22,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import edu.missouri.nimh.emotion.BuildConfig;
+import edu.missouri.nimh.emotion.Utilities;
 import edu.missouri.nimh.emotion.location.LocationBroadcast;
 
 import static edu.missouri.nimh.emotion.database.DatabaseHelper.EVENT_TABLE;
@@ -41,6 +43,7 @@ import static edu.missouri.nimh.emotion.database.DatabaseHelper.SURVEY_TABLE;
 public class DAO {
     private static final String LOG_TAG = "DAO";
     private final SQLiteDatabase db;
+    private final Context context;
 
     /**
      *
@@ -49,7 +52,7 @@ public class DAO {
     public DAO(@NonNull Context context) {
         DatabaseHelper helper = DatabaseHelper.getInstance(context);
         db                    = helper.getWritableDatabase();
-
+        this.context = context;
     }
 
     // *************************** Functions which emulate existing CSV functions ****************
@@ -144,6 +147,30 @@ public class DAO {
         result = insertEvent(LocationBroadcast.ID, time, "?", 0, null, null, null, null, result, null);
 
         return result != -1;
+    }
+
+    /**
+     * Records a user generated event.
+     *
+     * @param type       The type of event
+     * @param scheduleTS Scheduled start timestamp
+     * @param r1         Reminder 1 timestamp
+     * @param r2         Reminder 2 timestamp
+     * @param r3         Reminder 3 timestamp
+     * @param startTS    Actual start timestamp
+     * @param endTS      Actual end timestamp
+     */
+    public void writeEventToDatabase(int type, String scheduleTS, String r1, String r2, String r3, String startTS, String endTS) throws IOException {
+        Date time = Calendar.getInstance().getTime();
+        final int studyDay = Utilities.getStudyDay(context);
+        final String userID = LocationBroadcast.ID;
+
+        final String format = "writeEventToDatabase(%s, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")";
+        final String msg = String.format(format, type, scheduleTS, r1, r2, r3, startTS, endTS);
+
+        Log.d(LOG_TAG, msg);
+
+        insertEvent(userID, time, String.valueOf(type), studyDay, scheduleTS, startTS, endTS, null, null, null);
     }
 
     // ******************** Functions which insert only their parameters into the database *********
@@ -619,7 +646,7 @@ public class DAO {
             locationData.put("longitude", longitude);
             locationData.put("accuracy",  accuracy);
             locationData.put("provider",  provider);
-            locationData.put("type",      type);
+            locationData.put("type", type);
         }
 
         return locationData;
