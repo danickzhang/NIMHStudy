@@ -160,7 +160,7 @@ public class DAO {
      * @param startTS    Actual start timestamp
      * @param endTS      Actual end timestamp
      */
-    public void writeEventToDatabase(int type, String scheduleTS, String r1, String r2, String r3, String startTS, String endTS) throws IOException {
+    public void writeEventToDatabase(int type, String scheduleTS, String r1, String r2, String r3, String startTS, String endTS) throws DatabaseInsertionException {
         Date time = Calendar.getInstance().getTime();
         final int studyDay = Utilities.getStudyDay(context);
         final String userID = LocationBroadcast.ID;
@@ -170,7 +170,11 @@ public class DAO {
 
         Log.d(LOG_TAG, msg);
 
-        insertEvent(userID, time, String.valueOf(type), studyDay, scheduleTS, startTS, endTS, null, null, null);
+        long result = insertEvent(userID, time, String.valueOf(type), studyDay, scheduleTS, startTS, endTS, null, null, null);
+
+        if(result == -1) {
+            throw new DatabaseInsertionException();
+        }
     }
 
     // ******************** Functions which insert only their parameters into the database *********

@@ -201,24 +201,20 @@ public class SurveyBroadcast extends BroadcastReceiver {
 				Toast.makeText(context, surveyName+" has been skipped under current survey you are doing!", Toast.LENGTH_LONG).show();
 				shp.edit().putString(Utilities.SP_KEY_SURVEY_UNDERREMINDERING, "").commit();
 
-				try {
-					// for under doing some TRIGGERED survey, the new one will be skipped
-					// Random
-					// Drinking follow-ups
+				// for under doing some TRIGGERED survey, the new one will be skipped
+				// Random
+				// Drinking follow-ups
 
-					String seq = "";
-					int s = shp.getInt(triggerSeq, 0) != 0 ? shp.getInt(triggerSeq, 0) : Utilities.MAX_TRIGGER_MAP.get(surveyName);
-					if(surveyName.equals(Utilities.SV_NAME_RANDOM)){
-						seq = "," + s;
-					}
-
-					Utilities.writeEventToDatabase(context, (surveyName.equals(Utilities.SV_NAME_RANDOM) ? Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM : Utilities.CODE_SKIP_BLOCK_SURVEY_DRINKING),
-							"", "", "", "",
-							"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				String seq = "";
+				int s = shp.getInt(triggerSeq, 0) != 0 ? shp.getInt(triggerSeq, 0) : Utilities.MAX_TRIGGER_MAP.get(surveyName);
+				if(surveyName.equals(Utilities.SV_NAME_RANDOM)){
+					seq = "," + s;
 				}
+
+				Utilities.writeEventToDatabase(context, (surveyName.equals(Utilities.SV_NAME_RANDOM) ? Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM : Utilities.CODE_SKIP_BLOCK_SURVEY_DRINKING),
+						"", "", "", "",
+						"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
+
 			}
 		}
 		
@@ -264,21 +260,16 @@ public class SurveyBroadcast extends BroadcastReceiver {
 					Toast.makeText(context, surveyName+" has been skipped under suspension!", Toast.LENGTH_LONG).show();
 					Log.d("XXXXXXXXXXXXXXXX", "under suspension " + surveyName + " " + shp.getInt(triggerSeq, 0));
 
-					try {
-						// since suspension doesn't skip drinking follow-ups and morning, this is only for random
+					// since suspension doesn't skip drinking follow-ups and morning, this is only for random
 
-						String seq = "";
-						int s = shp.getInt(triggerSeq, 0) != 0 ? shp.getInt(triggerSeq, 0) : Utilities.MAX_TRIGGER_MAP.get(surveyName);
-						if (surveyName.equals(Utilities.SV_NAME_RANDOM)) {
-							seq = "," + s;
-						}
-						Utilities.writeEventToDatabase(context, Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM,
-								"", "", "", "",
-								"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+					String seq = "";
+					int s = shp.getInt(triggerSeq, 0) != 0 ? shp.getInt(triggerSeq, 0) : Utilities.MAX_TRIGGER_MAP.get(surveyName);
+					if (surveyName.equals(Utilities.SV_NAME_RANDOM)) {
+						seq = "," + s;
 					}
+					Utilities.writeEventToDatabase(context, Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM,
+							"", "", "", "",
+							"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
 				}
 			}
 			

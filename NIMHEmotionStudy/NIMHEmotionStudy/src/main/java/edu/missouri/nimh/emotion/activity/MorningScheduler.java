@@ -127,16 +127,11 @@ public class MorningScheduler extends Activity {
 					
 					Toast.makeText(getApplicationContext(), getString(R.string.bedtime_set)+" "+nf.format(hour)+":"+nf.format(minute),Toast.LENGTH_LONG).show();
 					nf = null;
-					
-					try {
-						Utilities.writeEventToDatabase(MorningScheduler.this, Utilities.CODE_BEDTIME,
-								Utilities.sdf.format(Utilities.getMorningCal(hour, minute).getTime()), "", "", "",
-								Utilities.sdf.format(startBedReportCal.getTime()),
-								Utilities.sdf.format(Calendar.getInstance().getTime()));
-					} catch (IOException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+
+					Utilities.writeEventToDatabase(MorningScheduler.this, Utilities.CODE_BEDTIME,
+							Utilities.sdf.format(Utilities.getMorningCal(hour, minute).getTime()), "", "", "",
+							Utilities.sdf.format(startBedReportCal.getTime()),
+							Utilities.sdf.format(Calendar.getInstance().getTime()));
 					
 					finish();
 				}

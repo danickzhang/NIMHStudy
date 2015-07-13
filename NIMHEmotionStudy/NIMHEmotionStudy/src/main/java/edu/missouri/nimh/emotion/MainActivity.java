@@ -416,14 +416,10 @@ public class MainActivity extends Activity {
 										SharedPreferences sp = getSharedPreferences(Utilities.SP_LOGIN, Context.MODE_PRIVATE);
 										long startTimeStamp = sp.getLong(Utilities.SP_KEY_SUSPENSION_TS, c.getTimeInMillis());
 										c.setTimeInMillis(startTimeStamp);
+										
+										Utilities.writeEventToDatabase(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
+												Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
 
-										try {
-											Utilities.writeEventToDatabase(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
-													Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
-										} catch (IOException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
 										sp.edit().remove(Utilities.SP_KEY_SUSPENSION_TS).commit();
 
 										//volume
@@ -744,14 +740,10 @@ public class MainActivity extends Activity {
 			SharedPreferences sp = getSharedPreferences(Utilities.SP_LOGIN, Context.MODE_PRIVATE); 
 			long startTimeStamp = sp.getLong(Utilities.SP_KEY_SUSPENSION_TS, c.getTimeInMillis());
 			c.setTimeInMillis(startTimeStamp);
-			
-			try {
-				Utilities.writeEventToDatabase(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
-						Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+
+			Utilities.writeEventToDatabase(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
+					Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
+
 			sp.edit().remove(Utilities.SP_KEY_SUSPENSION_TS).commit();
 			
 			Toast.makeText(getApplicationContext(), R.string.suspension_end, Toast.LENGTH_LONG).show();

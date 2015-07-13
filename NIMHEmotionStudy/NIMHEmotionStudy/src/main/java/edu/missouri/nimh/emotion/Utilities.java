@@ -35,6 +35,7 @@ import org.apache.http.util.EntityUtils;
 import com.google.android.gms.location.DetectedActivity;
 
 import edu.missouri.nimh.emotion.database.DAO;
+import edu.missouri.nimh.emotion.database.DatabaseInsertionException;
 import edu.missouri.nimh.emotion.location.ActivityRecognitionService;
 import edu.missouri.nimh.emotion.location.LocationBroadcast;
 import edu.missouri.nimh.emotion.location.LocationUtilities;
@@ -49,6 +50,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,7 +60,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 public class Utilities {
-	
+
+	public final static String LOG_TAG = "Utilities";
 /*	survey type*/
 	public final static String SV_FILE = "survey_file";
 	public final static String SV_NAME = "survey_name";
@@ -393,14 +397,10 @@ public class Utilities {
 				i++;
 			}
 
-			try {
-				//nimh gonna be different
-				writeEventToDatabase(context, (autoTriggered ? CODE_SCHEDULE_AUTOMATIC : CODE_SCHEDULE_MANUALLY),
-                        strArr[0], strArr[1], strArr[2], strArr[3], strArr[4], strArr[5]);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			//nimh gonna be different
+			writeEventToDatabase(context, (autoTriggered ? CODE_SCHEDULE_AUTOMATIC : CODE_SCHEDULE_MANUALLY),
+					strArr[0], strArr[1], strArr[2], strArr[3], strArr[4], strArr[5]);
+
 		}
 		
 		Utilities.getSP(context, Utilities.SP_RANDOM_TIME).edit().putString(Utilities.SP_KEY_RANDOM_TIME_SET, random_schedule).commit();
@@ -1068,12 +1068,26 @@ public class Utilities {
 	 * @param startTS    Actual start timestamp
 	 * @param endTS      Actual end timestamp
 	 */
-	public static void writeEventToDatabase(Context context, int type, String scheduleTS, String r1, String r2, String r3, String startTS, String endTS) throws IOException {
+	public static void writeEventToDatabase(
+			@NonNull Context context,
+			int type,
+			@Nullable String scheduleTS,
+			@Nullable String r1,
+			@Nullable String r2,
+			@Nullable String r3,
+			@Nullable String startTS,
+			@Nullable String endTS
+	) {
 		DAO dao = new DAO(context);
+
+		final String format = "type = %s, scheduleTS = \"%s\", r1 = \"%s\", r2 = \"%s\", r3 = \"%s\", startTS = \"%s\", endTS = \"%s\"";
+		String data = String.format(format, type, scheduleTS, r1, r2, r3, startTS, endTS);
 
 		try {
 			dao.writeEventToDatabase(type, scheduleTS, r1, r2, r3, startTS, endTS);
-		} catch (IOException e) {
+			Log.d(LOG_TAG, String.format("Wrote event to database: %s", data));
+		} catch (DatabaseInsertionException e) {
+			Log.e(LOG_TAG, String.format("Failed to write event to database: %s", data));
 			e.printStackTrace();
 		}
 	}
