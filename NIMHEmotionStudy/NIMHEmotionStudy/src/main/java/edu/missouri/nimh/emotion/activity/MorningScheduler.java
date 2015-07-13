@@ -7,9 +7,7 @@ import java.util.Calendar;
 import edu.missouri.nimh.emotion.R;
 import edu.missouri.nimh.emotion.Utilities;
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -131,9 +129,9 @@ public class MorningScheduler extends Activity {
 					nf = null;
 					
 					try {
-						Utilities.writeEventToFile(MorningScheduler.this, Utilities.CODE_BEDTIME, 
-								Utilities.sdf.format(Utilities.getMorningCal(hour, minute).getTime()), "", "", "",  
-								Utilities.sdf.format(startBedReportCal.getTime()), 
+						Utilities.writeEventToDatabase(MorningScheduler.this, Utilities.CODE_BEDTIME,
+								Utilities.sdf.format(Utilities.getMorningCal(hour, minute).getTime()), "", "", "",
+								Utilities.sdf.format(startBedReportCal.getTime()),
 								Utilities.sdf.format(Calendar.getInstance().getTime()));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

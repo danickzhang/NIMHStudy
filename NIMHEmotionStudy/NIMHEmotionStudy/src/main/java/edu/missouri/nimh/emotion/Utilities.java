@@ -14,11 +14,9 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
-import java.util.TimeZone;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -36,6 +34,7 @@ import org.apache.http.util.EntityUtils;
 
 import com.google.android.gms.location.DetectedActivity;
 
+import edu.missouri.nimh.emotion.database.DAO;
 import edu.missouri.nimh.emotion.location.ActivityRecognitionService;
 import edu.missouri.nimh.emotion.location.LocationBroadcast;
 import edu.missouri.nimh.emotion.location.LocationUtilities;
@@ -49,8 +48,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.util.Base64;
 import android.util.Log;
@@ -398,8 +395,8 @@ public class Utilities {
 
 			try {
 				//nimh gonna be different
-				writeEventToFile(context, (autoTriggered ? CODE_SCHEDULE_AUTOMATIC : CODE_SCHEDULE_MANUALLY),
-				strArr[0], strArr[1], strArr[2], strArr[3], strArr[4], strArr[5]);
+				writeEventToDatabase(context, (autoTriggered ? CODE_SCHEDULE_AUTOMATIC : CODE_SCHEDULE_MANUALLY),
+                        strArr[0], strArr[1], strArr[2], strArr[3], strArr[4], strArr[5]);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1001,24 +998,23 @@ public class Utilities {
 		transmitData.execute(toWriteArr);
 
 	}
-	
-	
+
 	//upload
 	public static void writeEventToFile(Context context, int type, String scheduleTS, String r1, String r2, String r3, String startTS, String endTS) throws IOException{
-		
+
 		Calendar endCal = Calendar.getInstance();
-		
+
 		String userID = Utilities.getSP(context, Utilities.SP_LOGIN).getString(Utilities.SP_KEY_LOGIN_USERID, "0000");
 		int studyDay = Utilities.getStudyDay(context);
-		
-		
+
+
 		StringBuilder sb = new StringBuilder(100);
-		
+
 //		Calendar c = Calendar.getInstance();
 //		c.setTimeInMillis(time);
 		sb.append(endCal.getTime().toString());
 		sb.append(",");
-		
+
 		sb.append(userID+","+studyDay+","+type+","+scheduleTS+","+r1+","+r2+","+r3+","+startTS+","+endTS+",");
 //		sb.append("\n");
 
@@ -1035,8 +1031,8 @@ public class Utilities {
 		}
 
 		/************************************************************************
-		 * Chen 
-		 * 
+		 * Chen
+		 *
 		 * Data encryption
 		 * Stringbuilder sb -> String ensb
 		 */
@@ -1057,6 +1053,29 @@ public class Utilities {
 		TransmitData transmitData=new TransmitData();
 		transmitData.execute(ensb);
 
+	}
+
+
+	/**
+	 * Records a user generated event.
+	 *
+	 * @param context    A context
+	 * @param type       The type of event
+	 * @param scheduleTS Scheduled start timestamp
+	 * @param r1         Reminder 1 timestamp
+	 * @param r2         Reminder 2 timestamp
+	 * @param r3         Reminder 3 timestamp
+	 * @param startTS    Actual start timestamp
+	 * @param endTS      Actual end timestamp
+	 */
+	public static void writeEventToDatabase(Context context, int type, String scheduleTS, String r1, String r2, String r3, String startTS, String endTS) throws IOException {
+		DAO dao = new DAO(context);
+
+		try {
+			dao.writeEventToDatabase(type, scheduleTS, r1, r2, r3, startTS, endTS);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	//Chen

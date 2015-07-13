@@ -212,7 +212,7 @@ public class SurveyBroadcast extends BroadcastReceiver {
 						seq = "," + s;
 					}
 
-					Utilities.writeEventToFile(context, (surveyName.equals(Utilities.SV_NAME_RANDOM) ? Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM : Utilities.CODE_SKIP_BLOCK_SURVEY_DRINKING),
+					Utilities.writeEventToDatabase(context, (surveyName.equals(Utilities.SV_NAME_RANDOM) ? Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM : Utilities.CODE_SKIP_BLOCK_SURVEY_DRINKING),
 							"", "", "", "",
 							"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
 				} catch (IOException e) {
@@ -272,8 +272,8 @@ public class SurveyBroadcast extends BroadcastReceiver {
 						if (surveyName.equals(Utilities.SV_NAME_RANDOM)) {
 							seq = "," + s;
 						}
-						Utilities.writeEventToFile(context, Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM,
-								"", "", "",	"",
+						Utilities.writeEventToDatabase(context, Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM,
+								"", "", "", "",
 								"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
