@@ -126,18 +126,23 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
                 case HttpStatus.SC_OK:
 //                    String result = EntityUtils.toString(response.getEntity());
                     String result = "Nominal request status code received.";
-                    Log.d(TAG, result);
-                    Log.d(TAG, "The parameters sent to the server are as follows: " + params.toString());
-                    break;
+                    Log.d(TAG, result + ", about to mark events as processed.");
+                    JSONArray jsonArray = new JSONArray();
+                    for (JSONObject jo : objects) {
+                        jsonArray.put(jo);
+                    }
+                    db.markEventsAsProcessed(jsonArray);
+                    return true;
+//                    Log.d(TAG, "The parameters sent to the server are as follows: " + params.toString());
                 case HttpStatus.SC_BAD_REQUEST:
                     String results = "BAD REQUEST ENCOUNTERED";
                     status200 = true;
                     Log.d(TAG, results);
-                    Log.d(TAG, "Params sent: " + params.toString());
+//                    Log.d(TAG, "Params sent: " + params.toString());
                     break;
                 default:
                     Log.w(TAG, String.format(POST_ERROR_MSG, uriString, statusCode));
-                    Log.w(TAG, "Params sent to server are lookie like: "+ params.toString());
+//                    Log.w(TAG, "Params sent to server are lookie like: "+ params.toString());
                     return false;
             }
         } catch (UnsupportedEncodingException e) {
@@ -154,14 +159,9 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
             return false;
         }
 
-//        // If the server returned a status 200 code, mark the events received as processed.
+        // If the server returned a status 200 code, mark the events received as processed.
 //        if (status200) {
-//            JSONArray jsonArray = new JSONArray();
-//            for (JSONObject jo : objects) {
-//                jsonArray.put(jo);
-//            }
-//            db.markEventsAsProcessed(jsonArray);
-//            return true;
+//
 //        }
 
         return status200;
