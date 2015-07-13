@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 import edu.missouri.nimh.emotion.database.DAO;
 
 /**
- * Created by compsci on 7/2/15.
+ * Created by Jay Kelner on 7/2/15.
  */
 public class SyncService extends IntentService {
 
