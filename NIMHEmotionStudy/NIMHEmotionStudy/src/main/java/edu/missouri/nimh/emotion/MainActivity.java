@@ -543,6 +543,11 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				long millisecondsTilFirstTrigger = 60000L;
 				long intervalToNextAlarm = 60000L;
+				Log.w(TAG, "Preparing to initiate Alarm Manager. Should start syncing in "
+						+ Long.toString(millisecondsTilFirstTrigger)
+						+ " milliseconds, and once every "
+						+ Long.toString(intervalToNextAlarm)
+						+ " milliseconds thereafter.");
 				AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 				Intent mIntent = new Intent(getApplicationContext(), SyncService.class);
 				Log.w("json", "About to begin syncing in 30 seconds, hopefully.");
@@ -766,7 +771,7 @@ public class MainActivity extends Activity {
 			c.setTimeInMillis(startTimeStamp);
 			
 			try {
-				Utilities.writeEventToFile(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "", 
+				Utilities.writeEventToFile(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
 						Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
