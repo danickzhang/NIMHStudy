@@ -57,6 +57,7 @@ import edu.missouri.nimh.emotion.activity.MorningScheduler;
 import edu.missouri.nimh.emotion.activity.SurveyMenu;
 import edu.missouri.nimh.emotion.activity.SuspensionTimePicker;
 import edu.missouri.nimh.emotion.location.LocationUtilities;
+import edu.missouri.nimh.emotion.util.SyncService;
 
 
 public class MainActivity extends Activity {
@@ -75,6 +76,8 @@ public class MainActivity extends Activity {
 	Button section_7;
 	Button section_8;
 	Button section_9;
+
+	Button syncWithServer;
 	
 	InputMethodManager imm;
 	SharedPreferences shp;
@@ -272,6 +275,8 @@ public class MainActivity extends Activity {
 		section_8 = (Button) findViewById(R.id.section_label8);
 		section_9 = (Button) findViewById(R.id.section_label9);
 
+		syncWithServer = (Button) findViewById(R.id.syncWithServer);
+
 		section_1.setOnClickListener(new OnClickListener(){
 
 			@Override
@@ -419,7 +424,7 @@ public class MainActivity extends Activity {
 										
 										Utilities.writeEventToDatabase(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
 												Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
-
+										
 										sp.edit().remove(Utilities.SP_KEY_SUSPENSION_TS).commit();
 
 										//volume
@@ -534,6 +539,11 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				long millisecondsTilFirstTrigger = 60000L;
 				long intervalToNextAlarm = 60000L;
+				Log.w(TAG, "Preparing to initiate Alarm Manager. Should start syncing in "
+						+ Long.toString(millisecondsTilFirstTrigger)
+						+ " milliseconds, and once every "
+						+ Long.toString(intervalToNextAlarm)
+						+ " milliseconds thereafter.");
 				AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 				Intent mIntent = new Intent(getApplicationContext(), SyncService.class);
 				Log.w("json", "About to begin syncing in 30 seconds, hopefully.");
