@@ -541,8 +541,15 @@ public class MainActivity extends Activity {
 		syncWithServer.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				long millisecondsTilFirstTrigger = 60000L;
+				long intervalToNextAlarm = 60000L;
+				AlarmManager alarmMgr = (AlarmManager) getApplicationContext().getSystemService(Context.ALARM_SERVICE);
 				Intent mIntent = new Intent(getApplicationContext(), SyncService.class);
-				startService(mIntent);
+				Log.w("json", "About to begin syncing in 30 seconds, hopefully.");
+				alarmMgr.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+						millisecondsTilFirstTrigger,
+						intervalToNextAlarm, PendingIntent.getService(getApplicationContext(), 30, mIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+//				startService(mIntent);
 			}
 		});
 	}
