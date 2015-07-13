@@ -143,7 +143,7 @@ public class XMLSurveyActivity extends Activity {
 					seq = "," + surSeq;
 				}
 
-				Utilities.writeEventToFile(context, getSurveyType(), getScheduleTimeStamp(),
+				Utilities.writeEventToDatabase(context, getSurveyType(), getScheduleTimeStamp(),
 						reminder[0], reminder[1], reminder[2],
 						"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
 			} catch (IOException e) {
@@ -378,7 +378,7 @@ public class XMLSurveyActivity extends Activity {
 					seq = "," + surSeq;
 				}
 
-				Utilities.writeEventToFile(context, getSurveyType(), getScheduleTimeStamp(),
+				Utilities.writeEventToDatabase(context, getSurveyType(), getScheduleTimeStamp(),
 						reminder[0], reminder[1], reminder[2],
 						"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
 			} catch (IOException e) {
@@ -409,7 +409,7 @@ public class XMLSurveyActivity extends Activity {
 						seq = "," + surSeq;
 					}
 
-					Utilities.writeEventToFile(context, (surName.equals(Utilities.SV_NAME_RANDOM) ? Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM : Utilities.CODE_SKIP_BLOCK_SURVEY_DRINKING),
+					Utilities.writeEventToDatabase(context, (surName.equals(Utilities.SV_NAME_RANDOM) ? Utilities.CODE_SKIP_BLOCK_SURVEY_RANDOM : Utilities.CODE_SKIP_BLOCK_SURVEY_DRINKING),
 							"", "", "", "",
 							"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
 				} catch (IOException e) {
@@ -1306,7 +1306,7 @@ public class XMLSurveyActivity extends Activity {
 						seq = "," + surSeq;
 					}
 
-					Utilities.writeEventToFile(context, getSurveyType(), getScheduleTimeStamp(),
+					Utilities.writeEventToDatabase(context, getSurveyType(), getScheduleTimeStamp(),
 							reminder[0], reminder[1], reminder[2],
 							"", Utilities.sdf.format(Calendar.getInstance().getTime()) + seq);
 				} catch (IOException e) {

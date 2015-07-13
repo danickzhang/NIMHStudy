@@ -57,7 +57,6 @@ import edu.missouri.nimh.emotion.activity.MorningScheduler;
 import edu.missouri.nimh.emotion.activity.SurveyMenu;
 import edu.missouri.nimh.emotion.activity.SuspensionTimePicker;
 import edu.missouri.nimh.emotion.location.LocationUtilities;
-import edu.missouri.nimh.emotion.util.SyncService;
 
 
 public class MainActivity extends Activity {
@@ -419,7 +418,7 @@ public class MainActivity extends Activity {
 										c.setTimeInMillis(startTimeStamp);
 
 										try {
-											Utilities.writeEventToFile(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
+											Utilities.writeEventToDatabase(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
 													Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
 										} catch (IOException e) {
 											// TODO Auto-generated catch block
@@ -747,7 +746,7 @@ public class MainActivity extends Activity {
 			c.setTimeInMillis(startTimeStamp);
 			
 			try {
-				Utilities.writeEventToFile(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "", 
+				Utilities.writeEventToDatabase(MainActivity.this, Utilities.CODE_SUSPENSION, "", "", "", "",
 						Utilities.sdf.format(c.getTime()), Utilities.sdf.format(Calendar.getInstance().getTime()));
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
