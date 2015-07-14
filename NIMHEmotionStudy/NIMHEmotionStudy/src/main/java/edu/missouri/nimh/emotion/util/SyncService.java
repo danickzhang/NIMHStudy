@@ -24,6 +24,7 @@ public class SyncService extends IntentService {
 
     public static final String TAG = "SyncService";
     public static final String URL = "http://dslsrv8.cs.missouri.edu/~jmkwdf/CrtNIMH/example.php";
+
     private URI uri;
 
     public SyncService(){
@@ -34,7 +35,6 @@ public class SyncService extends IntentService {
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
-
     }
 
     @Override
@@ -44,35 +44,32 @@ public class SyncService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.w(TAG, "Service started in SyncService");
+        Log.d(TAG, "Service started in SyncService");
+
         // Create a connectivity manager to monitor our connection status.
-        ConnectivityManager cm =
-                (ConnectivityManager)getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
-        boolean isConnected = activeNetwork != null &&
-                activeNetwork.isConnectedOrConnecting();
+        Context             context       = getApplicationContext();
+        ConnectivityManager cm            = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo         activeNetwork = cm.getActiveNetworkInfo();
+
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         // If the phone isConnected to the internet, perform the sync.
         if (isConnected) {
             performSync();
         } else {
-            Log.w(TAG, "sync failed in onHandleIntent: no connectivity was detected.");
+            Log.e(TAG, "sync failed in onHandleIntent: no connectivity was detected.");
         }
-
     }
 
     /**
      * Performs the synchronization with the server using TransmitJSONData
      */
     private void performSync() {
-
-
-
         DAO db = new DAO(this);
 
         // Get the event to sync
-        JSONArray jsonArray = db.getEventsToSync();
-        JSONObject[] events = new JSONObject[jsonArray.length()];
+        JSONArray    jsonArray = db.getEventsToSync();
+        JSONObject[] events    = new JSONObject[jsonArray.length()];
 
         // Turn the JSONArray into an array of JSONObjects
         for (int i = 0; i < jsonArray.length(); i++) {
@@ -86,6 +83,4 @@ public class SyncService extends IntentService {
         // Tell TransmitJSONData to send the JSON to server
         new TransmitJSONData(uri, TransmitJSONData.JSONMode.ALWAYS_OUTPUT_ARRAY, db).execute(events);
     }
-
-
 }

@@ -34,7 +34,7 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
 
     private static final int    JSON_INDENTION = 4;
 
-    // *************************** Format Strings *************************************************
+    // *************************** Format Strings *********************************************************
     private static final String POST_ERROR_MSG                = "POST to %s returned code %s ";
     private static final String UNSUPPORTED_ENCODING_MSG      = "Unable to encode parameter %s";
     private static final String CLIENT_PROTOCOL_EXCEPTION_MSG = "Client protocol writing JSON string to %s";
@@ -42,7 +42,7 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
     private static final String TAG                           = "JSON";
     private static final String JSON_EXCEPTION_MSG            = "Failed to generate JSON";
 
-    // ************************** Log Messages ****************************************************
+    // ************************** Log Messages ************************************************************
     private static final String LOG_THREAD_ID_MSG = "TransmitJSONData thread id: %s";
     private static final String LOG_NO_DATA_MSG   = "No JSON data to transmit";
 
@@ -63,7 +63,6 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
         OUTPUT_ARRAY_OR_OBJECT
     }
 
-
     /**
      * @param uri  The uri to POST the JSON to.
      * @param mode The way to represent a single object as JSON
@@ -77,7 +76,7 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
 
     @Override
     protected Boolean doInBackground(JSONObject... objects) {
-        String message = null;
+        String  message   = null;
         boolean status200 = false;
 
         if (objects == null || objects.length == 0) {
@@ -114,9 +113,11 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
 
         try {
             request.setEntity(new UrlEncodedFormEntity(params));
-            HttpResponse response = new DefaultHttpClient().execute(request);
-            HttpEntity entity = response.getEntity();
-            String responseString = EntityUtils.toString(entity, "UTF-8");
+
+            HttpResponse response       = new DefaultHttpClient().execute(request);
+            HttpEntity   entity         = response.getEntity();
+            String       responseString = EntityUtils.toString(entity, "UTF-8");
+
             Log.w("html", responseString);
 
             // This is returning an incorrect status code. I don't understand.
@@ -124,25 +125,24 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
 
             switch (statusCode) {
                 case HttpStatus.SC_OK:
-//                    String result = EntityUtils.toString(response.getEntity());
                     String result = "Nominal request status code received.";
+
                     Log.d(TAG, result + ", about to mark events as processed.");
+
                     JSONArray jsonArray = new JSONArray();
                     for (JSONObject jo : objects) {
                         jsonArray.put(jo);
                     }
+
                     db.markEventsAsProcessed(jsonArray);
                     return true;
-//                    Log.d(TAG, "The parameters sent to the server are as follows: " + params.toString());
                 case HttpStatus.SC_BAD_REQUEST:
                     String results = "BAD REQUEST ENCOUNTERED";
                     status200 = true;
                     Log.d(TAG, results);
-//                    Log.d(TAG, "Params sent: " + params.toString());
                     break;
                 default:
                     Log.w(TAG, String.format(POST_ERROR_MSG, uriString, statusCode));
-//                    Log.w(TAG, "Params sent to server are lookie like: "+ params.toString());
                     return false;
             }
         } catch (UnsupportedEncodingException e) {
@@ -158,12 +158,6 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
             e.printStackTrace();
             return false;
         }
-
-        // If the server returned a status 200 code, mark the events received as processed.
-//        if (status200) {
-//
-//        }
-
         return status200;
     }
 }

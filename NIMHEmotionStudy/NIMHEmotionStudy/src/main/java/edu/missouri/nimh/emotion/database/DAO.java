@@ -42,8 +42,9 @@ import static edu.missouri.nimh.emotion.database.DatabaseHelper.SURVEY_TABLE;
  */
 public class DAO {
     private static final String LOG_TAG = "DAO";
+
     private final SQLiteDatabase db;
-    private final Context context;
+    private final Context        context;
 
     /**
      *
@@ -52,7 +53,7 @@ public class DAO {
     public DAO(@NonNull Context context) {
         DatabaseHelper helper = DatabaseHelper.getInstance(context);
         db                    = helper.getWritableDatabase();
-        this.context = context;
+        this.context          = context;
     }
 
     // *************************** Functions which emulate existing CSV functions ****************
@@ -162,11 +163,12 @@ public class DAO {
      */
     public void writeEventToDatabase(int type, String scheduleTS, String r1, String r2, String r3, String startTS, String endTS) throws DatabaseInsertionException {
         Date time = Calendar.getInstance().getTime();
-        final int studyDay = Utilities.getStudyDay(context);
-        final String userID = LocationBroadcast.ID;
+
+        final int    studyDay = Utilities.getStudyDay(context);
+        final String userID   = LocationBroadcast.ID;
 
         final String format = "writeEventToDatabase(%s, \"%s\", \"%s\", \"%s\", \"%s\", \"%s\", \"%s\")";
-        final String msg = String.format(format, type, scheduleTS, r1, r2, r3, startTS, endTS);
+        final String msg    = String.format(format, type, scheduleTS, r1, r2, r3, startTS, endTS);
 
         Log.d(LOG_TAG, msg);
 
@@ -208,7 +210,6 @@ public class DAO {
         }
 
         return success;
-
     }
 
     /**
@@ -283,7 +284,6 @@ public class DAO {
 
         return result;
     }
-
 
     /**
      * Inserts a new record into the event table.
@@ -495,7 +495,8 @@ public class DAO {
     // *************************************************************************************
 
     /**
-     * Retrieves a row from the hardwareInfo table as JSON
+     * Retrieves a row from the hardwareInfo table as JSON.
+     *
      * @param hardwareInfoID the hardwareInfoID by which the row is retrieved
      * @return the JSONObject containing the row that has been retrieved
      * @throws JSONException
@@ -522,7 +523,6 @@ public class DAO {
             cursor.moveToFirst();
 
             String messageText = cursor.getString(MESSAGE);
-
 
             hardwareInfo.put("message", messageText);
         }
@@ -650,7 +650,7 @@ public class DAO {
             locationData.put("longitude", longitude);
             locationData.put("accuracy",  accuracy);
             locationData.put("provider",  provider);
-            locationData.put("type", type);
+            locationData.put("type",      type);
         }
 
         return locationData;

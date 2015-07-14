@@ -23,12 +23,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
     private static DatabaseHelper databaseHelper;
 
-    public  static final String DB_NAME      = "db.db";
     private static final String DB_LOCATION  = "";
     private static final String LOG_TAG      = "DB";
 
-
-
+    public static final String DB_NAME                  = "db.db";
     public static final String LOCATION_DATA_TABLE      = "locationData";
     public static final String HARDWARE_INFO_TABLE      = "hardwareInfo";
     public static final String SURVEY_TABLE             = "survey";
@@ -37,7 +35,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public static final String SURVEY_SUBMISSION_TABLE  = "surveySubmission";
     public static final String SUBMISSION_ANSWER_TABLE  = "submissionAnswer";
     public static final String EVENT_TABLE              = "event";
-
 
     private static final String LOCATION_DATA_SQL =
             "CREATE TABLE " + LOCATION_DATA_TABLE + " (" +
@@ -79,13 +76,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             "CREATE TABLE " + SURVEY_SUBMISSION_TABLE + " ("          +
             "    `surveySubmissionID` CHAR(36) PRIMARY KEY NOT NULL," +
             "    `surveyID` VARCHAR(45) NOT NULL,"                    +
-                    "reminderTS1 TEXT NULL," +
-                    "reminderTS2 TEXT NULL," +
-                    "reminderTS3 TEXT NULL"  +
+                    "reminderTS1 TEXT NULL,"                          +
+                    "reminderTS2 TEXT NULL,"                          +
+                    "reminderTS3 TEXT NULL"                           +
              ");";
 
     private static final String SUBMISSION_ANSWER =
-            "CREATE TABLE " + SUBMISSION_ANSWER_TABLE + " (" +
+            "CREATE TABLE " + SUBMISSION_ANSWER_TABLE + " ("             +
             "        `submissionAnswerID` INTEGER PRIMARY KEY NOT NULL," +
             "        `surveySubmissionID` CHAR(36),"                     +
             "        `questionID`         VARCHAR(45) NOT NULL,"         +
