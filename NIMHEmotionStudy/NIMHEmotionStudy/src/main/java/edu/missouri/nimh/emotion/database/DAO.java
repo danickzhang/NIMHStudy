@@ -13,10 +13,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -66,7 +64,7 @@ public class DAO {
             @Nullable String   startTS,
             @Nullable String   endTS,
             @Nullable String[] reminderTS,
-            @NonNull HashMap<String, List<String>> surveyData
+            @NonNull Map<String, List<String>> surveyData
     ) {
         final String formatMsg =
                 "writeSurveyToDatabase(userID = %s, studyDay = %s, type = %s," +
@@ -434,7 +432,6 @@ public class DAO {
         }
 
         return result;
-
     }
 
     /**
@@ -545,7 +542,8 @@ public class DAO {
     }
 
     /**
-     * Retrieves a question from the question table
+     * Retrieves a question from the question table.
+     *
      * @param questionID the questionID of the question to be retrieved
      * @return the JSONObject of the question retrieved
      * @throws JSONException
@@ -585,7 +583,8 @@ public class DAO {
     }
 
     /**
-     * Retrieves a row from the survey table in the database
+     * Retrieves a row from the survey table in the database.
+     *
      * @param surveyID the ID of the survey to retrieve
      * @return the JSONObject of the retrieved survey
      * @throws JSONException
@@ -903,6 +902,13 @@ public class DAO {
         return db;
     }
 
+    /**
+     * Inserts a question into the database.
+     *
+     * @param questionId The id of the question
+     * @param text       The text of the question
+     * @return           -1 on error
+     */
     public long insertQuestion(@NonNull String questionId, @NonNull String text) {
 
         // The values that will be inserted in the new row
