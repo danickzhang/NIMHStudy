@@ -161,7 +161,15 @@ public class DAO {
      * @param startTS    Actual start timestamp
      * @param endTS      Actual end timestamp
      */
-    public void writeEventToDatabase(int type, String scheduleTS, String r1, String r2, String r3, String startTS, String endTS) throws DatabaseInsertionException {
+    public void writeEventToDatabase(
+            int type,
+            @Nullable String scheduleTS,
+            @Nullable String r1,
+            @Nullable String r2,
+            @Nullable String r3,
+            @Nullable String startTS,
+            @Nullable String endTS
+    ) throws DatabaseInsertionException {
         Date time = Calendar.getInstance().getTime();
 
         final int    studyDay = Utilities.getStudyDay(context);
@@ -436,7 +444,12 @@ public class DAO {
      * @return null if the insertion failed, or a row ID otherwise
      */
     @Nullable
-    public String insertSurveySubmission(@NonNull String surveyID, String reminderTS1, String reminderTS2, String reminderTS3){
+    public String insertSurveySubmission(
+            @NonNull  String surveyID,
+            @Nullable String reminderTS1,
+            @Nullable String reminderTS2,
+            @Nullable String reminderTS3
+    ){
         Log.d(LOG_TAG, String.format("insertSurveySubmission(%s)", surveyID));
 
         // The values that will be inserted in the new row
