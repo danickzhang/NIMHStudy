@@ -135,15 +135,15 @@ public class TransmitJSONData extends AsyncTask<JSONObject, Void, Boolean> {
                     }
 
                     db.markEventsAsProcessed(jsonArray);
-                    return true;
+                    status200 = true;
+                    break;
                 case HttpStatus.SC_BAD_REQUEST:
                     String results = "BAD REQUEST ENCOUNTERED";
-                    status200 = true;
                     Log.d(TAG, results);
                     break;
                 default:
                     Log.w(TAG, String.format(POST_ERROR_MSG, uriString, statusCode));
-                    return false;
+                    status200 = false;
             }
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG, String.format(UNSUPPORTED_ENCODING_MSG, params.get(0)));
